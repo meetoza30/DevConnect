@@ -1,0 +1,19 @@
+{
+  "name": "devconnect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meetoza30/DevConnect.git"
+  },
+  "author": "Meet Oza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/meetoza30/DevConnect/issues"
+  },
+  "homepage": "https://github.com/meetoza30/DevConnect#readme"
+}
