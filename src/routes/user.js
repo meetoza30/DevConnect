@@ -25,6 +25,20 @@ catch(err){
 }
 })
 
+userRouter.get('/user/reqs/sent', userAuth, async (req, res)=>{
+      try  {const user = req.user;
+        const sentReqs = await Req.find(
+            {senderId : user._id, status : "interested"}
+        ).populate("senderId", ["firstName", "lastName", "skills", "bio"])
+        if(!sentReqs) throw new Error ("Reqs not available")
+        res.json({data : sentReqs})
+    }
+catch(err){
+    res.status(400).json({message : "ERROR : "+ err.message})
+}
+
+})
+
 userRouter.get('/user/connecs',userAuth, async (req, res)=>{
    try {const user = req.user;
     const connecs = await Req.find({
@@ -75,6 +89,35 @@ userRouter.get('/feed', userAuth, async (req, res)=>{
     }
     catch(err){
         res.json({error : err.message})
+    }
+})
+
+userRouter.get('/feed&college', userAuth,async (req, res)=>{
+    try{
+        const user = req.user;
+        const clg = req.query.college.toString()
+        const connectionReqs = await Req.find({
+            $or : [
+                {senderId : user._id},
+                {receiverId : user._id}
+            ]
+        }).select('senderId receiverId');
+        const hideFromFeed = new Set()
+        connectionReqs.forEach(ele => {
+            hideFromFeed.add(ele.senderId.toString())
+            hideFromFeed.add(ele.receiverId.toString())
+        })
+
+        const feedUsers = await User.find({
+            _id : {$nin : Array.from(hideFromFeed)},
+            college : clg
+        })
+
+        if(!feedUsers) throw new Error("Nothing to show here")
+        res.json({data : feedUsers})
+    }
+    catch(err){
+        res.status(400).json({message : "ERROR : "+err.message})
     }
 })
 
