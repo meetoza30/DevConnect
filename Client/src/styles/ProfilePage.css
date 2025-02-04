@@ -1,0 +1,22 @@
+/* From Uiverse.io by Spacious74 */ 
+.bgblue {
+    background: linear-gradient(135deg, #fffffff5, #3a4b8a, #ffffff98);
+    padding: 1px;
+    border-radius: 1.2rem;
+    box-shadow: 0px 1rem 1.5rem -0.9rem #000000e1;
+    max-width: 300px;
+  }
+  
+  .profilecard {
+    /* font-size: 1rem; */
+    /* color: #bec4cf; */
+    /* background: linear-gradient(135deg, #c04bf6 0%, #793a8a 43%, #b14dcd 100%); */
+    /* padding: 1.5rem; */
+    height: 80%; 
+    width: 18%;
+    border-radius: 1.2rem;
+    border: white 1px solid;
+    border-right: black;
+    border-left: black;
+  }
+  
