@@ -2,10 +2,10 @@ import validate from 'validator';
 
 
 const validateData = (req)=>{
-    const {firstName, emailId,age, userName, password, skills, bio, socials} = req.body;
+    const {fullName, emailId,age, userName, password, skills, bio, socials} = req.body;
     const usernameRegex = /^[a-z0-9._]+$/;
     console.log()
-    if(firstName?.length > 50) throw new Error("First Name is too long")
+    if(fullName?.length > 50) throw new Error("First Name is too long")
 
     else if(emailId && !validate.isEmail(emailId)) throw new Error("Enter valid email address")
 

@@ -3,11 +3,10 @@ import validate from 'validator'
 import jwt from 'jsonwebtoken'
 
 const userSchema = new Schema({
-    firstName : {
+    fullName : {
         type:String,
         required : true
     },
-    lastName  : String, 
     userName: {
         type: String,
         unique: true
@@ -51,14 +50,24 @@ const userSchema = new Schema({
         github: String,
         X : String,
         linkedin: String
-    }
+    },
+    hackathons : [{
+        name : String,
+        description : String,
+        date : Date
+    }],
+    projects : [{
+        name : String,
+        description : String,
+        ghLink : String
+    }]
 },{
     timestamps: true
 })
 
 userSchema.methods.getJWToken = async function(){
     const user = this;
-    const token = await jwt.sign({_id: user._id}, "DevConnect$3#12", {expiresIn: '24d'})
+    const token = await jwt.sign({_id: user._id}, "DevConnect$3#12", {expiresIn: '576h'})
 
     return token;
 }
