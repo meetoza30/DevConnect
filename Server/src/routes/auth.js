@@ -10,7 +10,7 @@ authRouter.post('/signup', async (req, res)=>{
     const {fullName, emailId, userName,age, college, projects, gender, password, skills, hackathons, bio, socials} = req.body;
     
     const hashedPassword = await bcrypt.hash(password, 10)
-    const user = new User({fullName, emailId, userName, age, college, gender, projects, hackathons, password: hashedPassword, skills, bio, socials});
+    const user = new User({fullName, emailId, userName, age, college, gender, projects : [], hackathons : [], password: hashedPassword, skills, bio, socials});
     try{
         validateData(req)
         const token = await user.getJWToken();

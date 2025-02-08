@@ -38,7 +38,7 @@ const userSchema = new Schema({
     },
     profileUrl: {
         type: String,
-        default: "https://iconduck.com/icons/6491/profile-default"
+        default: "https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
     },
     skills: [String],
     bio: {
@@ -51,16 +51,25 @@ const userSchema = new Schema({
         X : String,
         linkedin: String
     },
-    hackathons : [{
+    hackathons :{
+        type : 
+        [{
         name : String,
         description : String,
         date : Date
     }],
-    projects : [{
-        name : String,
-        description : String,
-        ghLink : String
-    }]
+        default : function (){ return [];}
+},
+projects: {
+    type: [
+        {
+            name: String,
+            description: String,
+            ghLink: String
+        }
+    ],
+    default: function () { return []; } // Each user gets a new empty array
+}
 },{
     timestamps: true
 })

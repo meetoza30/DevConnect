@@ -1,4 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import {BASE_URL} from '../utils/constants.js'
+import { useDispatch, useSelector } from "react-redux";
+import { addUser } from "../utils/userSlice";
+ 
 
 const SKILLS_LIST = [
   'React', 'JavaScript', 'Python', 'Node.js', 'TypeScript', 
@@ -10,64 +15,75 @@ const DeveloperProfile = () => {
   const [hackathonEdit, setHackathonEdit] = useState(false);
   const [editingHackathons, setEditingHackathons] = useState(new Set());
   const [projectEdit, setProjectEdit] = useState(false);
-  const [profile, setProfile] = useState({
-    name: 'Alex Rodriguez',
-    username: 'alexdev',
-    bio: 'Full Stack Developer | Open Source Enthusiast | Machine Learning Explorer',
-    profilePic: '/api/placeholder/200/200',
-    socialProfiles: {
-      leetcode: 'https://leetcode.com/alexdev',
-      geeksforgeeks: 'https://geeksforgeeks.org/alexdev',
-      codeforces: 'https://codeforces.com/profile/alexdev',
-      github: 'https://github.com/alexdev',
-      linkedin: 'https://linkedin.com/in/alexdev'
-    },
-    projects: [
-      {
-        name: 'AI Chatbot',
-        description: 'Advanced conversational AI using transformer models',
-        githubLink: 'https://github.com/alexdev/ai-chatbot'
-      },
-      {
-        name: 'E-Commerce Platform',
-        description: 'Scalable microservices-based online shopping solution',
-        githubLink: 'https://github.com/alexdev/ecommerce-platform'
-      },
-      {
-        name: 'Weather Forecast App',
-        description: 'Real-time weather tracking with predictive analytics',
-        githubLink: 'https://github.com/alexdev/weather-app'
-      }
-    ],
-    hackathons: [
-      {
-        name: 'Global AI Hackathon',
-        description: 'Built an AI-powered mental health support chatbot',
-        date: 'July 2023'
-      }
-    ],
-    skills: ['React', 'Python', 'Machine Learning', 'Docker']
-  });
+  const [editingProjects, setEditingProjects] = useState(new Set());
+  const [profile, setProfile] = useState(null);
+  const dispatch = useDispatch();
+  
+
+  const getProfile = async()=>{
+    
+    try{
+      const res = await axios.get(BASE_URL + "/profile/view", {withCredentials:true})
+      console.log(res.data)
+      dispatch(addUser(res.data));
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
+  const postProfile = async (updates) => {
+    try {
+      const res = await axios.patch(BASE_URL+"/profile/edit", {  }, { withCredentials: true });
+      
+      dispatch(addUser(res.data));
+      
+    } catch(err) {
+      console.log(err);
+    }
+  };
+
+  const userData = useSelector((store)=>store.user);
+  useEffect(()=>{
+    getProfile();
+  }, [])
+
+  useEffect(() => {
+    if (userData) {
+      setProfile(userData); // No need to manually set default projects/hackathons
+    }
+  }, [userData]);
+
+//  console.log(profile?.projects)
+  
+
 
   // ... (existing toggleEditMode, handleProfileUpdate, handleSocialProfileUpdate)
-  const toggleEditMode = (index) => {
-    setEditingHackathons(prevSet => {
-      const newSet = new Set(prevSet);
-      if (newSet.has(index)) {
-        newSet.delete(index);
-      } else {
-        newSet.add(index);
-      }
-      return newSet;
-    });
-  };
-  
+  const toggleHackathonEditMode = (index) => {
+  setEditingHackathons(prevSet => {
+    const newSet = new Set(prevSet);
+    newSet.has(index) ? newSet.delete(index) : newSet.add(index);
+    return newSet;
+  });
+};
+
+const toggleProjectEditMode = (index) => {
+  setEditingProjects(prevSet => {
+    const newSet = new Set(prevSet);
+    newSet.has(index) ? newSet.delete(index) : newSet.add(index);
+    return newSet;
+  });
+};
+
+  const toggleEditMode = ()=>{
+    setIsEditMode(!isEditMode);
+  }
 
   const handleProfileUpdate = (updates) => {
     setProfile(prev => ({ ...prev, ...updates }));
+    
   };
   
-
   const handleSocialProfileUpdate = (platform, value) => {
     setProfile(prev => ({
       ...prev,
@@ -76,42 +92,74 @@ const DeveloperProfile = () => {
         [platform]: value
       }
     }));
+
+    postProfile(e);
   };
 
   const handleProjectUpdate = (index, updates) => {
-    const newProjects = [...profile.projects];
-    newProjects[index] = { ...newProjects[index], ...updates };
-    setProfile(prev => ({ ...prev, projects: newProjects }));
-  };
+    setProfile(prev => {
+        const updatedProjects = prev.projects.map((project, i) =>
+            i === index ? { ...project, ...updates } : project
+        );
+        const updatedProfile = { ...prev, projects: updatedProjects };
+        
+        return updatedProfile;
+    });
+    
+};
 
   const addProject = () => {
-    setProfile(prev => ({
-      ...prev,
-      projects: [...prev.projects, { name: 'New Project', description: '', githubLink: '' }]
-    }));
-  };
+    setProfile(prev => {
+        const newProject = {
+            name: 'New Project',
+            description: '',
+            ghLink: '',
+            _id: `temp-${Date.now()}`
+        };
+        const updatedProjects = [...(prev.projects || []), newProject];
+        const updatedProfile = { ...prev, projects: updatedProjects };
+        postProfile({ projects: updatedProjects }); // Send only projects to the backend
+        return updatedProfile;
+    });
+
+    // Open edit mode for the new project
+    setEditingProjects(prevSet => {
+        const newSet = new Set(prevSet);
+        newSet.add(profile?.projects?.length || 0);
+        return newSet;
+    });
+};
 
   const removeProject = (indexToRemove) => {
     setProfile(prev => ({
       ...prev,
-      projects: prev.projects.filter((_, index) => index !== indexToRemove)
+      projects: (prev.projects || []).filter((_, index) => index !== indexToRemove)
     }));
   };
 
   const addHackathon = () => {
-    setProfile(prev => ({
-      ...prev,
-      hackathons: [...prev.hackathons, { name: 'New Hackathon', description: '', date: '' }] 
-    }));
+    setProfile(prev => {
+      const currentHackathons = prev.hackathons || [];
+      return {
+        ...prev,
+        hackathons: [
+          ...currentHackathons,
+          { 
+            name: 'New Hackathon', 
+            description: '', 
+            date: new Date().toISOString().split('T')[0], // Default to today's date
+            _id: `temp-${Date.now()}`
+          }
+        ]
+      };
+    });
   
-    // Wait for the new hackathon to be added, then set edit mode for only the new one
-    setTimeout(() => {
-      setEditingHackathons(prevSet => {
-        const newSet = new Set(prevSet);
-        newSet.add(profile.hackathons.length); // New hackathon index
-        return newSet;
-      });
-    }, 0);
+    // Immediately open edit mode for the new hackathon
+    setEditingHackathons(prevSet => {
+      const newSet = new Set(prevSet);
+      newSet.add(profile?.hackathons?.length || 0);
+      return newSet;
+    });
   };
 
   const handleHackathonUpdate = (index, updatedFields) => {
@@ -121,14 +169,17 @@ const DeveloperProfile = () => {
         i === index ? { ...hackathon, ...updatedFields } : hackathon
       )
     }));
+
+    
   };
   
-
   const removeHackathon = (indexToRemove) => {
     setProfile(prev => ({
       ...prev,
       hackathons: prev.hackathons.filter((_, index) => index !== indexToRemove)
     }));
+
+    postProfile(e);
   };
 
   // ... (existing handleSkillsUpdate)
@@ -140,18 +191,21 @@ const DeveloperProfile = () => {
         : [...currentSkills, skill];
       return { ...prev, skills: updatedSkills };
     });
+
+   
   };
 
   
 
   return (
+    
     <div className="min-h-screen bg-gray-900 text-gray-100 p-6 flex flex-col md:flex-row gap-6">
       {/* Profile Section (Left Sidebar) & SKills & PRofiles - Unchanged */}
-      <div className="w-full md:w-1/3 bg-purple-900/30 rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-700/50">
+      <div className="w-full md:w-1/3  rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-500">
         <div className="flex flex-col items-center">
           <div className="relative group">
             <img 
-              src={profile.profilePic} 
+              src={profile?.profileUrl} 
               alt="Profile" 
               className="w-32 h-32 rounded-full object-cover border-4 border-purple-600"
             />
@@ -164,22 +218,22 @@ const DeveloperProfile = () => {
           
           {!isEditMode ? (
             <>
-              <h2 className="text-2xl font-bold mt-4 text-purple-300">{profile.name}</h2>
-              <p className="text-purple-500">@{profile.username}</p>
-              <p className="text-center mt-2 text-gray-300">{profile.bio}</p>
+              <h2 className="text-2xl font-bold mt-4 text-purple-300">{profile?.fullName}</h2>
+              <p className="text-purple-500">@{profile?.userName}</p>
+              <p className="text-center mt-2 text-gray-300">{profile?.bio}</p>
             </>
           ) : (
             <div className="w-full mt-4 space-y-3">
               <input 
                 type="text" 
-                value={profile.name}
+                value={profile?.fullName}
                 onChange={(e) => handleProfileUpdate({ name: e.target.value })}
                 placeholder="Full Name"
                 className="w-full p-2 border rounded bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
               />
               <input 
                 type="text" 
-                value={profile.username}
+                value={profile?.userName}
                 onChange={(e) => handleProfileUpdate({ username: e.target.value })}
                 place
                 
@@ -187,7 +241,7 @@ const DeveloperProfile = () => {
                 className="w-full p-2 border rounded bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
               />
               <textarea 
-                value={profile.bio}
+                value={profile?.bio}
                 onChange={(e) => handleProfileUpdate({ bio: e.target.value })}
                 placeholder="Bio"
                 className="w-full p-2 border rounded h-24 bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
@@ -197,10 +251,10 @@ const DeveloperProfile = () => {
           
         </div>
         {/* Coding & Social Profiles */}
-       <div className="bg-purple-900/30 rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-700/50">
-          <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding Profiles</h3>
+       <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500">
+          {/* <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding Profiles</h3>
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isEditMode ? 'opacity-100' : 'opacity-90'}`}>
-            {Object.entries(profile.socialProfiles).map(([platform, link]) => (
+            {Object.entries(profile?.socials).map(([platform, link]) => (
               <div key={platform} className="flex items-center space-x-2">
                 {isEditMode ? (
                   <input 
@@ -215,25 +269,27 @@ const DeveloperProfile = () => {
                     href={link} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="flex items-center hover:text-purple-400 transition-colors text-purple-500"
+                    className="flex items-center p-1 underline hover:text-purple-400 transition-colors text-purple-200"
                   >
                     <span className="text-sm">{platform}</span>
                   </a>
                 )}
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
         {/* ... (existing Skills Showcase section) */}
 
-        <div className="bg-purple-900/30 rounded-lg shadow-2xl p-6 border border-purple-700/50">
+        <div className=" rounded-lg shadow-2xl p-6 border border-purple-500">
+          
           <h3 className="text-xl font-semibold mb-4 text-purple-300">Skills</h3>
+          
           <div className="flex flex-wrap gap-2">
             {!isEditMode ? (
-              profile.skills.map(skill => (
+              profile?.skills?.map(skill => (
                 <span 
                   key={skill} 
-                  className="bg-purple-700/30 text-purple-300 px-3 py-1 rounded-full text-sm"
+                  className="bg-purple-700/30 text-purple-200 px-3 py-1 rounded-full text-sm"
                 >
                   {skill}
                 </span>
@@ -245,7 +301,7 @@ const DeveloperProfile = () => {
                   onClick={() => handleSkillsUpdate(skill)}
                   className={`
                     px-3 py-1 rounded-full text-sm transition-colors
-                    ${profile.skills.includes(skill) 
+                    ${profile?.skills.includes(skill) 
                       ? 'bg-purple-700 text-white' 
                       : 'bg-gray-800 text-purple-400 hover:bg-purple-900'}
                   `}
@@ -254,6 +310,7 @@ const DeveloperProfile = () => {
                 </button>
               ))
             )}
+            
           </div>
         </div>
         
@@ -269,50 +326,111 @@ const DeveloperProfile = () => {
       <div className="w-full md:w-2/3 space-y-6">
        
         {/* Projects Section */}
-        <div className="bg-purple-900/30 rounded-lg shadow-2xl p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold text-purple-300">Projects</h3>
-            {isEditMode || profile.projects.length >= 0 && (
-              <button onClick={addProject} className="bg-purple-700 text-white px-3 py-1 rounded">Add Project</button>
-            )}
-          </div>
-          {profile.projects.map((project, index) => (
-            <div key={index} className="mb-4 bg-gray-800 p-4 rounded relative">
-              {!isEditMode ? (
-                <>
-                  <h4 className="font-bold text-purple-300">{project.name}</h4>
-                  <p className="text-gray-400">{project.description}</p>
-                  <a href={project.githubLink} className="text-purple-500 hover:underline">View on GitHub</a>
-                </>
-              ) : (
-                <div>
-                  <input type="text" value={project.name} onChange={(e) => handleProjectUpdate(index, { name: e.target.value })} className="w-full p-2 border rounded bg-gray-800 text-gray-100" />
-                  <textarea value={project.description} onChange={(e) => handleProjectUpdate(index, { description: e.target.value })} className="w-full p-2 border rounded h-24 bg-gray-800 text-gray-100"></textarea>
-                  <input type="text" value={project.githubLink} onChange={(e) => handleProjectUpdate(index, { githubLink: e.target.value })} className="w-full p-2 border rounded bg-gray-800 text-gray-100" />
-                  {profile.projects.length > 1 && (
-                    <button onClick={() => removeProject(index)} className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded">Remove</button>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Hackathon Journey */}
-        <div className="bg-purple-900/30 rounded-lg shadow-2xl p-6"> 
+        <div className="rounded-lg border border-purple-500 shadow-2xl p-6">
   <div className="flex justify-between items-center mb-4">
-    <h3 className="text-xl font-semibold text-purple-300">Hackathon Journey</h3>
-    <button onClick={addHackathon} className="bg-purple-700 text-white px-3 py-1 rounded">Add Hackathon</button>
+    <h3 className="text-xl font-bold text-purple-300">Project Journey</h3>
+    {profile?.projects.length > 0 &&
+    <button 
+      onClick={addProject} 
+      className="bg-purple-700 font-semibold text-white px-3 py-1 rounded hover:shadow-md hover:shadow-purple-400 hover:transition-all hover:duration-300"
+    >
+      Add Project
+    </button>}
   </div>
 
-  {profile.hackathons.map((hackathon, index) => (
-    <div key={index} className="mb-4 bg-gray-800 p-4 rounded relative">
+  {(profile?.projects?.length === 0) ? (
+    <div className="flex flex-col items-center justify-center py-10 bg-purple-900/30 rounded">
+      <p className="text-gray-400 mb-4">No projects added yet</p>
+      <button 
+        onClick={addProject}
+        className="bg-purple-700 font-semibold text-white px-4 py-2 rounded hover:bg-purple-600 transition-all duration-300"
+      >
+        Start Your Project Journey
+      </button>
+    </div>
+  ) : (
+    profile?.projects.map((project, index) => (
+      <div key={index} className="mb-4 bg-purple-900/30 mt-10 p-4 rounded relative">
+        {!editingProjects.has(index) ? (
+          <>
+            <div className='flex flex-row justify-between items-center'>
+              <div className='flex flex-col'>
+                <h4 className="font-bold text-purple-300">{project.name}</h4>
+                <p className="text-gray-400">{project.description}</p>
+                <a href={project.ghLink} className="text-purple-300 cursor-pointer hover:underline">
+                  View on GitHub
+                </a>
+              </div>
+              <button 
+                onClick={() => toggleProjectEditMode(index)} 
+                className="ml-3 border border-purple-500 bg-gray-800 text-white px-2 py-1 rounded hover:bg-purple-500 hover:transition-all hover:duration-200"
+              >
+                Edit
+              </button>
+            </div>
+          </>
+        ) : (
+          <div>
+            <input 
+              type="text" 
+              value={project.name} 
+              onChange={(e) => handleProjectUpdate(index, { name: e.target.value })} 
+              className="w-full p-2 border rounded bg-gray-800 text-gray-100"
+              disabled={!editingProjects.has(index)}
+            />
+            
+            <textarea 
+              value={project.description} 
+              onChange={(e) => handleProjectUpdate(index, { description: e.target.value })} 
+              className="w-full p-2 border rounded h-24 bg-gray-800 text-gray-100 mt-2"
+              disabled={!editingProjects.has(index)}
+            ></textarea>
+            
+            <input 
+              type="text" 
+              value={project.ghLink} 
+              onChange={(e) => handleProjectUpdate(index, { ghLink: e.target.value })} 
+              className="w-full p-2 border rounded bg-gray-800 text-gray-100 mt-2"
+              disabled={!editingProjects.has(index)}
+            />
+            <button 
+              onClick={() => toggleProjectEditMode(index)} 
+              className="mt-2 bg-green-600 text-white px-2 py-1 rounded"
+            >
+              Save
+            </button>
+            <button 
+              onClick={() => removeProject(index)} 
+              className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded"
+            >
+              Remove
+            </button>
+          </div>
+        )}
+      </div>
+    ))
+  )}
+</div>
+
+        {/* Hackathon Journey */}
+        <div className="border border-purple-500 rounded-lg shadow-2xl p-6"> 
+  <div className="flex justify-between items-center mb-4">
+    <h3 className="text-xl font-semibold text-purple-300">Hackathon Journey</h3>
+    <button onClick={addHackathon} className="bg-purple-700 text-white px-3 py-1 rounded hover:shadow-md hover:shadow-purple-400 hover:transition-all hover:duration-300">Add Hackathon</button>
+  </div>
+
+  {profile?.hackathons.map((hackathon, index) => (
+    <div key={index} className="mb-4 mt-10 bg-purple-900/30  p-4 rounded-lg relative">
       {!editingHackathons.has(index) ? (
         <>
+        <div className='flex flex-row justify-between items-center'>
+        <div className='flex flex-col'>
           <h4 className="font-bold text-purple-300">{hackathon.name}</h4>
           <p className="text-gray-400">{hackathon.description}</p>
-          <small className="text-purple-500">{hackathon.date}</small>
-          <button onClick={() => toggleEditMode(index)} className="ml-3 bg-purple-700 text-white px-2 py-1 rounded">Edit</button>
+          <small className="text-purple-300">{hackathon.date}</small>
+        </div>
+        <button onClick={() => toggleHackathonEditMode(index)} className="ml-3 border border-purple-500 text-white px-2 py-1 rounded hover:bg-purple-500  hover:transition-all hover:duration-200">Edit</button>
+        </div>
         </>
       ) : (
         <div>
@@ -320,7 +438,7 @@ const DeveloperProfile = () => {
   type="text" 
   value={hackathon.name} 
   onChange={(e) => handleHackathonUpdate(index, { name: e.target.value })} 
-  className="w-full p-2 border rounded bg-gray-800 text-gray-100"
+  className="w-full p-2 border border-purple-200 rounded bg-gray-800 text-gray-300"
   disabled={!editingHackathons.has(index)}
 />
 
@@ -332,15 +450,13 @@ const DeveloperProfile = () => {
 ></textarea>
 
 <input 
-  type="text" 
+  type="date" 
   value={hackathon.date} 
   onChange={(e) => handleHackathonUpdate(index, { date: e.target.value })} 
   className="w-full p-2 border rounded bg-gray-800 text-gray-100"
   disabled={!editingHackathons.has(index)}
 />
-
-
-          <button onClick={() => toggleEditMode(index)} className="mt-2 bg-green-600 text-white px-2 py-1 rounded">Save</button>
+          <button onClick={() => toggleHackathonEditMode(index)} className="mt-2 bg-green-600 text-white px-2 py-1 rounded">Save</button>
           <button onClick={() => removeHackathon(index)} className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded">Remove</button>
         </div>
       )}

@@ -9,7 +9,7 @@ const Signup = () => {
   const [isSignUp, setIsSignUp] = useState(true);
   const [emailId, setEmailId] = useState();
   const [password, setPassword] = useState();
-  const [firstName, setName] = useState();
+  const [fullName, setName] = useState();
   const [userName, setUsername] = useState();
 
   const dispath = useDispatch();
@@ -33,7 +33,7 @@ else {
   try {
     console.log("In signup")
           const res = await axios.post(BASE_URL+"/signup", {
-            firstName, userName, emailId, password
+            fullName, userName, emailId, password
           }, {withCredentials:true});
 
           dispath(addUser(res.data.user));

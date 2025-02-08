@@ -13,13 +13,13 @@ profileRouter.patch('/profile/edit',userAuth, async (req, res)=>{
         else if(req.body.skills?.length < 3) throw new Error("You should add minimum 3 skills");
 
 
-        const allowedUpdates = ["firstName","lastName", "userName","gender","profileUrl","skills", "age", "college", "bio"];
+        const allowedUpdates = ["fullName", "userName","gender", "projects", "hackathons","profileUrl","skills", "age", "college", "bio"];
         const isAllowedUpdates = Object.keys(req.body).every((k)=>allowedUpdates.includes(k))
         if(!isAllowedUpdates) throw new Error("Updating isnt allowed")
         validateData(req)
         const user = req.user;
-        await User.findByIdAndUpdate(user._id, req.body, {runValidators:true})
-         res.send(user.firstName + "'s profile updated successfully")
+        const updatedUser = await User.findByIdAndUpdate(user._id, req.body, {runValidators:true})
+         res.json(updatedUser);
     }
     catch(err){
 res.send("ERROR : " + err.message)
