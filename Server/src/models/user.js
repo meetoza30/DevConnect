@@ -51,25 +51,8 @@ const userSchema = new Schema({
         X : String,
         linkedin: String
     },
-    hackathons :{
-        type : 
-        [{
-        name : String,
-        description : String,
-        date : Date
-    }],
-        default : function (){ return [];}
-},
-projects: {
-    type: [
-        {
-            name: String,
-            description: String,
-            ghLink: String
-        }
-    ],
-    default: function () { return []; } // Each user gets a new empty array
-}
+    hackathons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Hackathon" }],
+    projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }]
 },{
     timestamps: true
 })

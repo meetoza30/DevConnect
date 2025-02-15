@@ -21,15 +21,17 @@ const DeveloperProfile = () => {
   
 
   const getProfile = async()=>{
+    setTimeout(async() => {
+      try{
+        const res = await axios.get(BASE_URL + "/profile/view", {withCredentials:true})
+        console.log(res.data)
+        dispatch(addUser(res.data));
+      }
+      catch(err){
+        console.log(err);
+      }
+    }, 500);
     
-    try{
-      const res = await axios.get(BASE_URL + "/profile/view", {withCredentials:true})
-      console.log(res.data)
-      dispatch(addUser(res.data));
-    }
-    catch(err){
-      console.log(err);
-    }
   }
 
   const postProfile = async (updates) => {
@@ -45,13 +47,19 @@ const DeveloperProfile = () => {
 
   const userData = useSelector((store)=>store.user);
   useEffect(()=>{
-    getProfile();
+    setTimeout(() => {
+      getProfile();
+    }, 1000);
+    
   }, [])
 
   useEffect(() => {
-    if (userData) {
-      setProfile(userData); // No need to manually set default projects/hackathons
-    }
+    setTimeout(() => {
+      if (userData) {
+        setProfile(userData); // No need to manually set default projects/hackathons
+      }
+    }, 500);
+    
   }, [userData]);
 
 //  console.log(profile?.projects)

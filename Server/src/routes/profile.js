@@ -3,6 +3,8 @@ import User from "../models/user.js";
 import userAuth from '../middlewares/auth.js';
 import validateData from '../utils/validators.js';
 import bcrypt from 'bcrypt'
+import Project from '../models/project.js';
+import Hackathon from '../models/hackathon.js';
 
 const profileRouter = express.Router();
 
@@ -13,7 +15,7 @@ profileRouter.patch('/profile/edit',userAuth, async (req, res)=>{
         else if(req.body.skills?.length < 3) throw new Error("You should add minimum 3 skills");
 
 
-        const allowedUpdates = ["fullName", "userName","gender", "projects", "hackathons","profileUrl","skills", "age", "college", "bio"];
+        const allowedUpdates = ["fullName", "userName","gender","profileUrl","skills", "age", "college", "bio"];
         const isAllowedUpdates = Object.keys(req.body).every((k)=>allowedUpdates.includes(k))
         if(!isAllowedUpdates) throw new Error("Updating isnt allowed")
         validateData(req)
@@ -49,6 +51,65 @@ profileRouter.patch('/profile/edit/password', userAuth, async (req, res)=>{
             res.status(400).send(err.message)
         }
    
+})
+
+profileRouter.patch('/profile/edit/hackathon/:hackathonId', userAuth, async(req, res)=>{
+    try {
+        const {hackathonId} = req.params;
+        const updates = req.body;
+
+        const updatedHackathon = await Hackathon.findByIdAndUpdate({_id : hackathonId, userId : req.user._id},updates ,{new : true});
+
+        if(!updatedHackathon) return res.json({error : "Hackathon not found"});
+
+        res.json(updatedHackathon)
+    } catch (error) {
+        res.status(500).json({ error: err.message });
+    }
+})
+
+profileRouter.post('profile/add/hackathon', userAuth, async(req,res)=>{
+    try {
+        const { name, description, date, role, outcome} = req.body;
+        const newHackathon = await Project.create({userId : req.user._id, name, description, date, role, outcome});
+        await User.findByIdAndUpdate(req.user._id, {$push : {hackathons : newHackathon._id}})
+
+        res.json(newHackathon)
+    } catch (error) {
+        res.json(error);
+    }
+})
+
+profileRouter.post('/profile/add/project', userAuth, async(req,res)=>{
+    try {
+        const { title, description, url, techStack, startDate, endDate } = req.body;
+        const newProject = await Project.create({ userId: req.user._id, title, description, url, techStack, startDate, endDate });
+    
+        await User.findByIdAndUpdate(req.user._id, { $push: { projects: newProject._id } });
+    
+        res.json(newProject);
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
+})
+
+profileRouter.patch('/profile/edit/project/:projectId', userAuth, async(req,res)=>{
+    try {
+        const { projectId } = req.params;
+        const updates = req.body;
+    
+        const updatedProject = await Project.findOneAndUpdate(
+          { _id: projectId, userId: req.user._id },
+          updates,
+          { new: true } // Return updated project
+        );
+    
+        if (!updatedProject) return res.status(404).json({ error: "Project not found" });
+    
+        res.json(updatedProject);
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
 })
 
 export default profileRouter

@@ -7,6 +7,7 @@ import Hero from './components/Hero';
 import Signup from './components/Signup';
 import SkillsPage from './components/SkillsPage';
 import DeveloperProfile from './components/ProfilePage';
+import Feed from './components/Feed';
 
 const router = createHashRouter([
   {
@@ -20,6 +21,10 @@ const router = createHashRouter([
       {
         path : '/signin',
         element : <Signup />
+      },
+      {
+        path : '/feed',
+        element : <Feed />
       },
       {
         path: '/profile',
