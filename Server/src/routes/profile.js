@@ -28,13 +28,15 @@ res.send("ERROR : " + err.message)
     }
 })
 
-profileRouter.get('/profile/view', userAuth,(req, res)=>{
+profileRouter.get('/profile/view', userAuth, async (req, res)=>{
     try{
-        const user = req.user;
+        const user = await User.findById(req.user._id)
+        .populate("hackathons")
+        .populate("projects");
         res.send(user);
     }
     catch(err){
-        res.send("an error occured");
+        res.send(err);
     }
 })
 
@@ -53,11 +55,11 @@ profileRouter.patch('/profile/edit/password', userAuth, async (req, res)=>{
    
 })
 
-profileRouter.patch('/profile/edit/hackathon/:hackathonId', userAuth, async(req, res)=>{
+profileRouter.patch('/hackathon-edit/:hackathonId', userAuth, async(req, res)=>{
     try {
         const {hackathonId} = req.params;
         const updates = req.body;
-
+        console.log(updates)
         const updatedHackathon = await Hackathon.findByIdAndUpdate({_id : hackathonId, userId : req.user._id},updates ,{new : true});
 
         if(!updatedHackathon) return res.json({error : "Hackathon not found"});
@@ -68,10 +70,10 @@ profileRouter.patch('/profile/edit/hackathon/:hackathonId', userAuth, async(req,
     }
 })
 
-profileRouter.post('profile/add/hackathon', userAuth, async(req,res)=>{
+profileRouter.post('/profile/add/hackathon', userAuth, async(req,res)=>{
     try {
-        const { name, description, date, role, outcome} = req.body;
-        const newHackathon = await Project.create({userId : req.user._id, name, description, date, role, outcome});
+        const { name, description, date, role, outcome} = req.body.hackathon;
+        const newHackathon = await Hackathon.create({userId : req.user._id, name, description, date, role, outcome});
         await User.findByIdAndUpdate(req.user._id, {$push : {hackathons : newHackathon._id}})
 
         res.json(newHackathon)
@@ -93,11 +95,11 @@ profileRouter.post('/profile/add/project', userAuth, async(req,res)=>{
       }
 })
 
-profileRouter.patch('/profile/edit/project/:projectId', userAuth, async(req,res)=>{
+profileRouter.patch('/project-edit/:projectId', userAuth, async(req,res)=>{
     try {
-        const { projectId } = req.params;
+        const  projectId  = req.params.projectId;
         const updates = req.body;
-    
+        console.log(projectId)
         const updatedProject = await Project.findOneAndUpdate(
           { _id: projectId, userId: req.user._id },
           updates,
@@ -110,6 +112,44 @@ profileRouter.patch('/profile/edit/project/:projectId', userAuth, async(req,res)
       } catch (err) {
         res.status(500).json({ error: err.message });
       }
+})
+
+profileRouter.delete('/remove-project/:projectId',userAuth, async(req,res)=>{
+    const {projectId} = req.params;
+    console.log(projectId)
+    try{
+        await Project.findByIdAndDelete(projectId)
+    await User.updateOne(
+        {_id : req.user._id},
+        {$pull : {projects : projectId}}
+    )
+
+    res.status(200).json({message : "Project deleted successfully"})
+}
+    catch(err){
+        res.status(500).json({message : "AN ERROR OCCURED"})
+    }
+
+    
+})
+
+profileRouter.delete('/remove-hackathon/:hackathonId',userAuth, async(req,res)=>{
+    const {hackathonId} = req.params;
+   
+    try{
+        await Hackathon.findByIdAndDelete(hackathonId)
+    await User.updateOne(
+        {_id : req.user._id},
+        {$pull : {hackathons : hackathonId}}
+    )
+
+    res.status(200).json({message : "Hackathon deleted successfully"})
+}
+    catch(err){
+        res.status(500).json({message : "AN ERROR OCCURED"})
+    }
+
+    
 })
 
 export default profileRouter

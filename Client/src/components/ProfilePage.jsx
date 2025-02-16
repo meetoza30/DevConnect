@@ -3,6 +3,7 @@ import axios from 'axios';
 import {BASE_URL} from '../utils/constants.js'
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
+// import { startSession } from 'mongoose';
  
 
 const SKILLS_LIST = [
@@ -12,9 +13,9 @@ const SKILLS_LIST = [
 
 const DeveloperProfile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
-  const [hackathonEdit, setHackathonEdit] = useState(false);
+  const [tempHackathons, setTempHackathons] = useState([])
   const [editingHackathons, setEditingHackathons] = useState(new Set());
-  const [projectEdit, setProjectEdit] = useState(false);
+  const [tempProjects, setTempProjects] = useState([])
   const [editingProjects, setEditingProjects] = useState(new Set());
   const [profile, setProfile] = useState(null);
   const dispatch = useDispatch();
@@ -54,13 +55,22 @@ const DeveloperProfile = () => {
   }, [])
 
   useEffect(() => {
-    setTimeout(() => {
+    
       if (userData) {
-        setProfile(userData); // No need to manually set default projects/hackathons
+        setProfile(userData); 
       }
-    }, 500);
+   
     
   }, [userData]);
+
+  useEffect(() => {
+    if (profile?.projects && tempProjects.length === 0) {
+      setTempProjects(profile.projects);
+    }
+    if(profile?.hackathons && tempHackathons.length === 0) setTempHackathons(profile.hackathons);
+
+  }, [profile?.projects, profile?.hackathons]);
+  
 
 //  console.log(profile?.projects)
   
@@ -75,7 +85,7 @@ const DeveloperProfile = () => {
   });
 };
 
-const toggleProjectEditMode = (index) => {
+  const toggleProjectEditMode = (index) => {
   setEditingProjects(prevSet => {
     const newSet = new Set(prevSet);
     newSet.has(index) ? newSet.delete(index) : newSet.add(index);
@@ -104,90 +114,106 @@ const toggleProjectEditMode = (index) => {
     postProfile(e);
   };
 
-  const handleProjectUpdate = (index, updates) => {
-    setProfile(prev => {
-        const updatedProjects = prev.projects.map((project, i) =>
-            i === index ? { ...project, ...updates } : project
-        );
-        const updatedProfile = { ...prev, projects: updatedProjects };
-        
-        return updatedProfile;
-    });
-    
+  const handleProjectUpdate = (projectId, updates) => {
+    setTempProjects(prev => prev.map(p=>p._id === projectId ? {...p, ...updates} : p))
 };
 
   const addProject = () => {
-    setProfile(prev => {
-        const newProject = {
-            name: 'New Project',
-            description: '',
-            ghLink: '',
-            _id: `temp-${Date.now()}`
-        };
-        const updatedProjects = [...(prev.projects || []), newProject];
-        const updatedProfile = { ...prev, projects: updatedProjects };
-        postProfile({ projects: updatedProjects }); // Send only projects to the backend
-        return updatedProfile;
-    });
+    
+    const newProject = {title : "", description: "", url : "", techStack : "", _id : `temp-${Date.now()}`}
+    setTempProjects(prev => [
+      ...prev, newProject
+    ]);
+    setEditingProjects(prevSet => new Set(prevSet).add(newProject._id))
 
-    // Open edit mode for the new project
-    setEditingProjects(prevSet => {
-        const newSet = new Set(prevSet);
-        newSet.add(profile?.projects?.length || 0);
-        return newSet;
-    });
 };
 
-  const removeProject = (indexToRemove) => {
-    setProfile(prev => ({
-      ...prev,
-      projects: (prev.projects || []).filter((_, index) => index !== indexToRemove)
-    }));
+  const saveProject = async(projectId)=>{
+    console.log("In save project ", projectId)
+    const project = tempProjects.find(p=>p._id === projectId);
+    if(!project || projectId.startsWith("temp-")){
+      try { 
+        const res = await axios.post(BASE_URL + "/profile/add/project", project, {withCredentials : true});
+        setTempProjects(prev => prev.map(p=> p._id === projectId ? res.data : p));
+      }
+        catch(err){
+          console.log(err)
+        }
+    }
+    else {
+      await axios.patch(BASE_URL + `/project-edit/${projectId}`, project, {withCredentials : true})
+    }
+
+   setEditingProjects(prevSet=> {
+    const newSet = new Set(prevSet)
+    newSet.delete(projectId);
+    return newSet;
+   })
+}
+
+  const removeProject = async (projectId) => {
+   
+   try{
+    await axios.delete(BASE_URL + `/remove-project/${projectId}`, {withCredentials : true})
+    setTempProjects(prev => prev.filter(proj => proj._id !== projectId))
+  }
+   catch(err){
+    console.log(err)
+   }
   };
+
 
   const addHackathon = () => {
-    setProfile(prev => {
-      const currentHackathons = prev.hackathons || [];
-      return {
-        ...prev,
-        hackathons: [
-          ...currentHackathons,
-          { 
-            name: 'New Hackathon', 
-            description: '', 
-            date: new Date().toISOString().split('T')[0], // Default to today's date
-            _id: `temp-${Date.now()}`
-          }
-        ]
-      };
-    });
-  
-    // Immediately open edit mode for the new hackathon
-    setEditingHackathons(prevSet => {
+    const newHackathon = {name : "", description : "", outcome : "", date : "", role : "", _id : `temp-${Date.now()}`}
+    setTempHackathons(prev=>[
+      ...prev, newHackathon
+    ])
+    setEditingHackathons(prevSet => new Set(prevSet).add(newHackathon._id));
+  };
+
+  const saveHackathon = async(hackathonId)=>{
+    if (!hackathonId) {
+      console.error("saveHackathon called with undefined ID");
+      
+  }
+      const hackathon = tempHackathons.find(h=> h._id === hackathonId);
+      
+      if (!hackathon) {
+        console.error("Hackathon not found for ID:", hackathonId);
+        return;
+    }
+      if(!hackathon || hackathonId.startsWith("temp-")){
+        console.log(hackathon)
+        try {const res = await axios.post(BASE_URL + "/profile/add/hackathon", {hackathon}, {withCredentials : true})
+        if(res.data) setTempHackathons(prev=>prev.map(h=>(h._id === hackathonId ? res.data : h)))
+      }
+      catch(err){
+        console.log(err);
+      }
+      }
+      else {
+        await axios.patch(BASE_URL + `/hackathon-edit/${hackathonId}`, hackathon, {withCredentials : true})
+      }
+     setEditingHackathons(prevSet =>{
       const newSet = new Set(prevSet);
-      newSet.add(profile?.hackathons?.length || 0);
+      newSet.delete(hackathonId);
       return newSet;
-    });
-  };
+     })
+  }
 
-  const handleHackathonUpdate = (index, updatedFields) => {
-    setProfile(prev => ({
-      ...prev,
-      hackathons: prev.hackathons.map((hackathon, i) => 
-        i === index ? { ...hackathon, ...updatedFields } : hackathon
-      )
-    }));
-
-    
+  const handleHackathonUpdate = (hackathonId, updatedFields) => {
+    setTempHackathons(prev=>prev.map(h=>h._id === hackathonId ? {...h, ...updatedFields} : h))
   };
   
-  const removeHackathon = (indexToRemove) => {
-    setProfile(prev => ({
-      ...prev,
-      hackathons: prev.hackathons.filter((_, index) => index !== indexToRemove)
-    }));
-
-    postProfile(e);
+  const removeHackathon = async (hackathonId) => {
+    try{
+      
+    await axios.delete(BASE_URL + `/remove-hackathon/${hackathonId}`, {withCredentials : true})
+    setTempHackathons(prev => prev.filter(h=> h._id !== hackathonId))
+  }
+  catch(err){
+    console.log(err)
+  }
   };
 
   // ... (existing handleSkillsUpdate)
@@ -208,7 +234,7 @@ const toggleProjectEditMode = (index) => {
   return (
     
     <div className="min-h-screen bg-gray-900 text-gray-100 p-6 flex flex-col md:flex-row gap-6">
-      {/* Profile Section (Left Sidebar) & SKills & PRofiles - Unchanged */}
+      {/* Profile Section (Left Sidebar) & SKills & Profiles - Unchanged */}
       <div className="w-full md:w-1/3  rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-500">
         <div className="flex flex-col items-center">
           <div className="relative group">
@@ -337,16 +363,16 @@ const toggleProjectEditMode = (index) => {
         <div className="rounded-lg border border-purple-500 shadow-2xl p-6">
   <div className="flex justify-between items-center mb-4">
     <h3 className="text-xl font-bold text-purple-300">Project Journey</h3>
-    {profile?.projects.length > 0 &&
+    
     <button 
       onClick={addProject} 
       className="bg-purple-700 font-semibold text-white px-3 py-1 rounded hover:shadow-md hover:shadow-purple-400 hover:transition-all hover:duration-300"
     >
       Add Project
-    </button>}
+    </button>
   </div>
 
-  {(profile?.projects?.length === 0) ? (
+  {(tempProjects?.length === 0) ? (
     <div className="flex flex-col items-center justify-center py-10 bg-purple-900/30 rounded">
       <p className="text-gray-400 mb-4">No projects added yet</p>
       <button 
@@ -357,20 +383,20 @@ const toggleProjectEditMode = (index) => {
       </button>
     </div>
   ) : (
-    profile?.projects.map((project, index) => (
-      <div key={index} className="mb-4 bg-purple-900/30 mt-10 p-4 rounded relative">
-        {!editingProjects.has(index) ? (
+    tempProjects.map((project) => (
+      <div key={project._id} className="mb-4 bg-purple-900/30 mt-10 p-4 rounded relative">
+        {!editingProjects.has(project._id) ? (
           <>
             <div className='flex flex-row justify-between items-center'>
               <div className='flex flex-col'>
-                <h4 className="font-bold text-purple-300">{project.name}</h4>
+                <h4 className="font-bold text-purple-300">{project.title}</h4>
                 <p className="text-gray-400">{project.description}</p>
-                <a href={project.ghLink} className="text-purple-300 cursor-pointer hover:underline">
-                  View on GitHub
+                <a href={project.url} className="text-purple-300 cursor-pointer hover:underline">
+                  View
                 </a>
               </div>
               <button 
-                onClick={() => toggleProjectEditMode(index)} 
+                onClick={() => setEditingProjects(prevSet => new Set(prevSet).add(project._id))} 
                 className="ml-3 border border-purple-500 bg-gray-800 text-white px-2 py-1 rounded hover:bg-purple-500 hover:transition-all hover:duration-200"
               >
                 Edit
@@ -381,34 +407,35 @@ const toggleProjectEditMode = (index) => {
           <div>
             <input 
               type="text" 
-              value={project.name} 
-              onChange={(e) => handleProjectUpdate(index, { name: e.target.value })} 
+              value={project.title} 
+              onChange={(e) => handleProjectUpdate(project._id, { title: e.target.value })} 
               className="w-full p-2 border rounded bg-gray-800 text-gray-100"
-              disabled={!editingProjects.has(index)}
+              disabled={!editingProjects.has(project._id)}
             />
             
             <textarea 
               value={project.description} 
-              onChange={(e) => handleProjectUpdate(index, { description: e.target.value })} 
+              onChange={(e) => handleProjectUpdate(project._id, { description: e.target.value })} 
               className="w-full p-2 border rounded h-24 bg-gray-800 text-gray-100 mt-2"
-              disabled={!editingProjects.has(index)}
+              disabled={!editingProjects.has(project._id)}
             ></textarea>
             
             <input 
               type="text" 
-              value={project.ghLink} 
-              onChange={(e) => handleProjectUpdate(index, { ghLink: e.target.value })} 
+              value={project.url} 
+              placeholder='Put the link where project is hosted or Github repo'
+              onChange={(e) => handleProjectUpdate(project._id, { url: e.target.value })} 
               className="w-full p-2 border rounded bg-gray-800 text-gray-100 mt-2"
-              disabled={!editingProjects.has(index)}
+              disabled={!editingProjects.has(project._id)}
             />
             <button 
-              onClick={() => toggleProjectEditMode(index)} 
+              onClick={() => saveProject(project._id)} 
               className="mt-2 bg-green-600 text-white px-2 py-1 rounded"
             >
               Save
             </button>
             <button 
-              onClick={() => removeProject(index)} 
+              onClick={() => removeProject(project._id)} 
               className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded"
             >
               Remove
@@ -427,9 +454,12 @@ const toggleProjectEditMode = (index) => {
     <button onClick={addHackathon} className="bg-purple-700 text-white px-3 py-1 rounded hover:shadow-md hover:shadow-purple-400 hover:transition-all hover:duration-300">Add Hackathon</button>
   </div>
 
-  {profile?.hackathons.map((hackathon, index) => (
-    <div key={index} className="mb-4 mt-10 bg-purple-900/30  p-4 rounded-lg relative">
-      {!editingHackathons.has(index) ? (
+
+  
+
+  {tempHackathons.length > 0 && tempHackathons.map((hackathon) => (
+    <div key={hackathon._id} className="mb-4 mt-10 bg-purple-900/30  p-4 rounded-lg relative">
+      {!editingHackathons.has(hackathon._id) ? (
         <>
         <div className='flex flex-row justify-between items-center'>
         <div className='flex flex-col'>
@@ -437,7 +467,7 @@ const toggleProjectEditMode = (index) => {
           <p className="text-gray-400">{hackathon.description}</p>
           <small className="text-purple-300">{hackathon.date}</small>
         </div>
-        <button onClick={() => toggleHackathonEditMode(index)} className="ml-3 border border-purple-500 text-white px-2 py-1 rounded hover:bg-purple-500  hover:transition-all hover:duration-200">Edit</button>
+        <button onClick={() => setEditingHackathons(prevSet => new Set(prevSet).add(hackathon._id))} className="ml-3 border border-purple-500 text-white px-2 py-1 rounded hover:bg-purple-500  hover:transition-all hover:duration-200">Edit</button>
         </div>
         </>
       ) : (
@@ -445,27 +475,27 @@ const toggleProjectEditMode = (index) => {
 <input 
   type="text" 
   value={hackathon.name} 
-  onChange={(e) => handleHackathonUpdate(index, { name: e.target.value })} 
+  onChange={(e) => handleHackathonUpdate(hackathon._id, { name: e.target.value })} 
   className="w-full p-2 border border-purple-200 rounded bg-gray-800 text-gray-300"
-  disabled={!editingHackathons.has(index)}
+  disabled={!editingHackathons.has(hackathon._id)}
 />
 
 <textarea 
   value={hackathon.description} 
-  onChange={(e) => handleHackathonUpdate(index, { description: e.target.value })} 
+  onChange={(e) => handleHackathonUpdate(hackathon._id, { description: e.target.value })} 
   className="w-full p-2 border rounded h-24 bg-gray-800 text-gray-100"
-  disabled={!editingHackathons.has(index)}
+  disabled={!editingHackathons.has(hackathon._id)}
 ></textarea>
 
 <input 
   type="date" 
   value={hackathon.date} 
-  onChange={(e) => handleHackathonUpdate(index, { date: e.target.value })} 
+  onChange={(e) => handleHackathonUpdate(hackathon._id, { date: e.target.value })} 
   className="w-full p-2 border rounded bg-gray-800 text-gray-100"
-  disabled={!editingHackathons.has(index)}
+  disabled={!editingHackathons.has(hackathon._id)}
 />
-          <button onClick={() => toggleHackathonEditMode(index)} className="mt-2 bg-green-600 text-white px-2 py-1 rounded">Save</button>
-          <button onClick={() => removeHackathon(index)} className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded">Remove</button>
+          <button onClick={() => saveHackathon(hackathon._id)} className="mt-2 bg-green-600 text-white px-2 py-1 rounded">Save</button>
+          <button onClick={() => removeHackathon(hackathon._id)} className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded">Remove</button>
         </div>
       )}
     </div>
