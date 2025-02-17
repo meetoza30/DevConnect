@@ -38,19 +38,14 @@ const userSchema = new Schema({
     },
     profileUrl: {
         type: String,
-        default: "https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
+        
     },
     skills: [String],
     bio: {
         type: String,
         max: 200
     },
-    socialIds: {
-        ig: String,
-        github: String,
-        X : String,
-        linkedin: String
-    },
+    socialIds: {type: Object},
     hackathons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Hackathon" }],
     projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }]
 },{

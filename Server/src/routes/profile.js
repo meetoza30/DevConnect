@@ -5,6 +5,7 @@ import validateData from '../utils/validators.js';
 import bcrypt from 'bcrypt'
 import Project from '../models/project.js';
 import Hackathon from '../models/hackathon.js';
+import upload from '../utils/multer.js';
 
 const profileRouter = express.Router();
 
@@ -14,20 +15,37 @@ profileRouter.patch('/profile/edit',userAuth, async (req, res)=>{
         if(req.body.skills?.length >15) throw new Error("You can add only 15 skills")
         else if(req.body.skills?.length < 3) throw new Error("You should add minimum 3 skills");
 
-
-        const allowedUpdates = ["fullName", "userName","gender","profileUrl","skills", "age", "college", "bio"];
-        const isAllowedUpdates = Object.keys(req.body).every((k)=>allowedUpdates.includes(k))
-        if(!isAllowedUpdates) throw new Error("Updating isnt allowed")
-        validateData(req)
+        console.log(req.body.skills)
         const user = req.user;
-        const updatedUser = await User.findByIdAndUpdate(user._id, req.body, {runValidators:true})
-         res.json(updatedUser);
+        const updatedUser = await User.findByIdAndUpdate(user._id, req.body, {runValidators:true, new : true})
+        console.log(updatedUser)
+        res.json(updatedUser);
+
     }
     catch(err){
 res.send("ERROR : " + err.message)
     }
 })
 
+profileRouter.patch('/profile/upload', userAuth,upload.single('profilePic'), async(req,res)=>{
+    try {
+
+        if(!req.file) throw new Error("Please upload a file")
+            // console.log("Uploaded file details:", req.file);
+
+            let user = req.user;
+            console.log("before change : ",user.profileUrl)
+            // user.profileUrl = req.file.path;
+            // await user.save()
+            const updatesUser = await User.findByIdAndUpdate(user._id, {profileUrl : req.file.path})
+            console.log("after change", updatesUser.profileUrl)
+            // console.log("after change : ",user.profileUrl)
+
+        res.json({message : "Profile picture uploaded successfully", profileUrl : user.profileUrl})
+    } catch (error) {
+        res.status(400).json({error : error.message})
+    }
+})
 profileRouter.get('/profile/view', userAuth, async (req, res)=>{
     try{
         const user = await User.findById(req.user._id)

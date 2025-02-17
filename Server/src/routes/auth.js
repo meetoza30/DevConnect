@@ -44,7 +44,8 @@ catch(err){
 })
 
 authRouter.post('/logout',(req,res)=>{
-    res.cookie('token', null,{expires: new Date(Date.now())});
+    res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "strict" });
+    res.cookie('token', null);
     res.send("User logged out!!")
 })
 

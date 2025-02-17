@@ -119,8 +119,66 @@ const Layout = () => {
     <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
     <ul className="menu bg-base-200 min-h-full w-80 p-4">
       {/* Sidebar content here */}
-      <li><a>Sidebar Item 1</a></li>
-      <li><a>Sidebar Item 2</a></li>
+      {userExist && <li><Link>
+          <div className="flex flex-grow justify-between items-center">
+            <img src="https://img.icons8.com/?size=100&id=115270&format=png&color=C4B4FF" className=" size-4"/>
+            <p className=" px-1">Feed</p>
+          </div>
+          </Link></li>}
+
+          {!userExist && <li><Link to='/signin'>
+          <div className="flex flex-grow justify-between items-center">
+            <img src="https://img.icons8.com/?size=100&id=a8WlVR9Y2GKa&format=png&color=C4B4FF" className=" size-4"/>
+            <p className=" px-1">Sign In</p>
+          </div>
+          </Link></li>}
+
+          {!userExist && <li>
+            <HashLink smooth to="/#features">
+    <div className="flex flex-grow justify-between items-center">
+      <img
+        src="https://img.icons8.com/?size=100&id=37112&format=png&color=C4B4FF"
+        className="size-4"
+      />
+      <p className="px-1">Why DevConnect?</p>
+    </div>
+  </HashLink>
+</li>}
+
+{!userExist && <li>
+            <HashLink smooth to="/#dev">
+    <div className="flex flex-grow justify-between items-center">
+      <img
+        src="https://img.icons8.com/?size=100&id=77971&format=png&color=C4B4FF"
+        className="size-4"
+      />
+      <p className="px-1">Developer's Message</p>
+    </div>
+  </HashLink>
+</li>}
+          
+          {userExist && <li><Link>
+          <div className="flex flex-grow justify-between items-center">
+            <img src="https://img.icons8.com/?size=100&id=tlOx8qQnfJdO&format=png&color=C4B4FF" className=" size-4"/>
+            <p className=" px-1">Convos</p>
+          </div>
+          </Link></li>}
+
+          {userExist && <li><Link>
+          <div className="flex flex-grow justify-between items-center">
+            <img src="https://img.icons8.com/?size=100&id=5MMxDaGdGsBe&format=png&color=C4B4FF" className=" size-4"/>
+            <p className=" px-1">Reqs</p>
+          </div>
+          </Link></li>}
+
+          {userExist && <li><Link>
+          <div className="flex flex-grow justify-between items-center">
+            <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=C4B4FF" className=" size-4"/>
+            <p className=" px-1">Profile</p>
+          </div>
+          </Link></li>}
+          
+         
     </ul>
   </div>
 </div>

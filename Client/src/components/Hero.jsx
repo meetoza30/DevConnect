@@ -165,8 +165,8 @@ const Hero = ()=>{
   <div className="container px-6 mx-auto text-center">
     
     <p className="mt-4 text-gray-600 dark:text-gray-300 font-semibold text-xl">
-      Hi, I'm Meet Oza, the creator of DevConnect! As a passionate developer and hackathon enthusiast, I built this platform to help fellow developers collaborate, connect, and grow together.
-      Whether you're looking for a team or honing your skills, DevConnect is here for you.  
+      Hi, I'm <span className="text-purple-500">Meet Oza</span>, the creator of DevConnect! As a passionate developer and hackathon enthusiast, I built this platform to help fellow developers collaborate, connect, and grow together.
+      Whether you're looking for a team or honing your skills,<span className="text-purple-500">DevConnect</span>  is here for you.  
       Let's make this a thriving community for developers worldwide!
     </p>
     <p className="mt-4 text-gray-600 dark:text-gray-300">

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { BASE_URL } from "../utils/constants";
 import { addUser } from "../utils/userSlice";
+import Cookies from "js-cookie"
 
 const Signup = () => {
   const [isSignUp, setIsSignUp] = useState(true);
@@ -15,6 +16,11 @@ const Signup = () => {
   const dispath = useDispatch();
   const navigate = useNavigate();
 
+  useEffect(()=>{
+    const token = Cookies.get('token');
+    if(token) return navigate("/feed")
+  }, [])
+
   const handleLogin = async (e)=>{
     // console.log("In loginHandle")
 
@@ -24,6 +30,7 @@ const Signup = () => {
             const res = await axios.post(BASE_URL+"/login",{emailId, password},{withCredentials:true})
             console.log(res.data)
             dispath(addUser(res.data.user));
+            return navigate('/feed')
           } catch (err) {
             console.log(err)
           }
@@ -46,9 +53,7 @@ else {
   const toggleForm = () => {
     setIsSignUp(!isSignUp);
   };
-console.log(password)
-console.log(userName)
-console.log(emailId)
+
   return (
     <section className="flex flex-col items-center pt-6 my-20">
       <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">

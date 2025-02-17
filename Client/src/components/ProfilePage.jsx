@@ -3,7 +3,8 @@ import axios from 'axios';
 import {BASE_URL} from '../utils/constants.js'
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
-// import { startSession } from 'mongoose';
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom';
  
 
 const SKILLS_LIST = [
@@ -15,23 +16,69 @@ const DeveloperProfile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [tempHackathons, setTempHackathons] = useState([])
   const [editingHackathons, setEditingHackathons] = useState(new Set());
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState('');
   const [tempProjects, setTempProjects] = useState([])
   const [editingProjects, setEditingProjects] = useState(new Set());
   const [profile, setProfile] = useState(null);
+  const [tempProfile, setTempProfile] = useState({
+    fullName: "",
+    userName: "",
+    bio: "",
+    profileUrl: "",
+    socialIds: {
+      Linkedin: "",
+      Github: "",
+      LeetCode: "",
+      GeeksForGeeks: "",
+      CodeForces: "",
+      CodeChef: "",
+    }, 
+    skills: [],
+  });
+  const SKILLS_LIST = [
+    'C', 'C#', 'C++', 'CSS3', 'DART', 'GOLANG', 'GRAPHQL', 'HTML5', 'JAVA',
+    'JavaScript', 'KOTLIN', 'PHP', 'RUST', 'PYTHON', 'TYPESCRIPT',
+    'AWS', 'AZURE', 'FIREBASE', 'GOOGLE CLOUD', 'NETLIFY', 'VERCEL', 'RENDER',
+    'ANGULAR', 'BOOTSTRAP', 'BUM', 'CHART.JS', 'Context API', 'DAISYUI', 'DJANGO',
+    'Electron.JS', 'EXPRESS.JS', 'FLASK', 'FLUTTER', 'JQUERY', 'JWT', 'NEXT.JS',
+    'NODE.JS', 'NODEMON', 'OPENCV', 'REACT.JS', 'REACT ROUTER',
+    'SOCKET.IO', 'TAILWINDCSS', 'THREE.JS', 'VITE', 'VUE.JS',
+    'APPWRITE', 'MONGODB', 'MYSQL', 'POCKETBASE', 'POSTGRES',
+    'REDIS', 'SQLITE', 'PRISMA',
+    'KERAS', 'MATPLOTLIB', 'MLFLOW', 'NUMPY', 'PANDAS', 'PYTORCH', 'TENSORFLOW',
+  ];
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   
 
   const getProfile = async()=>{
-    setTimeout(async() => {
+    
       try{
         const res = await axios.get(BASE_URL + "/profile/view", {withCredentials:true})
+        setTempProfile({
+          fullName: res.data?.fullName, 
+          userName: res.data?.userName,
+          bio: res.data?.bio || "Bio not available",
+          profileUrl: res.data?.profileUrl,
+          socialIds: res.data?.socialIds || {
+            Linkedin: "",
+            Github: "",
+            LeetCode: "",
+            GeeksForGeeks: "",
+            CodeForces: "",
+            CodeChef: "",
+          }, 
+          skills: res.data?.skills || [],
+        });
         console.log(res.data)
         dispatch(addUser(res.data));
       }
       catch(err){
         console.log(err);
       }
-    }, 500);
+    
     
   }
 
@@ -48,19 +95,15 @@ const DeveloperProfile = () => {
 
   const userData = useSelector((store)=>store.user);
   useEffect(()=>{
-    setTimeout(() => {
+      const token = Cookies.get('token')
+      if(!token) return navigate("/signin")
       getProfile();
-    }, 1000);
-    
   }, [])
 
   useEffect(() => {
-    
       if (userData) {
         setProfile(userData); 
       }
-   
-    
   }, [userData]);
 
   useEffect(() => {
@@ -71,12 +114,27 @@ const DeveloperProfile = () => {
 
   }, [profile?.projects, profile?.hackathons]);
   
-
-//  console.log(profile?.projects)
-  
-
-
   // ... (existing toggleEditMode, handleProfileUpdate, handleSocialProfileUpdate)
+
+  const handleProfileUpdate = (field, value) => {
+    setTempProfile(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const saveProfile = async()=>{
+    try {
+      console.log(tempProfile)
+      
+      await axios.patch(BASE_URL + "/profile/edit", tempProfile, {withCredentials : true})
+      console.log("Profile updated sucessfully")
+      setIsEditMode(!isEditMode)
+    } catch (error) {
+      console.log(error)
+    }
+  } 
+
   const toggleHackathonEditMode = (index) => {
   setEditingHackathons(prevSet => {
     const newSet = new Set(prevSet);
@@ -97,21 +155,13 @@ const DeveloperProfile = () => {
     setIsEditMode(!isEditMode);
   }
 
-  const handleProfileUpdate = (updates) => {
-    setProfile(prev => ({ ...prev, ...updates }));
-    
-  };
-  
   const handleSocialProfileUpdate = (platform, value) => {
-    setProfile(prev => ({
+    // console.log(platform, " ", value)
+    setTempProfile((prev)=>({
       ...prev,
-      socialProfiles: {
-        ...prev.socialProfiles,
-        [platform]: value
-      }
-    }));
-
-    postProfile(e);
+      socialIds : {...prev.socialIds, [platform] : value}
+    }))
+    // console.log(tempProfile.socialIds)
   };
 
   const handleProjectUpdate = (projectId, updates) => {
@@ -161,7 +211,6 @@ const DeveloperProfile = () => {
     console.log(err)
    }
   };
-
 
   const addHackathon = () => {
     const newHackathon = {name : "", description : "", outcome : "", date : "", role : "", _id : `temp-${Date.now()}`}
@@ -215,10 +264,21 @@ const DeveloperProfile = () => {
     console.log(err)
   }
   };
+  const logout = async ()=>{
+      try{const res = await axios.post(BASE_URL + "/logout", {withCredentials : true})
+      console.log(res)
+      const token = Cookies.get('token')
+      
+      // setTempProfile({})
+    }
+      
+      catch(err){
+        console.log(err)
+      }
+  }
 
-  // ... (existing handleSkillsUpdate)
   const handleSkillsUpdate = (skill) => {
-    setProfile(prev => {
+    setTempProfile(prev => {
       const currentSkills = prev.skills;
       const updatedSkills = currentSkills.includes(skill)
         ? currentSkills.filter(s => s !== skill)
@@ -229,6 +289,28 @@ const DeveloperProfile = () => {
    
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    setPreview(URL.createObjectURL(file)); 
+  };
+  
+  const uploadProfilePic = async()=>{
+    if(!image) return alert("Please select an image")
+      const formData = new FormData();
+    formData.append('profilePic', image);
+
+    try{
+      const res = await axios.patch(BASE_URL + "/profile/upload", formData, {headers : {'Content-Type' : 'multipart/form-data'},
+      withCredentials : true});
+      tempProfile.profileUrl = res.profileUrl;
+      alert(res.data.message);
+    }
+    catch(err){
+      console.log(err)
+      alert("Upload failed")
+    }
+  }
   
 
   return (
@@ -239,44 +321,38 @@ const DeveloperProfile = () => {
         <div className="flex flex-col items-center">
           <div className="relative group">
             <img 
-              src={profile?.profileUrl} 
+              src={tempProfile?.profileUrl} 
               alt="Profile" 
               className="w-32 h-32 rounded-full object-cover border-4 border-purple-600"
             />
             {isEditMode && (
-              <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <span className="text-white">Upload</span>
-              </div>
+              <div className="profile-upload">
+              {preview && <img src={preview} alt="Profile Preview" className="w-24 h-24 rounded-full" />}
+              <input type="file" accept="image/*" onChange={handleFileChange} />
+              <button onClick={uploadProfilePic}>Upload</button>
+            </div>
             )}
           </div>
           
           {!isEditMode ? (
             <>
-              <h2 className="text-2xl font-bold mt-4 text-purple-300">{profile?.fullName}</h2>
-              <p className="text-purple-500">@{profile?.userName}</p>
-              <p className="text-center mt-2 text-gray-300">{profile?.bio}</p>
+              <h2 className="text-2xl font-bold mt-4 text-purple-300">{tempProfile?.fullName}</h2>
+              <p className="text-purple-500">@{tempProfile?.userName}</p>
+              <p className="text-center mt-2 text-gray-300">{tempProfile?.bio}</p>
             </>
           ) : (
             <div className="w-full mt-4 space-y-3">
+              <h2 className="text-2xl font-bold mt-4 text-purple-300">{tempProfile?.fullName}</h2>
               <input 
                 type="text" 
-                value={profile?.fullName}
-                onChange={(e) => handleProfileUpdate({ name: e.target.value })}
-                placeholder="Full Name"
-                className="w-full p-2 border rounded bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
-              />
-              <input 
-                type="text" 
-                value={profile?.userName}
-                onChange={(e) => handleProfileUpdate({ username: e.target.value })}
-                place
-                
-                holder="Username"
+                value={tempProfile?.userName}
+                onChange={(e) => handleProfileUpdate("userName", e.target.value)}
+                placeholder="Username"
                 className="w-full p-2 border rounded bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
               />
               <textarea 
-                value={profile?.bio}
-                onChange={(e) => handleProfileUpdate({ bio: e.target.value })}
+                value={tempProfile?.bio}
+                onChange={(e) => handleProfileUpdate("bio", e.target.value)}
                 placeholder="Bio"
                 className="w-full p-2 border rounded h-24 bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
               />
@@ -286,21 +362,21 @@ const DeveloperProfile = () => {
         </div>
         {/* Coding & Social Profiles */}
        <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500">
-          {/* <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding Profiles</h3>
+          <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding Profiles</h3>
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isEditMode ? 'opacity-100' : 'opacity-90'}`}>
-            {Object.entries(profile?.socials).map(([platform, link]) => (
+            {Object.entries(tempProfile?.socialIds).map(([platform]) => (
               <div key={platform} className="flex items-center space-x-2">
                 {isEditMode ? (
                   <input 
                     type="text"
-                    value={link}
+                    value={tempProfile?.socialIds[platform]}
                     onChange={(e) => handleSocialProfileUpdate(platform, e.target.value)}
                     placeholder={`${platform} Profile`}
                     className="w-full p-2 border rounded bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
                   />
-                ) : (
+                ) : tempProfile.socialIds[platform] && (
                   <a 
-                    href={link} 
+                    href={tempProfile.socialIds[platform].startsWith("http") ? tempProfile.socialIds[platform] : `https://${tempProfile.socialIds[platform]}`}
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="flex items-center p-1 underline hover:text-purple-400 transition-colors text-purple-200"
@@ -310,7 +386,7 @@ const DeveloperProfile = () => {
                 )}
               </div>
             ))}
-          </div> */}
+          </div>
         </div>
         {/* ... (existing Skills Showcase section) */}
 
@@ -320,7 +396,8 @@ const DeveloperProfile = () => {
           
           <div className="flex flex-wrap gap-2">
             {!isEditMode ? (
-              profile?.skills?.map(skill => (
+              tempProfile.skills.length > 0 &&
+              tempProfile?.skills?.map(skill => (
                 <span 
                   key={skill} 
                   className="bg-purple-700/30 text-purple-200 px-3 py-1 rounded-full text-sm"
@@ -335,7 +412,7 @@ const DeveloperProfile = () => {
                   onClick={() => handleSkillsUpdate(skill)}
                   className={`
                     px-3 py-1 rounded-full text-sm transition-colors
-                    ${profile?.skills.includes(skill) 
+                    ${tempProfile?.skills.includes(skill) 
                       ? 'bg-purple-700 text-white' 
                       : 'bg-gray-800 text-purple-400 hover:bg-purple-900'}
                   `}
@@ -348,12 +425,41 @@ const DeveloperProfile = () => {
           </div>
         </div>
         
-        <button 
-          onClick={toggleEditMode} 
-          className="mt-4 w-full flex items-center justify-center p-2 bg-purple-700 text-white rounded hover:bg-purple-600 transition-colors"
-        >
-          {isEditMode ? 'Save Profile' : 'Edit Profile'}
-        </button>
+        <div className="mt-6 flex justify-center space-x-4">
+        {!isEditMode ? (
+          <div className="flex flex-col justify-center">
+          <button
+            onClick={() => setIsEditMode(true)}
+            className="  px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700"
+          >
+            Edit Profile
+          </button>
+          <button
+            onClick={() => logout()}
+            className="  px-4 py-2 bg-purple-600 mt-3 text-white rounded-lg shadow-md hover:bg-purple-700"
+          >
+           Log Out
+          </button>
+          </div>
+
+          
+        ) : (
+          <>
+            <button
+              onClick={() => setIsEditMode(false)}
+              className="px-4 py-2 mt-3 bg-gray-600 text-white rounded-lg shadow-md hover:bg-gray-700"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={saveProfile}
+              className="px-4 py-2 mt-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700"
+            >
+              Save
+            </button>
+          </>
+        )}
+      </div>
       </div>
 
       {/* Right Section */}
@@ -375,12 +481,7 @@ const DeveloperProfile = () => {
   {(tempProjects?.length === 0) ? (
     <div className="flex flex-col items-center justify-center py-10 bg-purple-900/30 rounded">
       <p className="text-gray-400 mb-4">No projects added yet</p>
-      <button 
-        onClick={addProject}
-        className="bg-purple-700 font-semibold text-white px-4 py-2 rounded hover:bg-purple-600 transition-all duration-300"
-      >
-        Start Your Project Journey
-      </button>
+      
     </div>
   ) : (
     tempProjects.map((project) => (
@@ -454,9 +555,12 @@ const DeveloperProfile = () => {
     <button onClick={addHackathon} className="bg-purple-700 text-white px-3 py-1 rounded hover:shadow-md hover:shadow-purple-400 hover:transition-all hover:duration-300">Add Hackathon</button>
   </div>
 
-
-  
-
+  {(tempHackathons?.length === 0) &&  (
+    <div className="flex flex-col items-center justify-center py-10 bg-purple-900/30 rounded">
+      <p className="text-gray-400 mb-4">No hackathons added yet</p>
+      
+    </div>
+  )}
   {tempHackathons.length > 0 && tempHackathons.map((hackathon) => (
     <div key={hackathon._id} className="mb-4 mt-10 bg-purple-900/30  p-4 rounded-lg relative">
       {!editingHackathons.has(hackathon._id) ? (
