@@ -1,6 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
 import validate from 'validator'
 import jwt from 'jsonwebtoken'
+import 'dotenv/config'
 
 const userSchema = new Schema({
     fullName : {
@@ -54,7 +55,7 @@ const userSchema = new Schema({
 
 userSchema.methods.getJWToken = async function(){
     const user = this;
-    const token = await jwt.sign({_id: user._id}, "DevConnect$3#12", {expiresIn: '576h'})
+    const token = await jwt.sign({_id: user._id}, process.env.DEVCONNECT_TOKEN_KEY, {expiresIn: '576h'})
 
     return token;
 }
