@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
+import 'dotenv/config'
 
-const string = "mongodb+srv://meetoz305:OqBMIsFLrx1044Cf@meetcluster.yqdeb.mongodb.net/DevConnect"
+const string = process.env.MONGODB_URI
 async function connectDB() {
     await mongoose.connect(string)
 }
