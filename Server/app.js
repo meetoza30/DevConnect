@@ -33,7 +33,7 @@ connectDB()
     console.error("DB connection isnt established")
 })
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://dev-connect-opal.vercel.app/",
     credentials: true,
 }))
 app.use(express.json())
