@@ -1,2 +1,1 @@
-export const BASE_URL =
-  location.hostname === "localhost" ? "http://localhost:4000" : "/api";
+export const BASE_URL = "https://devconnect-0o9t.onrender.com"; // Your deployed backend URL

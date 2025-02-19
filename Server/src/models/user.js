@@ -56,7 +56,7 @@ const userSchema = new Schema({
 userSchema.methods.getJWToken = async function(){
     const user = this;
     const token = await jwt.sign({_id: user._id}, process.env.DEVCONNECT_TOKEN_KEY, {expiresIn: '576h'})
-
+    console.log(token, " set successfully")
     return token;
 }
 const User = model('User', userSchema);

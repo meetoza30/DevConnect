@@ -82,21 +82,13 @@ const DeveloperProfile = () => {
     
   }
 
-  const postProfile = async (updates) => {
-    try {
-      const res = await axios.patch(BASE_URL+"/profile/edit", {  }, { withCredentials: true });
-      
-      dispatch(addUser(res.data));
-      
-    } catch(err) {
-      console.log(err);
-    }
-  };
+ 
 
   const userData = useSelector((store)=>store.user);
   useEffect(()=>{
       const token = Cookies.get('token')
-      if(!token) return navigate("/signin")
+      // console.log(token)
+      // if(!token) return navigate("/signin")
       getProfile();
   }, [])
 
