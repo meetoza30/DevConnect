@@ -32,10 +32,21 @@ connectDB()
 .catch((err)=>{
     console.error("DB connection isnt established")
 })
-app.use(cors({
-    origin: "https://dev-connect-opal.vercel.app/",
-    credentials: true,
-}))
+const allowedOrigins = [
+    'http://localhost:5173', // Local development
+    'https://dev-connect-opal.vercel.app' // Deployed frontend
+  ];
+  
+  app.use(cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true
+  }));
 app.use(express.json())
 app.use(cookieParser())
 app.use('/', authRouter)
