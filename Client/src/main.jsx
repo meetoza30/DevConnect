@@ -8,6 +8,9 @@ import Signup from './components/Signup';
 import SkillsPage from './components/SkillsPage';
 import DeveloperProfile from './components/ProfilePage';
 import Feed from './components/Feed';
+import Profile from './components/Profile';
+import UserReqCard from './components/UserReqCard.jsx';
+import Reqs from './components/ShowReqs.jsx';
 
 const router = createHashRouter([
   {
@@ -23,12 +26,24 @@ const router = createHashRouter([
         element : <Signup />
       },
       {
+        path : '/reqs/review',
+        element : <Reqs />
+      },
+      {
         path : '/feed',
         element : <Feed />
       },
       {
         path: '/profile',
         element: <DeveloperProfile />
+      },
+      {
+        path: '/profile/user/:userId',
+        element: <Profile />
+      },
+      {
+        path: '/usercard',
+        element: <UserReqCard />
       },
       {
         path: '/profile/update/skills',

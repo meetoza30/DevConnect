@@ -31,7 +31,7 @@ const skillsData = {
 const SkillsPage = () => {
   const [skills, setSkills] = useState([]);
   const dispath = useDispatch();
-  const naviaget = useNavigate();
+  const navigate = useNavigate();
   const postSkills = async(e)=>{
     // e.preventDefault();
     try{
@@ -57,7 +57,8 @@ const SkillsPage = () => {
 
   const handleNext = () => {
     console.log(skills);
-    postSkills() // Send the selected skills to your database
+    postSkills()
+    return navigate('/profile') // Send the selected skills to your database
   };
 
   return (

@@ -15,7 +15,7 @@ const reqSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: {
-            values : ["accepted", "ignore", "interested", "rejected"],
+            values : ["accepted", "ignore", "interested", "rejected", "withdraw"],
             message : '{VALUE} is incorrect status type'
         }
     }

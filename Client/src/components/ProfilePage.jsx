@@ -56,7 +56,7 @@ const DeveloperProfile = () => {
   const getProfile = async()=>{
     
       try{
-        const res = await axios.get(BASE_URL + "/profile/view", {withCredentials:true})
+        const res = await axios.get(BASE_URL + `/profile/view`, {withCredentials:true})
         setTempProfile({
           fullName: res.data?.fullName, 
           userName: res.data?.userName,
@@ -319,17 +319,17 @@ const DeveloperProfile = () => {
       {/* Profile Section (Left Sidebar) & SKills & Profiles - Unchanged */}
       <div className="w-full md:w-1/3  rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-500">
         <div className="flex flex-col items-center">
-          <div className="relative group">
+          <div className="relative group flex flex-col justify-center items-center">
             <img 
               src={tempProfile?.profileUrl} 
               alt="Profile" 
-              className="w-32 h-32 rounded-full object-cover border-4 border-purple-600"
+              className="w-32 h-32 z-10 rounded-full object-cover border-4 border-purple-600"
             />
             {isEditMode && (
-              <div className="profile-upload">
+              <div className="profile-upload flex mt-2">
               {preview && <img src={preview} alt="Profile Preview" className="w-24 h-24 rounded-full" />}
-              <input type="file" accept="image/*" onChange={handleFileChange} />
-              <button onClick={uploadProfilePic}>Upload</button>
+              <input type="file" className='text-purple-500' accept="image/*" onChange={handleFileChange} />
+              <button className='bg-purple-500 px-2 py-1 rounded-lg' onClick={uploadProfilePic}>Upload</button>
             </div>
             )}
           </div>
@@ -361,7 +361,7 @@ const DeveloperProfile = () => {
           
         </div>
         {/* Coding & Social Profiles */}
-       <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500">
+       <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500 z-20">
           <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding Profiles</h3>
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isEditMode ? 'opacity-100' : 'opacity-90'}`}>
             {Object.entries(tempProfile?.socialIds).map(([platform]) => (

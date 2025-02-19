@@ -47,6 +47,7 @@ profileRouter.patch('/profile/upload', userAuth,upload.single('profilePic'), asy
     }
 })
 profileRouter.get('/profile/view', userAuth, async (req, res)=>{
+    // const {userId} = req.params;
     try{
         const user = await User.findById(req.user._id)
         .populate("hackathons")
@@ -58,6 +59,18 @@ profileRouter.get('/profile/view', userAuth, async (req, res)=>{
     }
 })
 
+profileRouter.get('/profile/user/:userId', userAuth, async (req, res)=>{
+    const {userId} = req.params;
+    try{
+        const user = await User.findById(userId)
+        .populate("hackathons")
+        .populate("projects");
+        res.send(user);
+    }
+    catch(err){
+        res.send(err);
+    }
+})
 profileRouter.patch('/profile/edit/password', userAuth, async (req, res)=>{
     try{ 
         const user = req.user;

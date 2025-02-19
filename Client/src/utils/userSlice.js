@@ -12,11 +12,14 @@ const userSlice = createSlice({
         },
         addSkills: (state, action) => {
             return { ...state, skills: action.payload };
-        }
+        },
+         addOtherUser :(state, action)=> {
+            return {...state, ...action.payload}
+         }
     }
 });
 
-export const {addUser, removeUser, addSkills} = userSlice.actions;
+export const {addUser, removeUser, addSkills, addOtherUser} = userSlice.actions;
 const userReducer = userSlice.reducer;
 
 export default userReducer;

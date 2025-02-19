@@ -11,7 +11,7 @@ connectionRouter.post('/reqs/send/:status/:receiverId', userAuth, async (req, re
     const receiverId = req.params.receiverId;
     const status = req.params.status;
 
-   
+    console.log(status, " ", receiverId)
 
     const allowedStatus = ["interested", "ignore"];
     if(!allowedStatus.includes(status)) throw new Error("Invalid status")
@@ -37,14 +37,18 @@ catch(err){
 
 })
 
-connectionRouter.post('/reqs/review/:status/:reqid', userAuth, async (req, res)=>{
+connectionRouter.patch('/reqs/review/:status/:reqid', userAuth, async (req, res)=>{
     try{const user = req.user;
     const reqid = req.params.reqid;
     const status = req.params.status;
     
-    const allowedStatus = ["accepted", "rejected"];
+    const allowedStatus = ["accepted", "rejected", "withdraw"];
     if(!allowedStatus.includes(status)) throw new Error("Invalid status")
-    
+        if(status === "withdraw"){
+            const deletedReq = await Req.findByIdAndDelete(reqid)
+            res.json({message : "Req withdrawn"});
+            return;
+        }
     const request = await Req.findById({_id : reqid, receiverId : user._id, status : "interested"});
     if(!request) throw new Error("Req not found")
     

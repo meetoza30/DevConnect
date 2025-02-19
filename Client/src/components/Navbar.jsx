@@ -51,7 +51,7 @@ const Layout = () => {
         <ul className="menu menu-horizontal">
           {/* Navbar menu content here */}
           
-          {userExist && <li><Link>
+          {userExist && <li><Link to="/feed">
           <div className="flex flex-grow justify-between items-center">
             <img src="https://img.icons8.com/?size=100&id=115270&format=png&color=C4B4FF" className=" size-4"/>
             <p className=" px-1">Feed</p>
@@ -96,14 +96,14 @@ const Layout = () => {
           </div>
           </Link></li>}
 
-          {userExist && <li><Link>
+          {userExist && <li><Link to="/reqs/review">
           <div className="flex flex-grow justify-between items-center">
             <img src="https://img.icons8.com/?size=100&id=5MMxDaGdGsBe&format=png&color=C4B4FF" className=" size-4"/>
             <p className=" px-1">Reqs</p>
           </div>
           </Link></li>}
 
-          {userExist && <li><Link>
+          {userExist && <li><Link to="/profile">
           <div className="flex flex-grow justify-between items-center">
             <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=C4B4FF" className=" size-4"/>
             <p className=" px-1">Profile</p>
@@ -119,8 +119,8 @@ const Layout = () => {
     <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
     <ul className="menu bg-base-200 min-h-full w-80 p-4">
       {/* Sidebar content here */}
-      {userExist && <li><Link>
-          <div className="flex flex-grow justify-between items-center">
+      {userExist && <li><Link to="/feed">
+          <div className="flex flex-grow justify-between items-center z-50 ">
             <img src="https://img.icons8.com/?size=100&id=115270&format=png&color=C4B4FF" className=" size-4"/>
             <p className=" px-1">Feed</p>
           </div>
@@ -164,14 +164,14 @@ const Layout = () => {
           </div>
           </Link></li>}
 
-          {userExist && <li><Link>
+          {userExist && <li><Link to="/reqs/review">
           <div className="flex flex-grow justify-between items-center">
             <img src="https://img.icons8.com/?size=100&id=5MMxDaGdGsBe&format=png&color=C4B4FF" className=" size-4"/>
             <p className=" px-1">Reqs</p>
           </div>
           </Link></li>}
 
-          {userExist && <li><Link>
+          {userExist && <li><Link to={`profile`}>
           <div className="flex flex-grow justify-between items-center">
             <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=C4B4FF" className=" size-4"/>
             <p className=" px-1">Profile</p>

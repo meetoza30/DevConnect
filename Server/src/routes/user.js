@@ -10,12 +10,12 @@ userRouter.get('/user/reqs/received', userAuth, async (req, res)=>{
     const reqs = await Req.find({
         receiverId : user._id,
         status : "interested"
-    }).populate("senderId", "firstName lastName")
+    }).populate("senderId", "fullName userName skills bio profileUrl")
     if(!reqs) throw new Error("No reqs available")
 
     res.json({
         message : "Here are the reqs",
-        data : reqs
+        reqs
     })
 }
 catch(err){
@@ -29,9 +29,9 @@ userRouter.get('/user/reqs/sent', userAuth, async (req, res)=>{
       try  {const user = req.user;
         const sentReqs = await Req.find(
             {senderId : user._id, status : "interested"}
-        ).populate("senderId", ["firstName", "lastName", "skills", "bio"])
+        ).populate("receiverId", "fullName userName profileUrl skills bio")
         if(!sentReqs) throw new Error ("Reqs not available")
-        res.json({data : sentReqs})
+        res.json({reqs : sentReqs})
     }
 catch(err){
     res.status(400).json({message : "ERROR : "+ err.message})
@@ -62,7 +62,7 @@ catch(err){
 })
 
 userRouter.get('/feed', userAuth, async (req, res)=>{
-    const SAFE_DATA = "firstName lastName userName "
+    const SAFE_DATA = "firstName lastName userName profileUrl bio skills"
     try{
         
         const user = req.user;
@@ -85,14 +85,14 @@ userRouter.get('/feed', userAuth, async (req, res)=>{
             _id : { $nin : Array.from(hideFromFeed)}
         }).select(SAFE_DATA)
       
-        res.send(feedData)
+        res.json({feedData})
     }
     catch(err){
         res.json({error : err.message})
     }
 })
 
-userRouter.get('/feed&college', userAuth,async (req, res)=>{
+userRouter.get('/feed/:college', userAuth,async (req, res)=>{
     try{
         const user = req.user;
         const clg = req.query.college.toString()

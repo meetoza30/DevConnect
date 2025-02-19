@@ -1,19 +1,30 @@
 import { motion } from "framer-motion";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const UserCard = ({ user, onSwipe }) => {
+  const swipe = async ()=>{
+    await axios.post(BASE_URL + "")
+  }
+  const [x, setX] = useState();
+  const navigate = useNavigate()
   return (
     <motion.div
       className="absolute w-[400px] h-[80vh] flex justify-center items-center group"
       initial={{ scale: 1, y: 0 }}
       animate={{ scale: 1, y: 0 }}
-      exit={{ x: 200, opacity: 0 }}
+      exit={{ x: x, y:100, opacity: 0 }}
       drag="x"
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={(event, info) => {
         if (info.offset.x > 100) {
-          onSwipe("right", user.id);
+          onSwipe("interested", user._id);
+          setX(200)
         } else if (info.offset.x < -100) {
-          onSwipe("left", user.id);
+          onSwipe("ignored", user._id);
+          setX(-200)
         }
       }}
       transition={{ duration: 0.4 }}
@@ -29,22 +40,37 @@ const UserCard = ({ user, onSwipe }) => {
       <div className="absolute z-20 rounded-2xl w-full h-full flex flex-col items-center justify-center p-8">
         {/* Profile image */}
         <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-white/20 mb-8">
-          <img src={user?.url} alt="Profile" className="w-full h-full object-cover" />
+          <img src={user?.profileUrl} alt="Profile" className="w-full h-full object-cover" />
         </div>
 
         {/* Name and skills */}
         <div className="text-center">
-          <h3 className="text-white font-medium text-3xl mb-4">{user?.name}</h3>
-          <div className="flex flex-wrap justify-center gap-2 mt-4 max-w-sm">
-            <span className="text-base bg-white/10 text-white/80 px-4 py-2 rounded-full">{user?.bio}</span>
+          <h3 className="text-white font-medium text-3xl mb-4">{user?.firstName}</h3>
+          <div className="flex flex-wrap flex-col justify-center gap-2 mt-4 max-w-sm">
+            <span className="text-base bg-white/10 text-white/80 px-4 py-2 rounded-full">{user?.userName}</span>
+            <h5 className=" text-lg text-white font-medium mb-4">
+              {user?.bio ? user?.bio : "Bio not available"}</h5>
+              <div className="grid grid-cols-3 md:grid-cols-3 gap-4">
+            {user?.skills && user?.skills.map(skill => (
+              <span 
+              key={skill} 
+              className="bg-purple-700/30 text-purple-200 px-3 py-1 rounded-full text-sm"
+            >
+              {skill}
+            </span>
+            ))}
+            </div>
           </div>
         </div>
 
         {/* Action buttons */}
-        <div className="absolute bottom-0 w-full flex justify-center gap-6 mb-6">
+        <div className="absolute bottom-0 w-full flex justify-center gap-6 mt-2 mb-3">
           {/* Reject button */}
           <button
-            onClick={() => onSwipe("left", user.id)}
+            onClick={() => {onSwipe("ignore", user._id)
+              setX(-200)
+            }
+            }
             className="w-16 h-16 bg-black/20 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-8 h-8">
@@ -54,12 +80,21 @@ const UserCard = ({ user, onSwipe }) => {
 
           {/* Accept button */}
           <button
-            onClick={() => onSwipe("right", user.id)}
+            onClick={() =>{ onSwipe("interested", user._id) 
+              setX(200)}}
             className="w-16 h-16 bg-black/20 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-8 h-8">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
+          </button>
+
+              {/* View profile button */}
+          <button
+            onClick={() => navigate(`/profile/user/${user._id}`)}
+            className="px-10 h-16 bg-black/20 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-colors"
+          >
+           View Profile
           </button>
         </div>
       </div>
