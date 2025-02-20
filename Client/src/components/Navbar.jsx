@@ -11,18 +11,19 @@ const Layout = () => {
   
   let [userExist, setUserExist] = useState(false);
   const dispatch = useDispatch();
-  const fetchUser = async ()=>{
-      const res = await axios.get(BASE_URL + "/profile/view", {withCredentials:true})
-      // console.log(res.data);
-      dispatch(addUser(res.data));
-  }
+  useEffect(()=>{
+    const checkAuth = async()=>{
+const res = await axios.get(BASE_URL + "/check-auth", {withCredentials : true})
+if(res.data?.status){
+  setUserExist(true)
+} 
+}
+checkAuth();
+  }, [])
 
  
   const userData = useSelector((store)=>store.user);
-  useEffect(()=>{
-    fetchUser();
-    if(userData) setUserExist(true)
-  })
+ 
 
 
   return (
@@ -58,7 +59,7 @@ const Layout = () => {
           </div>
           </Link></li>}
 
-          {!userExist && <li><Link>
+          {!userExist && <li><Link to='/signin'>
           <div className="flex flex-grow justify-between items-center">
             <img src="https://img.icons8.com/?size=100&id=a8WlVR9Y2GKa&format=png&color=C4B4FF" className=" size-4"/>
             <p className=" px-1">Sign In</p>
@@ -89,7 +90,7 @@ const Layout = () => {
   </HashLink>
 </li>}
           
-          {userExist && <li><Link>
+          {userExist && <li><Link to='/convos'>
           <div className="flex flex-grow justify-between items-center">
             <img src="https://img.icons8.com/?size=100&id=tlOx8qQnfJdO&format=png&color=C4B4FF" className=" size-4"/>
             <p className=" px-1">Convos</p>
@@ -157,7 +158,7 @@ const Layout = () => {
   </HashLink>
 </li>}
           
-          {userExist && <li><Link>
+          {userExist && <li><Link to='/convos'>
           <div className="flex flex-grow justify-between items-center">
             <img src="https://img.icons8.com/?size=100&id=tlOx8qQnfJdO&format=png&color=C4B4FF" className=" size-4"/>
             <p className=" px-1">Convos</p>
@@ -171,7 +172,7 @@ const Layout = () => {
           </div>
           </Link></li>}
 
-          {userExist && <li><Link to={`profile`}>
+          {userExist && <li><Link to='/profile'>
           <div className="flex flex-grow justify-between items-center">
             <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=C4B4FF" className=" size-4"/>
             <p className=" px-1">Profile</p>

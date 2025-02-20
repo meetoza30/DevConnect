@@ -5,6 +5,7 @@ import axios from 'axios';
 import { BASE_URL } from "../utils/constants";
 import { addUser } from "../utils/userSlice";
 import Cookies from "js-cookie"
+import { toast } from 'react-toastify';
 
 const Signup = () => {
   const [isSignUp, setIsSignUp] = useState(true);
@@ -17,8 +18,16 @@ const Signup = () => {
   const navigate = useNavigate();
 
   useEffect(()=>{
-    const token = Cookies.get('token',{path :'/'});
-    if(token) return navigate("/feed")
+    const checkAuth = async()=>{
+const res = await axios.get(BASE_URL + "/check-auth", {withCredentials : true})
+if(res.data?.status){
+  toast.error("User already logged in, redirecting to feed")
+  return navigate('/feed')
+} 
+
+    }
+
+    checkAuth();
   }, [])
 
   const handleLogin = async (e)=>{
@@ -28,10 +37,14 @@ const Signup = () => {
         if(!isSignUp){
           try {
             const res = await axios.post(BASE_URL+"/login",{emailId, password},{withCredentials:true})
-            console.log(res.data)
+            console.log(res.data.error)
+            if(res.data.error === "Invalid Credentials") throw new Error("Invalid Credentials, please try again")
             dispath(addUser(res.data.user));
+            toast.success("Successfully logged in!");
+
             return navigate('/feed')
           } catch (err) {
+            toast.error(err.response?.data || "Invalid Credentials. Please try again.");
             console.log(err)
           }
         }
@@ -44,8 +57,10 @@ else {
           }, {withCredentials:true});
 
           dispath(addUser(res.data.user));
+          toast.success("Account created successfully!");
           return navigate('/profile/update/skills');
         } catch (error) {
+          toast.error(error.response?.data || "Signup failed. Please try again.");
           console.log(error)
         }}
   }

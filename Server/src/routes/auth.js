@@ -2,6 +2,7 @@ import express from 'express'
 import User from "../models/user.js";
 import bcrypt from 'bcrypt';
 import validateData from "../utils/validators.js";
+import userAuth from '../middlewares/auth.js';
 
 
 const authRouter = express.Router()
@@ -51,14 +52,33 @@ authRouter.post('/login', async (req,res)=>{
         }
     }
 catch(err){
-    res.send(err.message)
+    res.json({error : err.message})
 }
 })
 
 authRouter.post('/logout',(req,res)=>{
-    res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "strict" });
-    res.cookie('token', null);
-    res.send("User logged out!!")
+    res.clearCookie("token", { 
+        httpOnly: true, 
+        secure: process.env.NODE_ENV === "production", 
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        path: "/" 
+    });
+    
+    
+    res.status(200).json({ success: true, message: "Logged out successfully" });
 })
 
+authRouter.get('/check-auth', (req,res)=>{
+    try{
+        const {token} = req.cookies;
+        if(!token){
+            res.json({message : "Authenticated", status : false})
+            return;
+        } 
+        res.json({message : "Authenticated", status : true})
+    }
+     catch(err){
+        res.json({status : false, message : "Not authenticated"})
+     }
+})
 export default authRouter;

@@ -11,6 +11,7 @@ import Feed from './components/Feed';
 import Profile from './components/Profile';
 import UserReqCard from './components/UserReqCard.jsx';
 import Reqs from './components/ShowReqs.jsx';
+import Convos from './components/Convos.jsx';
 
 const router = createHashRouter([
   {
@@ -28,6 +29,10 @@ const router = createHashRouter([
       {
         path : '/reqs/review',
         element : <Reqs />
+      },
+      {
+        path : '/convos',
+        element : <Convos />
       },
       {
         path : '/feed',

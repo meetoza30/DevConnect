@@ -50,7 +50,7 @@ userRouter.get('/user/connecs',userAuth, async (req, res)=>{
 if(!connecs) throw new Error("No connecs available");
 res.json({
     message : "Here are the connecs",
-    data : connecs
+    connecs
 })
 }
 catch(err){

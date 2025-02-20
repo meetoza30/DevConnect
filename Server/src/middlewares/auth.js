@@ -3,7 +3,8 @@ import User from '../models/user.js';
 import 'dotenv/config'
 
 const userAuth = async (req, res, next)=>{
-   try {const {token} = req.cookies;
+   try {
+    const {token} = req.cookies;
     if(!token) throw new Error("Invalid entry, please login again")
     const decodedId = await jwt.verify(token, process.env.DEVCONNECT_TOKEN_KEY )
 

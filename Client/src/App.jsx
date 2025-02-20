@@ -7,6 +7,8 @@ import SkillsPage from './components/SkillsPage';
 import Hero from './components/Hero';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import appstore from './utils/store';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
@@ -20,6 +22,19 @@ function App() {
         <Outlet />
       </main>
     </div>
+
+    <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      
     </Provider>
 
   );

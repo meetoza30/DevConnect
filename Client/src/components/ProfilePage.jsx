@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {BASE_URL} from '../utils/constants.js'
 import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../utils/userSlice";
+import { addUser, removeUser } from "../utils/userSlice";
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom';
- 
+import { toast } from 'react-toastify';
 
 const SKILLS_LIST = [
   'React', 'JavaScript', 'Python', 'Node.js', 'TypeScript', 
@@ -52,7 +52,15 @@ const DeveloperProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
-
+  useEffect(()=>{
+    const checkAuth = async()=>{
+const res = await axios.get(BASE_URL + "/check-auth", {withCredentials : true})
+if(!res.data?.status){
+  return navigate('/')
+} 
+}
+ checkAuth();
+  }, [])
   const getProfile = async()=>{
     
       try{
@@ -72,10 +80,11 @@ const DeveloperProfile = () => {
           }, 
           skills: res.data?.skills || [],
         });
-        console.log(res.data)
+        // console.log(res.data)
         dispatch(addUser(res.data));
       }
       catch(err){
+        toast.error("Something went wrong")
         console.log(err);
       }
     
@@ -120,7 +129,7 @@ const DeveloperProfile = () => {
       console.log(tempProfile)
       
       await axios.patch(BASE_URL + "/profile/edit", tempProfile, {withCredentials : true})
-      console.log("Profile updated sucessfully")
+      // console.log("Profile updated sucessfully")
       setIsEditMode(!isEditMode)
     } catch (error) {
       console.log(error)
@@ -257,13 +266,13 @@ const DeveloperProfile = () => {
   }
   };
   const logout = async ()=>{
-      try{const res = await axios.post(BASE_URL + "/logout", {withCredentials : true})
+      try{const res = await axios.post(BASE_URL + "/logout", {}, {withCredentials:true})
       console.log(res)
-      const token = Cookies.get('token')
-      
+      // const token = Cookies.get('token')
+      dispatch(removeUser());
+      navigate('/')
       // setTempProfile({})
     }
-      
       catch(err){
         console.log(err)
       }
@@ -296,11 +305,11 @@ const DeveloperProfile = () => {
       const res = await axios.patch(BASE_URL + "/profile/upload", formData, {headers : {'Content-Type' : 'multipart/form-data'},
       withCredentials : true});
       tempProfile.profileUrl = res.profileUrl;
-      alert(res.data.message);
+      toast.success(res.data.message);
     }
     catch(err){
       console.log(err)
-      alert("Upload failed")
+      toast.error("Upload failed")
     }
   }
   
@@ -318,10 +327,17 @@ const DeveloperProfile = () => {
               className="w-32 h-32 z-10 rounded-full object-cover border-4 border-purple-600"
             />
             {isEditMode && (
-              <div className="profile-upload flex mt-2">
-              {preview && <img src={preview} alt="Profile Preview" className="w-24 h-24 rounded-full" />}
-              <input type="file" className='text-purple-500' accept="image/*" onChange={handleFileChange} />
-              <button className='bg-purple-500 px-2 py-1 rounded-lg' onClick={uploadProfilePic}>Upload</button>
+              <div className="profile-upload flex flex-row items-center justify-between mt-2">
+              {preview && 
+              <div>
+              <img src={preview} alt="Profile Preview" className="w-24 h-24 rounded-full mr-5" />
+              </div>
+              }
+              <div className='flex flex-col items-start justify-start mt-5'>
+              <input type="file" className='mx-auto text-purple-500' accept="image/*" onChange={handleFileChange} />
+              <button className='bg-purple-500 mt-5 px-2 py-1 rounded-lg' onClick={uploadProfilePic}>Upload</button>
+              
+              </div>
             </div>
             )}
           </div>
@@ -382,40 +398,39 @@ const DeveloperProfile = () => {
         </div>
         {/* ... (existing Skills Showcase section) */}
 
-        <div className=" rounded-lg shadow-2xl p-6 border border-purple-500">
-          
-          <h3 className="text-xl font-semibold mb-4 text-purple-300">Skills</h3>
-          
-          <div className="flex flex-wrap gap-2">
-            {!isEditMode ? (
-              tempProfile.skills.length > 0 &&
-              tempProfile?.skills?.map(skill => (
-                <span 
-                  key={skill} 
-                  className="bg-purple-700/30 text-purple-200 px-3 py-1 rounded-full text-sm"
-                >
-                  {skill}
-                </span>
-              ))
-            ) : (
-              SKILLS_LIST.map(skill => (
-                <button
-                  key={skill}
-                  onClick={() => handleSkillsUpdate(skill)}
-                  className={`
-                    px-3 py-1 rounded-full text-sm transition-colors
-                    ${tempProfile?.skills.includes(skill) 
-                      ? 'bg-purple-700 text-white' 
-                      : 'bg-gray-800 text-purple-400 hover:bg-purple-900'}
-                  `}
-                >
-                  {skill}
-                </button>
-              ))
-            )}
-            
-          </div>
-        </div>
+        <div className="rounded-lg shadow-2xl p-6 border border-purple-500">
+  <h3 className="text-xl font-semibold mb-4 text-purple-300">Skills</h3>
+  
+  <div className="flex flex-wrap gap-2 overflow-auto max-h-40">
+    {!isEditMode ? (
+      tempProfile.skills.length > 0 &&
+      tempProfile?.skills?.map(skill => (
+        <span 
+          key={skill} 
+          className="bg-purple-700/30 text-purple-200 px-3 py-1 rounded-full text-sm min-w-[80px] text-center"
+        >
+          {skill}
+        </span>
+      ))
+    ) : (
+      SKILLS_LIST.map(skill => (
+        <button
+          key={skill}
+          onClick={() => handleSkillsUpdate(skill)}
+          className={`
+            px-3 py-1 rounded-full text-sm transition-colors min-w-[80px] text-center
+            ${tempProfile?.skills.includes(skill) 
+              ? 'bg-purple-700 text-white' 
+              : 'bg-gray-800 text-purple-400 hover:bg-purple-900'}
+          `}
+        >
+          {skill}
+        </button>
+      ))
+    )}
+  </div>
+</div>
+
         
         <div className="mt-6 flex justify-center space-x-4">
         {!isEditMode ? (

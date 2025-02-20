@@ -15,8 +15,7 @@ const Profile = ()=>{
     const [isEditMode, setIsEditMode] = useState(false);
 
     useEffect(() => {
-        const token = Cookies.get('token');
-        if (!token) return navigate("/signin");
+        
 
         const fetchProfile = async () => {
             try {

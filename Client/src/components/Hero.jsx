@@ -1,16 +1,22 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import heroImg from '../assets/Business_SVG.svg'
 import Navbar from "./Navbar"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { addUser } from "../utils/userSlice"
-import meetImg from '../utils/meet_oza.jpg'
+import Cookies from 'js-cookie'
+
 const Hero = ()=>{
   const DEVCONNECT = "<DevConnect />"
   const dispath = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((store)=>store.user);
+  const [show, setShow] = useState(true)
+  useEffect(()=>{
+    const token = Cookies.get('token')
+    if(!token) setShow(!setShow)
+  })
 
   const fetchUser = async ()=>{
       if(userData) return;
@@ -43,13 +49,13 @@ const Hero = ()=>{
                             Empower your ideas with the right collaborators.
                         </p>
                         <div className="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start">
-                            <Link
+                           {setShow && <Link
                                 rel="noopener noreferrer"
                                 to='/signin'
                                 className="px-8 py-3 text-lg font-semibold rounded bg-violet-600 text-white"
                             >
                                 Join the Community
-                            </Link>
+                            </Link>}
                             
                         </div>
                     </div>

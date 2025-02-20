@@ -30,11 +30,11 @@ const UserCard = ({ user, onSwipe }) => {
       transition={{ duration: 0.4 }}
     >
       {/* Gradient backgrounds */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-700 to-pink-600" />
-      <div className="absolute inset-0 bg-gradient rounded-2xl-to-br from-purple-700 to-pink-600 blur-xl" />
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br mx-5 from-purple-700 to-pink-600" />
+      <div className="absolute inset-0 bg-gradient rounded-2xl-to-br mx-5 from-purple-700 to-pink-600 blur-xl" />
 
       {/* Inner dark container */}
-      <div className="absolute rounded-2xl inset-[6px] bg-black/60 z-10" />
+      <div className="absolute mx-5 rounded-2xl inset-[6px] bg-black/60 z-10" />
 
       {/* Content container */}
       <div className="absolute z-20 rounded-2xl w-full h-full flex flex-col items-center justify-center p-8">
