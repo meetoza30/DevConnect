@@ -17,7 +17,7 @@ const Signup = () => {
   const navigate = useNavigate();
 
   useEffect(()=>{
-    const token = Cookies.get('token');
+    const token = Cookies.get('token',{path :'/'});
     if(token) return navigate("/feed")
   }, [])
 
