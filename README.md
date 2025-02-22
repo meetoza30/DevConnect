@@ -24,9 +24,9 @@ DevConnect is live! Check it out here: [DevConnect](https://dev-connect-opal.ver
 
 ## 🛠 Tech Stack
 - **Frontend**: React (with Tailwind CSS for styling)
-- **Backend**: Node.js & Firebase
-- **Database**: Firestore
-- **Hosting**: Vercel
+- **Backend**: Node.js & Express.js
+- **Database**: MongoDB
+- **Hosting**: Vercel & Render
 
 Join DevConnect and start building your developer network today! 🚀
 
