@@ -71,7 +71,7 @@ else {
 
   return (
     <section className="flex flex-col items-center pt-6 my-20">
-      <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+      <div className="w-full bg-white rounded-lg border-purple-500 shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 ">
         <div className="p-6 space-y-4 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
             {isSignUp ? "Create an account" : "Sign in"}
@@ -91,7 +91,7 @@ else {
                   id="name"
                   onChange={(e)=>{setName(e.target.value)}}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
-                  placeholder="Meet Oza"
+                  placeholder="ex - Meet Oza"
                   required
                 />
               </div>
@@ -109,7 +109,7 @@ else {
                 onChange={(e)=>{setUsername(e.target.value)}}
                 id="username"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
-                placeholder="meetoza30"
+                placeholder="ex - meetoza30"
                 required
               />
             </div>)}
@@ -126,7 +126,7 @@ else {
                 id="email"
                 onChange={(e)=>{setEmailId(e.target.value)}}
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
-                placeholder="meetoza@devconnect.com"
+                placeholder="ex - meetoza@devconnect.com"
                 required
               />
             </div>

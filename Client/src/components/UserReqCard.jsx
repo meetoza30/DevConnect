@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const UserReqCard = ({ req, showSent, reviewReq}) => {
+const UserReqCard = ({ req, showSent, reviewReq, showConnec}) => {
   const user = showSent ? req.receiverId : req.senderId;
   const { profileUrl, fullName, userName, bio, skills } = user;
 
@@ -36,7 +36,7 @@ const UserReqCard = ({ req, showSent, reviewReq}) => {
         {showSent ? (
           // Withdraw Button for Sent Requests
           <button
-            className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-lg"
+            className="bg-purple-200 text-black font-semibold hover:bg-purple-400 py-1 px-3 rounded-lg"
             onClick={() => reviewReq("withdraw",req._id)}
           >
             Withdraw

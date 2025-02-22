@@ -68,7 +68,7 @@ if(!res.data?.status){
         setTempProfile({
           fullName: res.data?.fullName, 
           userName: res.data?.userName,
-          bio: res.data?.bio || "Bio not available",
+          bio: res.data?.bio || "",
           profileUrl: res.data?.profileUrl,
           socialIds: res.data?.socialIds || {
             Linkedin: "",
@@ -80,12 +80,12 @@ if(!res.data?.status){
           }, 
           skills: res.data?.skills || [],
         });
-        // console.log(res.data)
+        
         dispatch(addUser(res.data));
       }
       catch(err){
         toast.error("Something went wrong")
-        console.log(err);
+        
       }
     
     
@@ -96,8 +96,6 @@ if(!res.data?.status){
   const userData = useSelector((store)=>store.user);
   useEffect(()=>{
       const token = Cookies.get('token')
-      // console.log(token)
-      // if(!token) return navigate("/signin")
       getProfile();
   }, [])
 
@@ -126,13 +124,14 @@ if(!res.data?.status){
 
   const saveProfile = async()=>{
     try {
-      console.log(tempProfile)
+      
       
       await axios.patch(BASE_URL + "/profile/edit", tempProfile, {withCredentials : true})
-      // console.log("Profile updated sucessfully")
+      toast.success("Profile updated successfully")
       setIsEditMode(!isEditMode)
     } catch (error) {
-      console.log(error)
+      toast.error("Something went wrong")
+      
     }
   } 
 
@@ -157,12 +156,11 @@ if(!res.data?.status){
   }
 
   const handleSocialProfileUpdate = (platform, value) => {
-    // console.log(platform, " ", value)
+    
     setTempProfile((prev)=>({
       ...prev,
       socialIds : {...prev.socialIds, [platform] : value}
     }))
-    // console.log(tempProfile.socialIds)
   };
 
   const handleProjectUpdate = (projectId, updates) => {
@@ -180,15 +178,16 @@ if(!res.data?.status){
 };
 
   const saveProject = async(projectId)=>{
-    console.log("In save project ", projectId)
+   
     const project = tempProjects.find(p=>p._id === projectId);
     if(!project || projectId.startsWith("temp-")){
       try { 
         const res = await axios.post(BASE_URL + "/profile/add/project", project, {withCredentials : true});
         setTempProjects(prev => prev.map(p=> p._id === projectId ? res.data : p));
+        toast.success("Project updated successfully")
       }
         catch(err){
-          console.log(err)
+          toast.error("Something went wrong")
         }
     }
     else {
@@ -209,7 +208,7 @@ if(!res.data?.status){
     setTempProjects(prev => prev.filter(proj => proj._id !== projectId))
   }
    catch(err){
-    console.log(err)
+    toast.error("Something went wrong")
    }
   };
 
@@ -223,26 +222,27 @@ if(!res.data?.status){
 
   const saveHackathon = async(hackathonId)=>{
     if (!hackathonId) {
-      console.error("saveHackathon called with undefined ID");
-      
+      toast.error("Something went wrong")
   }
       const hackathon = tempHackathons.find(h=> h._id === hackathonId);
       
       if (!hackathon) {
-        console.error("Hackathon not found for ID:", hackathonId);
+        toast.error("Something went wrong")
         return;
     }
       if(!hackathon || hackathonId.startsWith("temp-")){
-        console.log(hackathon)
+       
         try {const res = await axios.post(BASE_URL + "/profile/add/hackathon", {hackathon}, {withCredentials : true})
         if(res.data) setTempHackathons(prev=>prev.map(h=>(h._id === hackathonId ? res.data : h)))
+        toast.success("Hackathon details updated successfully!")
       }
       catch(err){
-        console.log(err);
+        toast.error("Something went wrong")
       }
       }
       else {
         await axios.patch(BASE_URL + `/hackathon-edit/${hackathonId}`, hackathon, {withCredentials : true})
+        toast.success("Hackathon details updated successfully!")
       }
      setEditingHackathons(prevSet =>{
       const newSet = new Set(prevSet);
@@ -262,19 +262,17 @@ if(!res.data?.status){
     setTempHackathons(prev => prev.filter(h=> h._id !== hackathonId))
   }
   catch(err){
-    console.log(err)
+    toast.error("Something went wrong")
   }
   };
   const logout = async ()=>{
       try{const res = await axios.post(BASE_URL + "/logout", {}, {withCredentials:true})
-      console.log(res)
-      // const token = Cookies.get('token')
+      toast.success("User logged out successfully!")
       dispatch(removeUser());
       navigate('/')
-      // setTempProfile({})
     }
       catch(err){
-        console.log(err)
+        toast.error("Something went wrong")
       }
   }
 
@@ -308,7 +306,6 @@ if(!res.data?.status){
       toast.success(res.data.message);
     }
     catch(err){
-      console.log(err)
       toast.error("Upload failed")
     }
   }
@@ -324,7 +321,7 @@ if(!res.data?.status){
             <img 
               src={tempProfile?.profileUrl} 
               alt="Profile" 
-              className="w-32 h-32 z-10 rounded-full object-cover border-4 border-purple-600"
+              className="w-32 h-32 z-0 rounded-full object-cover border-4 border-purple-600"
             />
             {isEditMode && (
               <div className="profile-upload flex flex-row items-center justify-between mt-2">
@@ -369,7 +366,7 @@ if(!res.data?.status){
           
         </div>
         {/* Coding & Social Profiles */}
-       <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500 z-20">
+       <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500 z-0">
           <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding Profiles</h3>
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isEditMode ? 'opacity-100' : 'opacity-90'}`}>
             {Object.entries(tempProfile?.socialIds).map(([platform]) => (
@@ -575,8 +572,8 @@ if(!res.data?.status){
         <div className='flex flex-row justify-between items-center'>
         <div className='flex flex-col'>
           <h4 className="font-bold text-purple-300">{hackathon.name}</h4>
-          <p className="text-gray-400">{hackathon.description}</p>
-          <small className="text-purple-300">{hackathon.date}</small>
+          <p className="text-gray-400 mt-1">{hackathon.description}</p>
+          <small className="text-purple-300 mt-3">Outcome - {hackathon.outcome}</small>
         </div>
         <button onClick={() => setEditingHackathons(prevSet => new Set(prevSet).add(hackathon._id))} className="ml-3 border border-purple-500 text-white px-2 py-1 rounded hover:bg-purple-500  hover:transition-all hover:duration-200">Edit</button>
         </div>
@@ -586,6 +583,7 @@ if(!res.data?.status){
 <input 
   type="text" 
   value={hackathon.name} 
+  placeholder='Title'
   onChange={(e) => handleHackathonUpdate(hackathon._id, { name: e.target.value })} 
   className="w-full p-2 border border-purple-200 rounded bg-gray-800 text-gray-300"
   disabled={!editingHackathons.has(hackathon._id)}
@@ -593,15 +591,17 @@ if(!res.data?.status){
 
 <textarea 
   value={hackathon.description} 
+  placeholder='Description'
   onChange={(e) => handleHackathonUpdate(hackathon._id, { description: e.target.value })} 
   className="w-full p-2 border rounded h-24 bg-gray-800 text-gray-100"
   disabled={!editingHackathons.has(hackathon._id)}
 ></textarea>
 
 <input 
-  type="date" 
-  value={hackathon.date} 
-  onChange={(e) => handleHackathonUpdate(hackathon._id, { date: e.target.value })} 
+  type="text" 
+  value={hackathon.outcome} 
+  placeholder='Outcome (Win/Loss, prize, or participation details)'
+  onChange={(e) => handleHackathonUpdate(hackathon._id, { outcome: e.target.value })} 
   className="w-full p-2 border rounded bg-gray-800 text-gray-100"
   disabled={!editingHackathons.has(hackathon._id)}
 />

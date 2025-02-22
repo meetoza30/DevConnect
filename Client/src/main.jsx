@@ -12,6 +12,7 @@ import Profile from './components/Profile';
 import UserReqCard from './components/UserReqCard.jsx';
 import Reqs from './components/ShowReqs.jsx';
 import Convos from './components/Convos.jsx';
+import ShowConnections from './components/ShowConnections.jsx';
 
 const router = createHashRouter([
   {
@@ -45,6 +46,10 @@ const router = createHashRouter([
       {
         path: '/profile/user/:userId',
         element: <Profile />
+      },
+      {
+        path: '/connections',
+        element: <ShowConnections />
       },
       {
         path: '/usercard',

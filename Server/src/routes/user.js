@@ -39,18 +39,25 @@ catch(err){
 
 })
 
-userRouter.get('/user/connecs',userAuth, async (req, res)=>{
+userRouter.get('/user/connections',userAuth, async (req, res)=>{
    try {const user = req.user;
-    const connecs = await Req.find({
-        $or : [
-            {senderId : user._id, status : "accepted"},
-        {receiverId : user._id, status: "accepted"}
-    ] 
-    })
-if(!connecs) throw new Error("No connecs available");
+    const receivedConnections = await Req.find({
+        receiverId : user._id, status : "accepted"
+    }).select("senderId")
+    .populate("senderId", "fullName userName profileUrl skills bio")
+
+    const sentConnections = await Req.find({
+        senderId : user._id, status : "accepted"
+    }).select("receiverId")
+    .populate("receiverId", "fullName userName profileUrl skills bio")
+    let connections = receivedConnections.map(i=> i.senderId)
+    // connections =[...connections, sentConnections.map(i=> i.receiverId)] 
+      
+
+if(!connections) throw new Error("No connections available");
 res.json({
     message : "Here are the connecs",
-    connecs
+    connections
 })
 }
 catch(err){
@@ -81,6 +88,7 @@ userRouter.get('/feed', userAuth, async (req, res)=>{
         hideFromFeed.add(element.senderId.toString())
         hideFromFeed.add(element.receiverId.toString())
       });
+      hideFromFeed.add(req.user._id.toString())
       const feedData = await User.find({
             _id : { $nin : Array.from(hideFromFeed)}
         }).select(SAFE_DATA)

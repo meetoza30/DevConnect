@@ -33,18 +33,18 @@ const Profile = ()=>{
         fetchProfile();
     }, [userId, navigate]);
 
-    console.log(othersProfile)
+    
     return(
         
         <div className="min-h-screen bg-gray-900 text-gray-100 p-6 flex flex-col md:flex-row gap-6">
       {/* Profile Section (Left Sidebar) & SKills & Profiles - Unchanged */}
-      <div className="w-full md:w-1/3  rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-500">
+      <div className="w-full z-0 md:w-1/3  rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-500">
         <div className="flex flex-col items-center">
           <div className="relative group flex flex-col justify-center items-center">
             <img 
               src={othersProfile?.profileUrl} 
               alt="Profile" 
-              className="w-32 h-32 z-10 rounded-full object-cover border-4 border-purple-600"
+              className="w-32 h-32 z-0 rounded-full object-cover border-4 border-purple-600"
             />
             {isEditMode && (
               <div className="profile-upload flex mt-2">
@@ -82,7 +82,7 @@ const Profile = ()=>{
           
         </div>
         {/* Coding & Social Profiles */}
-       <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500 z-20">
+       <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500 z-0">
           <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding Profiles</h3>
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isEditMode ? 'opacity-100' : 'opacity-90'}`}>
             {othersProfile?.socialIds && Object.entries(othersProfile?.socialIds).map(([platform]) => (

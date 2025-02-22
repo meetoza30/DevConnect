@@ -47,11 +47,11 @@ const Reqs = () => {
 
   return (
     
-    <div className="flex flex-col items-center mx-5">
-      <h1 className="text-xl font-semibold mb-4">Requests</h1>
+    <div className="flex flex-col items-center mx-5 ">
+      <h1 className="text-3xl mt-10 mb-10 font-bold text-white ">Your Reqs</h1>
 
       {/* Toggle Switch */}
-      <div className="flex items-center gap-3 mb-4">
+      <div className="flex items-center gap-3 mb-4 border border-purple-500 px-10 py-6 rounded-lg">
         <span className={`text-sm ${!showSent ? "text-purple-600 font-bold" : "text-gray-400"}`}>
           Received
         </span>
@@ -72,10 +72,17 @@ const Reqs = () => {
       {/* Requests List */}
       <div className="flex flex-col justify-center items-center mx-5 max-w-lg w-full">
         {showSent
-          ? sentReqs.map((req) => <UserReqCard showSent = {true} key={req._id} req={req} reviewReq={reviewReq}/>)
-          : receivedReqs.map((req) => (
+          ?  (sentReqs.length > 0 ? sentReqs.map((req) => <UserReqCard showSent = {true} key={req._id} req={req} reviewReq={reviewReq}/>) : <div className="text-purple-500 text-2xl font-bold text-center md:w-26 items-center lg:w-66 mt-10">
+          Nothing to show here. Toggle the button above to view the connection requests you’ve received.
+        </div>)
+          : (receivedReqs.length > 0 ? receivedReqs.map((req) => (
               <UserReqCard key={req._id} showSent = {false} req={req} reviewReq={reviewReq} />
-            ))}
+            )) :
+            <div className="text-purple-500 text-2xl font-bold text-center md:w-26 items-center lg:w-66 mt-10">
+  Nothing to show here. Toggle the button above to view the connection requests you’ve sent.
+</div>
+
+            )}
       </div>
     </div>
   );

@@ -54,8 +54,8 @@ checkAuth();
           
           {userExist && <li><Link to="/feed">
           <div className="flex flex-grow justify-between items-center">
-            <img src="https://img.icons8.com/?size=100&id=115270&format=png&color=C4B4FF" className=" size-4"/>
-            <p className=" px-1">Feed</p>
+            <img src="https://img.icons8.com/?size=100&id=59766&format=png&color=C4B4FF" className=" size-4"/>
+            <p className=" px-1">Explore</p>
           </div>
           </Link></li>}
 
@@ -103,6 +103,16 @@ checkAuth();
             <p className=" px-1">Reqs</p>
           </div>
           </Link></li>}
+          {userExist && (
+    <li>
+      <Link to="/connections" onClick={() => (document.getElementById('my-drawer-3').checked = false)}>
+        <div className="flex flex-grow justify-between items-center z-50">
+          <img src="https://img.icons8.com/?size=100&id=92484&format=png&color=C4B4FF" className="size-4" />
+          <p className="px-1">Connections</p>
+        </div>
+      </Link>
+    </li>
+  )}
 
           {userExist && <li><Link to="/profile">
           <div className="flex flex-grow justify-between items-center">
@@ -118,12 +128,12 @@ checkAuth();
   </div>
   <div className="drawer-side">
     <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
-    <ul className="menu bg-base-200 min-h-full w-80 p-4">
+    <ul className="menu bg-base-200 min-h-full w-80 p-4 ">
       {/* Sidebar content here */}
       {userExist && <li><Link to="/feed">
-          <div className="flex flex-grow justify-between items-center z-50 ">
-            <img src="https://img.icons8.com/?size=100&id=115270&format=png&color=C4B4FF" className=" size-4"/>
-            <p className=" px-1">Feed</p>
+          <div className="flex flex-grow justify-between items-center">
+            <img src="https://img.icons8.com/?size=100&id=59766&format=png&color=C4B4FF" className=" size-4"/>
+            <p className=" px-1">Explore</p>
           </div>
           </Link></li>}
 
@@ -158,27 +168,49 @@ checkAuth();
   </HashLink>
 </li>}
           
-          {userExist && <li><Link to='/convos'>
-          <div className="flex flex-grow justify-between items-center">
-            <img src="https://img.icons8.com/?size=100&id=tlOx8qQnfJdO&format=png&color=C4B4FF" className=" size-4"/>
-            <p className=" px-1">Convos</p>
-          </div>
-          </Link></li>}
+{userExist && (
+    <li>
+      <Link to="/convos" onClick={() => (document.getElementById('my-drawer-3').checked = false)}>
+        <div className="flex flex-grow justify-between items-center z-50">
+        <img src="https://img.icons8.com/?size=100&id=tlOx8qQnfJdO&format=png&color=C4B4FF" className=" size-4"/>
+          <p className="px-1">Convos</p>
+        </div>
+      </Link>
+    </li>
+  )}
 
-          {userExist && <li><Link to="/reqs/review">
-          <div className="flex flex-grow justify-between items-center">
-            <img src="https://img.icons8.com/?size=100&id=5MMxDaGdGsBe&format=png&color=C4B4FF" className=" size-4"/>
-            <p className=" px-1">Reqs</p>
-          </div>
-          </Link></li>}
+  {userExist && (
+    <li>
+      <Link to="/reqs/review" onClick={() => (document.getElementById('my-drawer-3').checked = false)}>
+        <div className="flex flex-grow justify-between items-center">
+          <img src="https://img.icons8.com/?size=100&id=5MMxDaGdGsBe&format=png&color=C4B4FF" className="size-4" />
+          <p className="px-1">Reqs</p>
+        </div>
+      </Link>
+    </li>
+  )}
 
-          {userExist && <li><Link to='/profile'>
-          <div className="flex flex-grow justify-between items-center">
-            <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=C4B4FF" className=" size-4"/>
-            <p className=" px-1">Profile</p>
-          </div>
-          </Link></li>}
-          
+{userExist && (
+    <li>
+      <Link to="/connections" onClick={() => (document.getElementById('my-drawer-3').checked = false)}>
+        <div className="flex flex-grow justify-between items-center z-50">
+          <img src="https://img.icons8.com/?size=100&id=92484&format=png&color=C4B4FF" className="size-4" />
+          <p className="px-1">Connections</p>
+        </div>
+      </Link>
+    </li>
+  )}
+
+  {userExist && (
+    <li>
+      <Link to="/profile" onClick={() => (document.getElementById('my-drawer-3').checked = false)}>
+        <div className="flex flex-grow justify-between items-center">
+          <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=C4B4FF" className="size-4" />
+          <p className="px-1">Profile</p>
+        </div>
+      </Link>
+    </li>
+  )}
          
     </ul>
   </div>
