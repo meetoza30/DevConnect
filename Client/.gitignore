@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-src\utils\constants.js
+Client/src/utils/constants.js
+          
 
