@@ -31,13 +31,13 @@ if(res.data?.status){
   }, [])
 
   const handleLogin = async (e)=>{
-    // console.log("In loginHandle")
+    
 
         e.preventDefault();
         if(!isSignUp){
           try {
             const res = await axios.post(BASE_URL+"/login",{emailId, password},{withCredentials:true})
-            console.log(res.data.error)
+            
             if(res.data.error === "Invalid Credentials") throw new Error("Invalid Credentials, please try again")
             dispath(addUser(res.data.user));
             toast.success("Successfully logged in!");
@@ -45,13 +45,13 @@ if(res.data?.status){
             return navigate('/feed')
           } catch (err) {
             toast.error(err.response?.data || "Invalid Credentials. Please try again.");
-            console.log(err)
+            
           }
         }
         
 else {        
   try {
-    console.log("In signup")
+    
           const res = await axios.post(BASE_URL+"/signup", {
             fullName, userName, emailId, password
           }, {withCredentials:true});
@@ -61,7 +61,7 @@ else {
           return navigate('/profile/update/skills');
         } catch (error) {
           toast.error(error.response?.data || "Signup failed. Please try again.");
-          console.log(error)
+          
         }}
   }
 

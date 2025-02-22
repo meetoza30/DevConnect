@@ -11,7 +11,7 @@ connectionRouter.post('/reqs/send/:status/:receiverId', userAuth, async (req, re
     const receiverId = req.params.receiverId;
     const status = req.params.status;
 
-    console.log(status, " ", receiverId)
+    
 
     const allowedStatus = ["interested", "ignore"];
     if(!allowedStatus.includes(status)) throw new Error("Invalid status")

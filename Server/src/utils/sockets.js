@@ -30,7 +30,7 @@ const initiateSocket = (io)=>{
     io.on('connection', (socket)=>{
         socket.on('user_connected', (userId)=>{
             activeUsers.set(userId, socket.id)
-            console.log('User connected' + userId)
+            
         })
 
         socket.on('send_message', async (conversationId, msgContent)=>{

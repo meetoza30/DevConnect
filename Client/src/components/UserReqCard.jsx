@@ -24,7 +24,7 @@ const UserReqCard = ({ req, showSent, reviewReq, showConnec}) => {
         </Link>
         <p className="text-sm mt-1">
           {bio !== "Bio not available"
-            ? bio
+            ?  <span>{bio.slice(0,45)}...</span>
             : skills?.length > 0
             ? skills.slice(0, 3).join(", ") + (skills.length > 3 ? "..." : "")
             : ""}

@@ -7,10 +7,10 @@ const userAuth = async (req, res, next)=>{
     const {token} = req.cookies;
     if(!token) throw new Error("Invalid entry, please login again")
     const decodedId = await jwt.verify(token, process.env.DEVCONNECT_TOKEN_KEY )
-    // console.log(decodedId)
+   
     
     const {_id} = decodedId;
-    // console.logs(_id)
+    
     const user = await User.findById(_id);
     if(!user) throw new Error("User doesnt exist")
     req.user = user;

@@ -496,7 +496,7 @@ if(!res.data?.status){
               <div className='flex flex-col'>
                 <h4 className="font-bold text-purple-300">{project.title}</h4>
                 <p className="text-gray-400">{project.description}</p>
-                <a href={project.url} className="text-purple-300 cursor-pointer hover:underline">
+                <a href={project.url.startsWith("http") ? project.url : `https://${project.url}`} target='_blank' className="text-purple-300 cursor-pointer hover:underline">
                   View
                 </a>
               </div>
@@ -512,6 +512,7 @@ if(!res.data?.status){
           <div>
             <input 
               type="text" 
+              placeholder='Project title'
               value={project.title} 
               onChange={(e) => handleProjectUpdate(project._id, { title: e.target.value })} 
               className="w-full p-2 border rounded bg-gray-800 text-gray-100"
@@ -520,6 +521,7 @@ if(!res.data?.status){
             
             <textarea 
               value={project.description} 
+              placeholder='Description'
               onChange={(e) => handleProjectUpdate(project._id, { description: e.target.value })} 
               className="w-full p-2 border rounded h-24 bg-gray-800 text-gray-100 mt-2"
               disabled={!editingProjects.has(project._id)}

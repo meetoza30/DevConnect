@@ -37,7 +37,7 @@ const SkillsPage = () => {
     try{
       const res  = await axios.patch(BASE_URL + "/profile/edit", {skills}, {withCredentials :true})
       dispath(addSkills(res.data.user))
-      console.log(res)
+      
     }
     catch(err){
       console.log(err)
@@ -56,7 +56,7 @@ const SkillsPage = () => {
   };
 
   const handleNext = () => {
-    console.log(skills);
+   
     postSkills()
     return navigate('/profile') // Send the selected skills to your database
   };

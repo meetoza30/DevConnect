@@ -23,16 +23,16 @@ const ShowConnections = () => {
     getConnections();
   }, []);
 
-  console.log(connections)
+
   return (
     
     <div className="flex flex-col items-center justify-center mx-5">
       <h1 className="text-3xl mt-10 mb-10 font-bold text-white ">Your Connections</h1>
 
       {/* Requests List */}
-      <div className="flex flex-col justify-center items-center my-10 mx-5 max-w-lg w-full">
+      <div className=" lg:grid lg:grid-cols-2 lg:gap-4  sm:grid-cols-1 justify-center items-center">
       {connections.length > 0 ? connections.map((connec, index) => (
-          <div key={index} className="absolute flex justify-center mx-5">
+          <div key={index} className="flex justify-center mx-5">
             {<UserConnecCard user = {connec} />}
             
           </div>

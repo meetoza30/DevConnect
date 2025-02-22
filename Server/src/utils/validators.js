@@ -4,7 +4,7 @@ import validate from 'validator';
 const validateData = (req)=>{
     const {fullName, emailId,age, userName, password, projects, hackathons, skills, bio, socials} = req.body;
     const usernameRegex = /^[a-z0-9._]+$/;
-    console.log()
+  
     if(fullName?.length > 50) throw new Error("First Name is too long")
 
     else if(emailId && !validate.isEmail(emailId)) throw new Error("Enter valid email address")
@@ -17,7 +17,7 @@ const validateData = (req)=>{
 
     else if(skills?.length < 3) throw new Error("Please add more skills")
 
-    else if(skills?.length > 10) throw new Error("Please add skills less or equal to 10")
+    else if(skills?.length > 15) throw new Error("Please add skills less or equal to 15")
 
     else if(bio?.length > 200) throw new Error("Bio description too long")
 

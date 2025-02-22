@@ -27,7 +27,7 @@ const Reqs = () => {
       console.error(err);
     }
   };
-//   console.log(sentReqs)
+
 
   // Handle Request Review (Accept/Reject)
   const reviewReq = async (status, reqId) => {

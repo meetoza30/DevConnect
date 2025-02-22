@@ -53,7 +53,7 @@ const UserCard = ({ user, onSwipe }) => {
           <div className="flex flex-wrap flex-col justify-center gap-2 mt-4 max-w-sm">
             <span className="text-base text-white/80 underline">{user?.userName}</span>
             <h5 className=" text-lg text-white font-medium mb-4">
-              {user?.bio ? user?.bio : ""}</h5>
+              {user?.bio ? <span>{user?.bio.slice(0,35)}...</span> : ""}</h5>
               <div className="grid grid-cols-3 md:grid-cols-3 gap-4">
             {user?.skills && user?.skills.slice(0,6).map(skill => (
               <span 

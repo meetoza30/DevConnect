@@ -15,10 +15,10 @@ profileRouter.patch('/profile/edit',userAuth, async (req, res)=>{
         if(req.body.skills?.length >15) throw new Error("You can add only 15 skills")
         else if(req.body.skills?.length < 3) throw new Error("You should add minimum 3 skills");
 
-        console.log(req.body.skills)
+        
         const user = req.user;
         const updatedUser = await User.findByIdAndUpdate(user._id, req.body, {runValidators:true, new : true})
-        console.log(updatedUser)
+      
         res.json(updatedUser);
 
     }
@@ -31,17 +31,11 @@ profileRouter.patch('/profile/upload', userAuth,upload.single('profilePic'), asy
     try {
 
         if(!req.file) throw new Error("Please upload a file")
-            // console.log("Uploaded file details:", req.file);
+            
 
             let user = req.user;
-            console.log("before change : ",user.profileUrl)
-            // user.profileUrl = req.file.path;
-            // await user.save()
             const updatesUser = await User.findByIdAndUpdate(user._id, {profileUrl : req.file.path})
-            console.log("after change", updatesUser.profileUrl)
-            // console.log("after change : ",user.profileUrl)
-
-        res.json({message : "Profile picture uploaded successfully", profileUrl : user.profileUrl})
+            res.json({message : "Profile picture uploaded successfully", profileUrl : user.profileUrl})
     } catch (error) {
         res.status(400).json({error : error.message})
     }
@@ -75,7 +69,7 @@ profileRouter.patch('/profile/edit/password', userAuth, async (req, res)=>{
     try{ 
         const user = req.user;
         
-        console.log(req.body.password)
+       
         const hashedNewPassword = await bcrypt.hash(req.body.password, 10);
         await User.findByIdAndUpdate(user._id, {password : hashedNewPassword})
     
@@ -90,7 +84,7 @@ profileRouter.patch('/hackathon-edit/:hackathonId', userAuth, async(req, res)=>{
     try {
         const {hackathonId} = req.params;
         const updates = req.body;
-        console.log(updates)
+      
         const updatedHackathon = await Hackathon.findByIdAndUpdate({_id : hackathonId, userId : req.user._id},updates ,{new : true});
 
         if(!updatedHackathon) return res.json({error : "Hackathon not found"});
@@ -130,7 +124,7 @@ profileRouter.patch('/project-edit/:projectId', userAuth, async(req,res)=>{
     try {
         const  projectId  = req.params.projectId;
         const updates = req.body;
-        console.log(projectId)
+       
         const updatedProject = await Project.findOneAndUpdate(
           { _id: projectId, userId: req.user._id },
           updates,
@@ -147,7 +141,7 @@ profileRouter.patch('/project-edit/:projectId', userAuth, async(req,res)=>{
 
 profileRouter.delete('/remove-project/:projectId',userAuth, async(req,res)=>{
     const {projectId} = req.params;
-    console.log(projectId)
+
     try{
         await Project.findByIdAndDelete(projectId)
     await User.updateOne(

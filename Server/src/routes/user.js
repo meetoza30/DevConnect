@@ -39,34 +39,39 @@ catch(err){
 
 })
 
-userRouter.get('/user/connections',userAuth, async (req, res)=>{
-   try {const user = req.user;
-    const receivedConnections = await Req.find({
-        receiverId : user._id, status : "accepted"
-    }).select("senderId")
-    .populate("senderId", "fullName userName profileUrl skills bio")
-
-    const sentConnections = await Req.find({
-        senderId : user._id, status : "accepted"
-    }).select("receiverId")
-    .populate("receiverId", "fullName userName profileUrl skills bio")
-    let connections = receivedConnections.map(i=> i.senderId)
-    // connections =[...connections, sentConnections.map(i=> i.receiverId)] 
-      
-
-if(!connections) throw new Error("No connections available");
-res.json({
-    message : "Here are the connecs",
-    connections
-})
-}
-catch(err){
-    res.status(404).json({
-        message : "ERROR : "+ err.message
-    })
-}
-
-})
+userRouter.get('/user/connections', userAuth, async (req, res) => {
+    try {
+        const user = req.user;
+ 
+        const receivedConnections = await Req.find({
+            receiverId: user._id, status: "accepted"
+        }).select("senderId")
+        .populate("senderId", "fullName userName profileUrl skills bio");
+ 
+        const sentConnections = await Req.find({
+            senderId: user._id, status: "accepted"
+        }).select("receiverId")
+        .populate("receiverId", "fullName userName profileUrl skills bio");
+ 
+        // Flatten the connections into one array
+        let connections = [
+            ...receivedConnections.map(i => i.senderId), 
+            ...sentConnections.map(i => i.receiverId)
+        ];
+ 
+        if (connections.length === 0) throw new Error("No connections available");
+ 
+        res.json({
+            message: "Here are the connections",
+            connections
+        });
+    } catch (err) {
+        res.status(404).json({
+            message: "ERROR: " + err.message
+        });
+    }
+ });
+ 
 
 userRouter.get('/feed', userAuth, async (req, res)=>{
     const SAFE_DATA = "firstName lastName userName profileUrl bio skills"
