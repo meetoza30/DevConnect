@@ -45,8 +45,8 @@ authRouter.post('/login', async (req,res)=>{
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // Use secure in production
             sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-            path: "/", // Important! Add path to ensure it's available throughout the site
-            maxAge: 24 * 60 * 60 * 1000, // 1 Day
+            path: "/", 
+            maxAge: 30*24 * 60 * 60 * 1000,
         });
         res.send("Login Successfully!!")
         }
