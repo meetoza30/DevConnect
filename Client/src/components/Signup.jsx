@@ -130,7 +130,7 @@ else {
                 required
               />
             </div>
-            <div>
+            {isSignUp && (<div>
               <label
                 htmlFor="password"
                
@@ -143,11 +143,30 @@ else {
                 name="password"
                 onChange={(e)=>{setPassword(e.target.value)}}
                 id="password"
-                placeholder="••••••••"
+                placeholder="Use Uppercase character, numbers & special characters"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
                 required
               />
-            </div>
+            </div>)}
+
+            {!isSignUp && (<div>
+              <label
+                htmlFor="password"
+               
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                onChange={(e)=>{setPassword(e.target.value)}}
+                id="password"
+                placeholder="********"
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
+                required
+              />
+            </div>)}
             <button
               type="submit"
               

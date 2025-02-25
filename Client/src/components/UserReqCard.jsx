@@ -23,12 +23,13 @@ const UserReqCard = ({ req, showSent, reviewReq, showConnec}) => {
           <p className="text-sm text-gray-300">@{userName}</p>
         </Link>
         <p className="text-sm mt-1">
-          {bio !== "Bio not available"
-            ?  <span>{bio.slice(0,45)}...</span>
-            : skills?.length > 0
-            ? skills.slice(0, 3).join(", ") + (skills.length > 3 ? "..." : "")
-            : ""}
-        </p>
+  {bio && bio !== "Bio not available"
+    ? <span>{bio.slice(0,45)}...</span>
+    : skills?.length > 0
+    ? skills.slice(0, 3).join(", ") + (skills.length > 3 ? "..." : "")
+    : ""}
+</p>
+
       </div>
 
       {/* Actions */}

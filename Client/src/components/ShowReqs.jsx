@@ -6,9 +6,9 @@ import UserReqCard from "./UserReqCard";
 const Reqs = () => {
   const [receivedReqs, setReceivedReqs] = useState([]);
   const [sentReqs, setSentReqs] = useState([]);
-  const [showSent, setShowSent] = useState(false); // Toggle state
+  const [showSent, setShowSent] = useState(false); 
 
-  // Fetch Received Requests
+  
   const getReceivedReqs = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/user/reqs/received`, { withCredentials: true });
@@ -18,7 +18,7 @@ const Reqs = () => {
     }
   };
 
-  // Fetch Sent Requests
+  
   const getSentReqs = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/user/reqs/sent`, { withCredentials: true });
@@ -29,7 +29,7 @@ const Reqs = () => {
   };
 
 
-  // Handle Request Review (Accept/Reject)
+  
   const reviewReq = async (status, reqId) => {
     try {
       await axios.patch(`${BASE_URL}/reqs/review/${status}/${reqId}`, {}, { withCredentials: true });

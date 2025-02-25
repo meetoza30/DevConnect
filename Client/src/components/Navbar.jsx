@@ -47,10 +47,12 @@ checkAuth();
           </svg>
         </label>
       </div>
-      <div className="mx-2 flex-1 px-2 font-bold text-violet-600 text-2xl">{DEVCONNECT}</div>
+      <Link className="mx-2 flex-1 px-2 font-bold text-violet-600 text-2xl" to='/feed'>
+      {DEVCONNECT}
+      </Link>
       <div className="hidden flex-none lg:block">
         <ul className="menu menu-horizontal">
-          {/* Navbar menu content here */}
+          
           
           {userExist && <li><Link to="/feed">
           <div className="flex flex-grow justify-between items-center">

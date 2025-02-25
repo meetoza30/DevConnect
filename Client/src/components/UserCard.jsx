@@ -70,28 +70,41 @@ const UserCard = ({ user, onSwipe }) => {
         {/* Action buttons */}
         <div className="absolute bottom-0 w-full flex justify-center gap-6 mt-2 mb-3">
           {/* Reject button */}
-          <button
-            onClick={() => {onSwipe("ignore", user._id)
-              setX(-200)
-            }
-            }
-            className="w-16 h-16 bg-black/20 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-8 h-8">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+<button
+  onClick={() => {
+    onSwipe("ignore", user._id);
+    setX(-200);
+  }}
+  className="relative w-16 h-16 bg-black/20 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-colors"
+>
+  {/* Tooltip */}
+  <span className="absolute -top-7 px-3 py-1 text-sm bg-black text-white rounded-md opacity-0 transition-opacity group-hover:opacity-100">
+    Ignore
+  </span>
 
-          {/* Accept button */}
-          <button
-            onClick={() =>{ onSwipe("interested", user._id) 
-              setX(200)}}
-            className="w-16 h-16 bg-black/20 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-8 h-8">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          </button>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-8 h-8">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+  </svg>
+</button>
+
+{/* Accept button */}
+<button
+  onClick={() => {
+    onSwipe("interested", user._id);
+    setX(200);
+  }}
+  className="relative w-16 h-16 bg-black/20 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-colors"
+>
+  {/* Tooltip */}
+  <span className="absolute -top-7 px-3 py-1 text-sm bg-black text-white rounded-md opacity-0 transition-opacity group-hover:opacity-100">
+    Interested
+  </span>
+
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-8 h-8">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+  </svg>
+</button>
+
 
               {/* View profile button */}
           <button
