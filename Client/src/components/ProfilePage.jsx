@@ -164,6 +164,8 @@ if(!res.data?.status){
   };
 
   const handleProjectUpdate = (projectId, updates) => {
+    if(updates.title == "" || updates.description == "" || updates.url =="") toast.error("Please fill all the details")
+    console.log(updates)
     setTempProjects(prev => prev.map(p=>p._id === projectId ? {...p, ...updates} : p))
 };
 
@@ -180,25 +182,41 @@ if(!res.data?.status){
   const saveProject = async(projectId)=>{
    
     const project = tempProjects.find(p=>p._id === projectId);
+    console.log(project);
+    
     if(!project || projectId.startsWith("temp-")){
       try { 
-        const res = await axios.post(BASE_URL + "/profile/add/project", project, {withCredentials : true});
+        if(project.title == "" || project.description == "" || project.url =="") throw new Error("Please fill all the details of the project")
+        else {
+      const res = await axios.post(BASE_URL + "/profile/add/project", project, {withCredentials : true});
         setTempProjects(prev => prev.map(p=> p._id === projectId ? res.data : p));
+        setEditingProjects(prevSet=> {
+          const newSet = new Set(prevSet)
+          newSet.delete(projectId);
+          return newSet;
+         })
         toast.success("Project updated successfully")
       }
+      }
         catch(err){
-          toast.error("Something went wrong")
+          toast.error(err.message)
         }
     }
     else {
+      try{
+        if(project.title == "" || project.description == "" || project.url =="") throw new Error("Please fill all the details")
       await axios.patch(BASE_URL + `/project-edit/${projectId}`, project, {withCredentials : true})
+      setEditingProjects(prevSet=> {
+        const newSet = new Set(prevSet)
+        newSet.delete(projectId);
+        return newSet;
+       })
+      }catch(error){
+        toast.error(error.message)
+      }
     }
 
-   setEditingProjects(prevSet=> {
-    const newSet = new Set(prevSet)
-    newSet.delete(projectId);
-    return newSet;
-   })
+   
 }
 
   const removeProject = async (projectId) => {
@@ -225,30 +243,43 @@ if(!res.data?.status){
       toast.error("Something went wrong")
   }
       const hackathon = tempHackathons.find(h=> h._id === hackathonId);
-      
+      console.log(hackathon)
       if (!hackathon) {
         toast.error("Something went wrong")
         return;
     }
       if(!hackathon || hackathonId.startsWith("temp-")){
        
-        try {const res = await axios.post(BASE_URL + "/profile/add/hackathon", {hackathon}, {withCredentials : true})
+        try {
+          if(hackathon.name == "" ||hackathon.description == "") throw new Error("Please fill all the details")
+          const res = await axios.post(BASE_URL + "/profile/add/hackathon", {hackathon}, {withCredentials : true})
         if(res.data) setTempHackathons(prev=>prev.map(h=>(h._id === hackathonId ? res.data : h)))
+          setEditingHackathons(prevSet =>{
+            const newSet = new Set(prevSet);
+            newSet.delete(hackathonId);
+            return newSet;
+           })
         toast.success("Hackathon details updated successfully!")
       }
       catch(err){
-        toast.error("Something went wrong")
+        toast.error(err.message)
       }
       }
       else {
+       try {
+        if(hackathon.name == "" ||hackathon.description == "") throw new Error("Please fill all the details")
         await axios.patch(BASE_URL + `/hackathon-edit/${hackathonId}`, hackathon, {withCredentials : true})
+        setEditingHackathons(prevSet =>{
+          const newSet = new Set(prevSet);
+          newSet.delete(hackathonId);
+          return newSet;
+         })
         toast.success("Hackathon details updated successfully!")
+      }catch(err){
+          toast.error(err.message)
+        }
       }
-     setEditingHackathons(prevSet =>{
-      const newSet = new Set(prevSet);
-      newSet.delete(hackathonId);
-      return newSet;
-     })
+     
   }
 
   const handleHackathonUpdate = (hackathonId, updatedFields) => {

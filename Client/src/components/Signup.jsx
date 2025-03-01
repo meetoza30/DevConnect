@@ -6,6 +6,7 @@ import { BASE_URL } from "../utils/constants";
 import { addUser } from "../utils/userSlice";
 import Cookies from "js-cookie"
 import { toast } from 'react-toastify';
+import validate from 'validator';
 
 const Signup = () => {
   const [isSignUp, setIsSignUp] = useState(true);
@@ -39,6 +40,7 @@ if(res.data?.status){
             const res = await axios.post(BASE_URL+"/login",{emailId, password},{withCredentials:true})
             
             if(res.data.error === "Invalid Credentials") throw new Error("Invalid Credentials, please try again")
+            
             dispath(addUser(res.data.user));
             toast.success("Successfully logged in!");
 
@@ -51,16 +53,20 @@ if(res.data?.status){
         
 else {        
   try {
-    
+    const usernameRegex = /^[a-z0-9._]+$/;
+    if(userName && !usernameRegex.test(userName)) throw new Error("Username should consist of lowercase characters, numbers & ('.' , '_') only")
+    if(emailId && !validate.isEmail(emailId)) throw new Error("Enter valid email address")
+    if(password && !validate?.isStrongPassword(password)) throw new Error("Enter strong password (Use Uppercase, Special characters & numbers)")
+
           const res = await axios.post(BASE_URL+"/signup", {
             fullName, userName, emailId, password
           }, {withCredentials:true});
-
+          // if(res.error) throw new Error(res.error)
           dispath(addUser(res.data.user));
           toast.success("Account created successfully!");
           return navigate('/profile/update/skills');
         } catch (error) {
-          toast.error(error.response?.data || "Signup failed. Please try again.");
+          toast.error(error.message || "Signup failed. Please try again.");
           
         }}
   }
@@ -143,7 +149,7 @@ else {
                 name="password"
                 onChange={(e)=>{setPassword(e.target.value)}}
                 id="password"
-                placeholder="Use Uppercase character, numbers & special characters"
+                placeholder="A strong password contains more than 8 characters"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
                 required
               />
