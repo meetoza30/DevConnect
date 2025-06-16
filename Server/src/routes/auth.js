@@ -34,6 +34,7 @@ authRouter.post('/signup', async (req, res)=>{
 
 authRouter.post('/login', async (req,res)=>{
     try{
+        console.log(req.body.emailId);
         const user = await User.findOne({emailId : req.body.emailId})
     if(!user) throw new Error("Invalid Credentials");
     const isPasswordValid = await bcrypt.compare(req.body.password, user?.password);
@@ -55,6 +56,51 @@ catch(err){
     res.json({error : err.message})
 }
 })
+
+authRouter.post('/google/login', async (req, res) => {
+  const { fullName, emailId, _id } = req.body;
+
+  try {
+    
+    let user = await User.findOne({ emailId });
+
+    if (!user) {
+
+      user = new User({
+        fullName,
+        emailId,
+        userName: "", 
+        password: _id, 
+        age: "",
+        college: "",
+        projects: [],
+        hackathons: [],
+        skills: [],
+        gender: "",
+        bio: "",
+        socials: {}
+      });
+
+      await user.save();
+    }
+
+   
+    const token = await user.getJWToken();
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      path: "/",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    res.json({ user, message: "User logged in successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(400).send(err.message);
+  }
+});
+
 
 authRouter.post('/logout',(req,res)=>{
     res.clearCookie("token", { 

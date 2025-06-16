@@ -5,6 +5,8 @@ import axios from 'axios';
 import { BASE_URL } from "../utils/constants";
 import { addUser } from "../utils/userSlice";
 import Cookies from "js-cookie"
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../utils/firebaseConfig";
 import { toast } from 'react-toastify';
 import validate from 'validator';
 
@@ -30,6 +32,22 @@ if(res.data?.status){
 
     checkAuth();
   }, [])
+
+  const handleGoogleLogin = async()=>{
+    try{
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      const res = await axios.post(BASE_URL+"/google/login",{_id: user.uid,
+      fullName: user.displayName,
+      emailId: user.email},{withCredentials:true});
+      console.log(res);
+      return navigate('/feed')
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
 
   const handleLogin = async (e)=>{
     
@@ -189,6 +207,22 @@ else {
                 {isSignUp ? "Sign in here" : "Create an account"}
               </span>
             </p>
+            <div className="flex flex-col items-center my-4">
+  <p className="text-gray-500 dark:text-gray-400 mb-2">or</p>
+  <button
+    onClick={handleGoogleLogin}
+    type="button"
+    className="flex items-center justify-center w-full text-black bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600 dark:focus:ring-blue-800"
+  >
+    <img
+      src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+      alt="Google logo"
+      className="w-5 h-5 mr-2"
+    />
+    Continue with Google
+  </button>
+</div>
+
           </form>
         </div>
       </div>
