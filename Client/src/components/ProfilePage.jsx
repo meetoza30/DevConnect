@@ -374,7 +374,7 @@ if(!res.data?.status){
             <>
               <h2 className="text-2xl font-bold mt-4 text-purple-300">{tempProfile?.fullName}</h2>
               {
-                tempProfile?.userName.length > 0 && <p className="text-purple-500">@{othersProfile?.userName}</p>
+                tempProfile?.userName.length > 0 && <p className="text-purple-500">@{tempProfile?.userName}</p>
               }
               <p className="text-center mt-2 text-gray-300">{tempProfile?.bio}</p>
             </>

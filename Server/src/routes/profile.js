@@ -1,6 +1,6 @@
 import express from 'express'
 import User from "../models/user.js";
-import userAuth from '../middlewares/auth.js';
+import {userAuth} from '../middlewares/auth.js';
 import validateData from '../utils/validators.js';
 import bcrypt from 'bcrypt'
 import Project from '../models/project.js';

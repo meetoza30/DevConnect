@@ -9,6 +9,7 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../utils/firebaseConfig";
 import { toast } from 'react-toastify';
 import validate from 'validator';
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   const [isSignUp, setIsSignUp] = useState(true);
@@ -50,8 +51,6 @@ if(res.data?.status){
   }
 
   const handleLogin = async (e)=>{
-    
-
         e.preventDefault();
         if(!isSignUp){
           try {
@@ -160,7 +159,7 @@ else {
                
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Password
+                Password <span className=" text-gray-300 font-light">(Use uppercase, lowercase, symbols and numbers)</span>
               </label>
               <input
                 type="password"
@@ -198,15 +197,27 @@ else {
             >
               {isSignUp ? "Create an account" : "Sign in"}
             </button>
-            <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+
+            
+            <div>
+              {!isSignUp && <Link
+                to="/forgot-password"
+                className="font-medium text-sm text-violet-600 underline dark:text-violet-500 cursor-pointer"
+              >Forgot password?</Link>}
+
+            <p className=" mt-2 text-sm font-light text-gray-500 dark:text-gray-400">
+              
               {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
               <span
                 onClick={toggleForm}
                 className="font-medium text-violet-600 hover:underline dark:text-violet-500 cursor-pointer"
               >
+                
                 {isSignUp ? "Sign in here" : "Create an account"}
               </span>
             </p>
+            </div>
+
             <div className="flex flex-col items-center my-4">
   <p className="text-gray-500 dark:text-gray-400 mb-2">or</p>
   <button

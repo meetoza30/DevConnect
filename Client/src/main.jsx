@@ -13,6 +13,8 @@ import UserReqCard from './components/UserReqCard.jsx';
 import Reqs from './components/ShowReqs.jsx';
 import Convos from './components/Convos.jsx';
 import ShowConnections from './components/ShowConnections.jsx';
+import ForgotPassword from './components/ForgotPassword.jsx';
+import ResetPassword from './components/ResetPassword.jsx';
 
 const router = createHashRouter([
   {
@@ -26,6 +28,14 @@ const router = createHashRouter([
       {
         path : '/signin',
         element : <Signup />
+      },
+      {
+        path : '/forgot-password',
+        element : <ForgotPassword />
+      },
+      {
+        path : '/reset-password/:id/:token',
+        element : <ResetPassword />
       },
       {
         path : '/reqs/review',
