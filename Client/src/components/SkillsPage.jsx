@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/SkillsPage.css';
+import '../styles/InputBox.css'
 import { BASE_URL } from '../utils/constants';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -30,12 +31,13 @@ const skillsData = {
 
 const SkillsPage = () => {
   const [skills, setSkills] = useState([]);
+  const [gradYear, setGradYear] = useState();
   const dispath = useDispatch();
   const navigate = useNavigate();
   const postSkills = async(e)=>{
     // e.preventDefault();
     try{
-      const res  = await axios.patch(BASE_URL + "/profile/edit", {skills}, {withCredentials :true})
+      const res  = await axios.patch(BASE_URL + "/profile/edit", {skills, gradYear}, {withCredentials :true})
       dispath(addSkills(res.data.user))
       
     }
@@ -43,7 +45,7 @@ const SkillsPage = () => {
       console.log(err)
     }
   }
-
+  // console.log(gradyear)
 
   const handleCheckBox = (skill) => {
     setSkills((prev) => {
@@ -62,7 +64,21 @@ const SkillsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
+    <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white p-8">
+      <div className='mb-5 flex flex-col items-center'>
+ <h1 className='text-3xl font-bold text-center mb-8'>Enter your graduation year:</h1>
+<div class="input-container">
+  <input
+    class="input"
+    name="text"
+    type="text"
+    placeholder="Ex. 2027"
+    onChange={(e)=>setGradYear(e.target.value)}
+  />
+</div>
+      </div>
+     
+
       <h1 className="text-3xl font-bold text-center mb-8">
         Let people know about your skills
       </h1>

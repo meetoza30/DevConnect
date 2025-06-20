@@ -42,8 +42,9 @@ if(res.data?.status){
       const res = await axios.post(BASE_URL+"/google/login",{_id: user.uid,
       fullName: user.displayName,
       emailId: user.email},{withCredentials:true});
-      console.log(res);
-      return navigate('/feed')
+      if(res?.data?.existing == true) return navigate('/feed')
+      else return navigate('/profile/update/skills')
+      
     }
     catch(err){
       console.log(err);

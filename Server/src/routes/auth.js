@@ -10,10 +10,10 @@ import 'dotenv/config'
 const authRouter = express.Router()
 
 authRouter.post('/signup', async (req, res)=>{
-    const {fullName, emailId, userName,age, college, projects, gender, password, skills, hackathons, bio, socials} = req.body;
+    const {fullName, emailId, userName,age, gradYear, projects, gender, password, skills, hackathons, bio, socials} = req.body;
     
     const hashedPassword = await bcrypt.hash(password, 10)
-    const user = new User({fullName, emailId, userName, age, college, gender, projects : [], hackathons : [], password: hashedPassword, skills, bio, socials});
+    const user = new User({fullName, emailId, userName, age, gradYear, gender, projects : [], hackathons : [], password: hashedPassword, skills, bio, socials});
     try{
         validateData(req)
         const token = await user.getJWToken();
@@ -63,9 +63,9 @@ authRouter.post('/google/login', async (req, res) => {
   const { fullName, emailId, _id } = req.body;
 
   try {
-    
+    let existing = false;
     let user = await User.findOne({ emailId });
-
+    if(user) existing = true;
     if (!user) {
 
       user = new User({
@@ -74,13 +74,14 @@ authRouter.post('/google/login', async (req, res) => {
         userName: "", 
         password: _id, 
         age: "",
-        college: "",
+        gradYear: "",
         projects: [],
         hackathons: [],
         skills: [],
         gender: "",
         bio: "",
-        socials: {}
+        socials: {},
+        isGoogleUser:true
       });
 
       await user.save();
@@ -96,7 +97,7 @@ authRouter.post('/google/login', async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({ user, message: "User logged in successfully" });
+    res.json({ user, message: "User logged in successfully", existing });
   } catch (err) {
     console.error(err);
     res.status(400).send(err.message);

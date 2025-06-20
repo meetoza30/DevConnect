@@ -22,7 +22,7 @@ const userSchema = new Schema({
         unique:true,
         lowerCase: true
     },
-    college: {
+    gradYear: {
         type:String,
     // required:true
 },
