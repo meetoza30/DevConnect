@@ -21,4 +21,22 @@ const userAuth = async (req, res, next)=>{
     }
 }
 
-export default userAuth;
+const resetPasswordAuth = async(req,res,next)=>{
+    try{
+        const {token} = req.params;
+        const decodedId = await jwt.verify(token, process.env.DEVCONNECT_TOKEN_KEY);
+
+        const {_id} = decodedId;
+        const user = await User.findById(_id);
+        if(!user) throw new Error("User doesnt exist")
+        req.user = user;
+        next();
+    }
+
+    catch(err){
+    res.status(400).send(err.message);
+    }
+    
+}
+
+export {userAuth, resetPasswordAuth};

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo  } from 'react';
 import axios from 'axios';
 import {BASE_URL} from '../utils/constants.js'
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,7 @@ const Profile = ()=>{
     const [tempProjects, setTempProjects] = useState([]);
     const [tempHackathons, setTempHackathons] = useState([]);
     const [isEditMode, setIsEditMode] = useState(false);
+    // let profilesExist = false;
 
     useEffect(() => {
         
@@ -33,11 +34,15 @@ const Profile = ()=>{
         fetchProfile();
     }, [userId, navigate]);
 
+const profilesExist = useMemo(() => {
+  if (!othersProfile?.socialIds) return false;
+  return Object.values(othersProfile.socialIds).some(val => val?.trim().length > 0);
+}, [othersProfile]);
     
     return(
         
         <div className="min-h-screen bg-gray-900 text-gray-100 p-6 flex flex-col md:flex-row gap-6">
-      {/* Profile Section (Left Sidebar) & SKills & Profiles - Unchanged */}
+      {/* Profile Section (Left Sidebar) & Skills & Profiles - Unchanged */}
       <div className="w-full z-0 md:w-1/3  rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-500">
         <div className="flex flex-col items-center">
           <div className="relative group flex flex-col justify-center items-center">
@@ -58,7 +63,10 @@ const Profile = ()=>{
           {!isEditMode ? (
             <>
               <h2 className="text-2xl font-bold mt-4 text-purple-300">{othersProfile?.fullName}</h2>
-              <p className="text-purple-500">@{othersProfile?.userName}</p>
+              {/* {
+                othersProfile?.userName.length > 0 && <p className="text-purple-500">@{othersProfile?.userName}</p>
+              } */}
+              
               <p className="text-center mt-2 text-gray-300">{othersProfile?.bio}</p>
             </>
           ) : (
@@ -82,8 +90,9 @@ const Profile = ()=>{
           
         </div>
         {/* Coding & Social Profiles */}
-       <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500 z-0">
-          <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding Profiles</h3>
+
+       {profilesExist && <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500 z-0">
+          <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding & Social Profiles</h3>
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isEditMode ? 'opacity-100' : 'opacity-90'}`}>
             {othersProfile?.socialIds && Object.entries(othersProfile?.socialIds).map(([platform]) => (
               <div key={platform} className="flex items-center space-x-2">
@@ -108,7 +117,7 @@ const Profile = ()=>{
               </div>
             ))}
           </div>
-        </div>
+        </div>}
         {/* ... (existing Skills Showcase section) */}
 
         <div className=" rounded-lg shadow-2xl p-6 border border-purple-500">

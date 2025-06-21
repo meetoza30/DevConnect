@@ -1,7 +1,7 @@
 import express from 'express'
 import Req from '../models/reqs.js'
 import { connect } from 'mongoose';
-import userAuth from '../middlewares/auth.js';
+import {userAuth} from '../middlewares/auth.js';
 import User from '../models/user.js';
 
 const connectionRouter = express.Router();

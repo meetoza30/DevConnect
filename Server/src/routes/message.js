@@ -1,6 +1,6 @@
 import express from 'express'
 import { Socket, Server } from 'socket.io'
-import userAuth from '../middlewares/auth.js'
+import {userAuth} from '../middlewares/auth.js'
 import {createServer} from 'http'
 import cors from 'cors'
 import Conversation from '../models/conversations.js'

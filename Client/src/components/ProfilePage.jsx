@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import {BASE_URL} from '../utils/constants.js'
 import { useDispatch, useSelector } from "react-redux";
@@ -51,6 +51,7 @@ const DeveloperProfile = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // let profilesExist = false;
   
   useEffect(()=>{
     const checkAuth = async()=>{
@@ -99,19 +100,28 @@ if(!res.data?.status){
       getProfile();
   }, [])
 
-  useEffect(() => {
+   useEffect(() => {
       if (userData) {
         setProfile(userData); 
       }
   }, [userData]);
 
-  useEffect(() => {
+    useEffect(() => {
     if (profile?.projects && tempProjects.length === 0) {
       setTempProjects(profile.projects);
     }
     if(profile?.hackathons && tempHackathons.length === 0) setTempHackathons(profile.hackathons);
 
   }, [profile?.projects, profile?.hackathons]);
+
+const profilesExist = useMemo(() => {
+  if (!tempProfile?.socialIds) return false;
+  return Object.values(tempProfile.socialIds).some(val => val?.trim().length > 0);
+}, [tempProfile]);
+
+ 
+
+
   
   // ... (existing toggleEditMode, handleProfileUpdate, handleSocialProfileUpdate)
 
@@ -373,7 +383,9 @@ if(!res.data?.status){
           {!isEditMode ? (
             <>
               <h2 className="text-2xl font-bold mt-4 text-purple-300">{tempProfile?.fullName}</h2>
-              <p className="text-purple-500">@{tempProfile?.userName}</p>
+              {
+                tempProfile?.userName.length > 0 && <p className="text-purple-500">@{tempProfile?.userName}</p>
+              }
               <p className="text-center mt-2 text-gray-300">{tempProfile?.bio}</p>
             </>
           ) : (
@@ -398,7 +410,8 @@ if(!res.data?.status){
         </div>
         {/* Coding & Social Profiles */}
        <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500 z-0">
-          <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding Profiles</h3>
+          {profilesExist && <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding & Social Profiles</h3>}
+          {!profilesExist && <h3 className="text-xl font-semibold mb-4 text-purple-300">You haven't added any profiles yet</h3>}
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isEditMode ? 'opacity-100' : 'opacity-90'}`}>
             {Object.entries(tempProfile?.socialIds).map(([platform]) => (
               <div key={platform} className="flex items-center space-x-2">

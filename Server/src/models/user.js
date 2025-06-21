@@ -14,10 +14,6 @@ const userSchema = new Schema({
     },
     age : {
         type: Number,
-        
-        validate(value){
-            if(value < 16) throw new Error("Minimum age allowed onDevConnect is 16")
-        }
     },
     emailId: {
         type:String,
@@ -26,7 +22,7 @@ const userSchema = new Schema({
         unique:true,
         lowerCase: true
     },
-    college: {
+    gradYear: {
         type:String,
     // required:true
 },
@@ -47,6 +43,7 @@ const userSchema = new Schema({
         type: String,
         max: 200
     },
+    isGoogleUser: { type: Boolean, default: false },
     socialIds: {type: Object},
     hackathons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Hackathon" }],
     projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }]

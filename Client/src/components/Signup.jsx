@@ -5,8 +5,11 @@ import axios from 'axios';
 import { BASE_URL } from "../utils/constants";
 import { addUser } from "../utils/userSlice";
 import Cookies from "js-cookie"
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../utils/firebaseConfig";
 import { toast } from 'react-toastify';
 import validate from 'validator';
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   const [isSignUp, setIsSignUp] = useState(true);
@@ -31,9 +34,24 @@ if(res.data?.status){
     checkAuth();
   }, [])
 
-  const handleLogin = async (e)=>{
-    
+  const handleGoogleLogin = async()=>{
+    try{
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
 
+      const res = await axios.post(BASE_URL+"/google/login",{_id: user.uid,
+      fullName: user.displayName,
+      emailId: user.email},{withCredentials:true});
+      if(res?.data?.existing == true) return navigate('/feed')
+      else return navigate('/profile/update/skills')
+      
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
+  const handleLogin = async (e)=>{
         e.preventDefault();
         if(!isSignUp){
           try {
@@ -142,7 +160,7 @@ else {
                
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Password
+                Password <span className=" text-gray-300 font-light">(Use uppercase, lowercase, symbols and numbers)</span>
               </label>
               <input
                 type="password"
@@ -180,15 +198,43 @@ else {
             >
               {isSignUp ? "Create an account" : "Sign in"}
             </button>
-            <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+
+            
+            <div>
+              {!isSignUp && <Link
+                to="/forgot-password"
+                className="font-medium text-sm text-violet-600 underline dark:text-violet-500 cursor-pointer"
+              >Forgot password?</Link>}
+
+            <p className=" mt-2 text-sm font-light text-gray-500 dark:text-gray-400">
+              
               {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
               <span
                 onClick={toggleForm}
                 className="font-medium text-violet-600 hover:underline dark:text-violet-500 cursor-pointer"
               >
+                
                 {isSignUp ? "Sign in here" : "Create an account"}
               </span>
             </p>
+            </div>
+
+            <div className="flex flex-col items-center my-4">
+  <p className="text-gray-500 dark:text-gray-400 mb-2">or</p>
+  <button
+    onClick={handleGoogleLogin}
+    type="button"
+    className="flex items-center justify-center w-full text-black bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600 dark:focus:ring-blue-800"
+  >
+    <img
+      src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+      alt="Google logo"
+      className="w-5 h-5 mr-2"
+    />
+    Continue with Google
+  </button>
+</div>
+
           </form>
         </div>
       </div>

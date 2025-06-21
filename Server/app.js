@@ -5,7 +5,7 @@ import authRouter from "./src/routes/auth.js";
 import profileRouter from "./src/routes/profile.js";
 import jwt from 'jsonwebtoken';
 import cookieParser from "cookie-parser";
-import userAuth from "./src/middlewares/auth.js";
+import {userAuth} from "./src/middlewares/auth.js";
 import connectionRouter from "./src/routes/connections.js";
 import userRouter from "./src/routes/user.js";
 import messageRouter from "./src/routes/message.js";
