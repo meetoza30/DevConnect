@@ -15,6 +15,7 @@ import Convos from './components/Convos.jsx';
 import ShowConnections from './components/ShowConnections.jsx';
 import ForgotPassword from './components/ForgotPassword.jsx';
 import ResetPassword from './components/ResetPassword.jsx';
+import { FilterSidebar } from './components/FilterSidebar.jsx';
 
 const router = createHashRouter([
   {
@@ -60,6 +61,10 @@ const router = createHashRouter([
       {
         path: '/connections',
         element: <ShowConnections />
+      },
+      {
+        path: '/test',
+        element: <FilterSidebar />
       },
       {
         path: '/usercard',

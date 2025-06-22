@@ -74,7 +74,7 @@ userRouter.get('/user/connections', userAuth, async (req, res) => {
  
 
 userRouter.get('/feed', userAuth, async (req, res)=>{
-    const SAFE_DATA = "firstName lastName userName profileUrl bio skills"
+    const SAFE_DATA = "firstName lastName userName profileUrl bio skills hackathons gradYear"
     try{
         
         const user = req.user;

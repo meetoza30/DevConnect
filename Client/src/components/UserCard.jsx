@@ -12,7 +12,7 @@ const UserCard = ({ user, onSwipe }) => {
   const [x, setX] = useState();
   const navigate = useNavigate()
   return (
-    <TinderCard className="absolute w-[400px] h-[80vh] cursor-pointer flex justify-center items-center group"
+    <TinderCard className="absolute w-[400px] h-[80vh] mb-1 cursor-pointer flex justify-center items-center group"
   onSwipe={(dir) => onSwipe(dir)}
 >
     <motion.div

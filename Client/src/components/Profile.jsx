@@ -63,9 +63,10 @@ const profilesExist = useMemo(() => {
           {!isEditMode ? (
             <>
               <h2 className="text-2xl font-bold mt-4 text-purple-300">{othersProfile?.fullName}</h2>
-              {/* {
+              {
                 othersProfile?.userName.length > 0 && <p className="text-purple-500">@{othersProfile?.userName}</p>
-              } */}
+              }
+              <p className="text-center mt-2 text-purple-300 font-semibold border px-2 mb-2 rounded-md border-purple-700">🎓 - {othersProfile?.gradYear}</p>
               
               <p className="text-center mt-2 text-gray-300">{othersProfile?.bio}</p>
             </>

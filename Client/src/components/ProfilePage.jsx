@@ -69,6 +69,7 @@ if(!res.data?.status){
         setTempProfile({
           fullName: res.data?.fullName, 
           userName: res.data?.userName,
+          gradYear : res?.data?.gradYear,
           bio: res.data?.bio || "",
           profileUrl: res.data?.profileUrl,
           socialIds: res.data?.socialIds || {
@@ -93,7 +94,7 @@ if(!res.data?.status){
   }
 
  
-
+// console.log(tempProfile?.gradYear)
   const userData = useSelector((store)=>store.user);
   useEffect(()=>{
       const token = Cookies.get('token')
@@ -119,10 +120,7 @@ const profilesExist = useMemo(() => {
   return Object.values(tempProfile.socialIds).some(val => val?.trim().length > 0);
 }, [tempProfile]);
 
- 
 
-
-  
   // ... (existing toggleEditMode, handleProfileUpdate, handleSocialProfileUpdate)
 
   const handleProfileUpdate = (field, value) => {
@@ -175,7 +173,7 @@ const profilesExist = useMemo(() => {
 
   const handleProjectUpdate = (projectId, updates) => {
     if(updates.title == "" || updates.description == "" || updates.url =="") toast.error("Please fill all the details")
-    console.log(updates)
+    // console.log(updates)
     setTempProjects(prev => prev.map(p=>p._id === projectId ? {...p, ...updates} : p))
 };
 
@@ -192,7 +190,7 @@ const profilesExist = useMemo(() => {
   const saveProject = async(projectId)=>{
    
     const project = tempProjects.find(p=>p._id === projectId);
-    console.log(project);
+    // console.log(project);
     
     if(!project || projectId.startsWith("temp-")){
       try { 
@@ -253,7 +251,7 @@ const profilesExist = useMemo(() => {
       toast.error("Something went wrong")
   }
       const hackathon = tempHackathons.find(h=> h._id === hackathonId);
-      console.log(hackathon)
+      // console.log(hackathon)
       if (!hackathon) {
         toast.error("Something went wrong")
         return;
@@ -383,10 +381,12 @@ const profilesExist = useMemo(() => {
           {!isEditMode ? (
             <>
               <h2 className="text-2xl font-bold mt-4 text-purple-300">{tempProfile?.fullName}</h2>
+              <p className="text-center mt-2 text-purple-300 font-semibold border px-2 rounded-md border-purple-700">🎓 - {tempProfile?.gradYear}</p>
               {
                 tempProfile?.userName.length > 0 && <p className="text-purple-500">@{tempProfile?.userName}</p>
               }
               <p className="text-center mt-2 text-gray-300">{tempProfile?.bio}</p>
+              
             </>
           ) : (
             <div className="w-full mt-4 space-y-3">
@@ -404,6 +404,13 @@ const profilesExist = useMemo(() => {
                 placeholder="Bio"
                 className="w-full p-2 border rounded h-24 bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
               />
+              <input 
+                type="text" 
+                value={tempProfile?.gradYear}
+                onChange={(e) => handleProfileUpdate("gradYear", e.target.value)}
+                placeholder="Enter your graduation year"
+                className="w-full p-2 border rounded bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
+              />
             </div>
           )}
           
@@ -415,7 +422,7 @@ const profilesExist = useMemo(() => {
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isEditMode ? 'opacity-100' : 'opacity-90'}`}>
             {Object.entries(tempProfile?.socialIds).map(([platform]) => (
               <div key={platform} className="flex items-center space-x-2">
-                {isEditMode ? (
+                {isEditMode ? ( 
                   <input 
                     type="text"
                     value={tempProfile?.socialIds[platform]}

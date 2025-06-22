@@ -24,5 +24,6 @@ dist-ssr
 *.sw?
 
 Client/src/utils/constants.js
+package-lock.json
           
 
