@@ -132,7 +132,7 @@ authRouter.post('/forgotPassword', async(req,res)=>{
     <h2>Hello ${user.fullName},</h2>
     <p>You requested to reset your password.</p>
     <p>Click the link below to reset it:</p>
-    <a href="http://localhost:5173/#/reset-password/${user._id}/${token}" target="_blank">
+    <a href="https://dev-connect-opal.vercel.app/#/reset-password/${user._id}/${token}" target="_blank">
       <strong>Reset Password</strong>
     </a>
     <br><br>
