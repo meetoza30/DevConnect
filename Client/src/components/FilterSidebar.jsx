@@ -37,8 +37,9 @@ export const FilterSidebar = ({
     onFiltersChange({ ...filters, skills: updatedSkills });
   };
 
+
   const handleGraduationYearChange = (year, checked) => {
-    console.log(year)
+    // console.log(year)
     const updatedYears = checked
       ? [...filters.graduationYears, year]
       : filters.graduationYears.filter(y => y !== year);

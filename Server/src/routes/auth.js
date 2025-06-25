@@ -61,6 +61,7 @@ catch(err){
 
 authRouter.post('/google/login', async (req, res) => {
   const { fullName, emailId, _id } = req.body;
+  console.log(fullName, emailId)
 
   try {
     let existing = false;

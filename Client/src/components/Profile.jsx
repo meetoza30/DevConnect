@@ -3,7 +3,6 @@ import axios from 'axios';
 import {BASE_URL} from '../utils/constants.js'
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-
 import Cookies from 'js-cookie'
 
 const Profile = ()=>{
@@ -13,7 +12,7 @@ const Profile = ()=>{
     const [tempProjects, setTempProjects] = useState([]);
     const [tempHackathons, setTempHackathons] = useState([]);
     const [isEditMode, setIsEditMode] = useState(false);
-    // let profilesExist = false;
+    
 
     useEffect(() => {
         

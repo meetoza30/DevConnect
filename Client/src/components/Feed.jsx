@@ -14,6 +14,8 @@ export default function Feed() {
   const [swipeText, setSwipeText] = useState("");
   const [showSwipeText, setShowSwipeText] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+
+  
   
   // Filter state
   const [filters, setFilters] = useState({

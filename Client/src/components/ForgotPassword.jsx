@@ -5,10 +5,10 @@ import { BASE_URL } from "../utils/constants";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
+
 const ForgotPassword = ()=>{
     const [emailId, setEmailId] = useState();
     const navigate = useNavigate();
-
     const sendEmail = async ()=>{
         console.log("in sendEmail")
         const result = await axios.post(BASE_URL + '/forgotPassword', {emailId}, {withCredentials:true});
