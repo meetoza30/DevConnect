@@ -125,7 +125,7 @@ authRouter.post('/forgotPassword', async(req,res)=>{
     });
 
     var mailOptions = {
-        from : "process.env.DEVCONNECT_EMAIL",
+        from : `"Team DevConnect" <process.env.DEVCONNECT_EMAIL>`,
         to : emailId,
         subject : "Reset your password -  DevConnect",
          html: `
@@ -137,7 +137,7 @@ authRouter.post('/forgotPassword', async(req,res)=>{
     </a>
     <br><br>
     <p>If you did not request this, you can ignore this email.</p>
-    <p>– DevConnect Team</p>
+    <p>– DevConnect</p>
   `
     };
 
@@ -194,4 +194,5 @@ authRouter.get('/check-auth', (req,res)=>{
         res.json({status : false, message : "Not authenticated"})
      }
 })
+
 export default authRouter;
