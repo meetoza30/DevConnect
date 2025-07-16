@@ -35,7 +35,7 @@ connectDB()
 const allowedOrigins = [
     'http://localhost:5173', // Local development
     'https://dev-connect-opal.vercel.app', // Deployed frontend
-    'http://3.110.158.200/' 
+    'http://3.110.158.200' 
   ];
   
   app.use(cors({
