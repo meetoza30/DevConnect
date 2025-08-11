@@ -7,10 +7,6 @@ import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const SKILLS_LIST = [
-  'React', 'JavaScript', 'Python', 'Node.js', 'TypeScript', 
-  'Docker', 'Kubernetes', 'AWS', 'GraphQL', 'Machine Learning'
-];
 
 const DeveloperProfile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -21,6 +17,7 @@ const DeveloperProfile = () => {
   const [tempProjects, setTempProjects] = useState([])
   const [editingProjects, setEditingProjects] = useState(new Set());
   const [profile, setProfile] = useState(null);
+
   const [tempProfile, setTempProfile] = useState({
     fullName: "",
     userName: "",
@@ -84,6 +81,7 @@ if(!res.data?.status){
         });
         
         dispatch(addUser(res.data));
+        localStorage.setItem('userData', JSON.stringify(res.data));
       }
       catch(err){
         toast.error("Something went wrong")
@@ -94,7 +92,7 @@ if(!res.data?.status){
   }
 
  
-// console.log(tempProfile?.gradYear)
+
   const userData = useSelector((store)=>store.user);
   useEffect(()=>{
       const token = Cookies.get('token')
@@ -547,7 +545,7 @@ const profilesExist = useMemo(() => {
               <div className='flex flex-col'>
                 <h4 className="font-bold text-purple-300">{project.title}</h4>
                 <p className="text-gray-400">{project.description}</p>
-                <a href={project.url.startsWith("http") ? project.url : `https://${project.url}`} target='_blank' className="text-purple-300 cursor-pointer hover:underline">
+                <a href={project?.url?.startsWith("http") ? project.url : `https://${project.url}`} target='_blank' className="text-purple-300 cursor-pointer hover:underline">
                   View
                 </a>
               </div>

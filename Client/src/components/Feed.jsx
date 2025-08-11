@@ -7,6 +7,7 @@ import axios from "axios";
 import IconImag from '../assets/Business_SVG.svg'
 import { toast } from "react-toastify";
 import { Filter } from 'lucide-react';
+import { useSelector } from "react-redux";
 
 export default function Feed() {
   const [feed, setFeed] = useState([]);
@@ -14,7 +15,9 @@ export default function Feed() {
   const [swipeText, setSwipeText] = useState("");
   const [showSwipeText, setShowSwipeText] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-
+  const user = useSelector((store) => store.user);
+  console.log("in feed..........");
+  console.log(user);
   
   
   // Filter state

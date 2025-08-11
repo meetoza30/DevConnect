@@ -11,21 +11,17 @@ const messageSchema = new Schema({
         ref : 'User',
         required : true
     },
-    receiverId : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'User',
-        required : true
-    },
-    msgContent : {
+    text : {
         type : String, 
         required : true
+    },
+    timestamps : { // Keep this field name consistent
+        type : Date,
+        default : Date.now
     }
 }, {
-    timestamps : true
-})
+    timestamps : true // This adds createdAt and updatedAt
+});
 
-
-const Message  = mongoose.model('Message', messageSchema)
-
-export default Message
-
+const Message = mongoose.model('Message', messageSchema);
+export default Message;

@@ -17,7 +17,7 @@ const Signup = () => {
   const [password, setPassword] = useState();
   const [fullName, setName] = useState();
   const [userName, setUsername] = useState();
-
+  //  const { refreshAuth } = useAuth();
   const dispath = useDispatch();
   const navigate = useNavigate();
 
@@ -42,10 +42,20 @@ if(res.data?.status){
       const res = await axios.post(BASE_URL+"/google/login",{_id: user.uid,
       fullName: user.displayName,
       emailId: user.email},{withCredentials:true});
-      if(res?.data?.existing == true) return navigate('/feed')
-      else return navigate('/profile/update/skills')
-      
-    }
+      console.log(res?.data?.user);
+      dispath(addUser(res.data.user));
+      localStorage.setItem('userData', JSON.stringify(res.data.user));
+      localStorage.setItem('token', res.data.token);
+      document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+    localStorage.setItem("loggedIn", "true");
+    window.dispatchEvent(new Event("storage"));
+
+    toast.success("Successfully logged in!");
+            return navigate('/feed')
+
+
+      }
     catch(err){
       console.log(err);
     }
@@ -58,11 +68,16 @@ if(res.data?.status){
             const res = await axios.post(BASE_URL+"/login",{emailId, password},{withCredentials:true})
             
             if(res.data.error === "Invalid Credentials") throw new Error("Invalid Credentials, please try again")
-            
+            console.log(res.data.user);
             dispath(addUser(res.data.user));
+            localStorage.setItem('userData', JSON.stringify(res.data.user));
             toast.success("Successfully logged in!");
+            localStorage.setItem('token', res.data.token);
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
 
             return navigate('/feed')
+
           } catch (err) {
             toast.error(err.response?.data || "Invalid Credentials. Please try again.");
             
@@ -79,9 +94,20 @@ else {
           const res = await axios.post(BASE_URL+"/signup", {
             fullName, userName, emailId, password
           }, {withCredentials:true});
-          // if(res.error) throw new Error(res.error)
           dispath(addUser(res.data.user));
+          localStorage.setItem('userData', JSON.stringify(res.data.user));
           toast.success("Account created successfully!");
+          
+          localStorage.setItem( 'token',res.data.token);
+          document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+
+    // Store login flag and trigger storage event
+    localStorage.setItem("loggedIn", "true");
+    window.dispatchEvent(new Event("storage"));
+
+    // Update navbar immediately
+    refreshAuth();
           return navigate('/profile/update/skills');
         } catch (error) {
           toast.error(error.message || "Signup failed. Please try again.");
@@ -95,9 +121,9 @@ else {
 
   return (
     <section className="flex flex-col items-center pt-6 my-20">
-      <div className="w-full bg-white rounded-lg border-purple-500 shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 ">
+      <div className="w-full bg-gray-800 rounded-lg border-purple-500 shadow border sm:max-w-md xl:p-0 ">
         <div className="p-6 space-y-4 sm:p-8">
-          <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+          <h1 className="text-xl font-bold leading-tight tracking-tight  md:text-2xl text-white">
             {isSignUp ? "Create an account" : "Sign in"}
           </h1>
           <form className="space-y-4" onSubmit={handleLogin}>
@@ -105,7 +131,7 @@ else {
               <div>
                 <label
                   htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white"
                 >
                   Your full name
                 </label>
@@ -114,7 +140,7 @@ else {
                   name="name"
                   id="name"
                   onChange={(e)=>{setName(e.target.value)}}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
+                  className="border border-gray-300  sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 bg-gray-700  dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
                   placeholder="ex - Meet Oza"
                   required
                 />
@@ -123,7 +149,7 @@ else {
             {isSignUp && (<div>
               <label
                 htmlFor="username"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Username
               </label>
@@ -132,7 +158,7 @@ else {
                 name="username"
                 onChange={(e)=>{setUsername(e.target.value)}}
                 id="username"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
+                className=" border border-gray-300  sm:text-sm rounded-lg  block w-full p-2.5 bg-gray-700  text-white focus:ring-violet-500 focus:border-violet-500"
                 placeholder="ex - meetoza30"
                 required
               />
@@ -140,7 +166,7 @@ else {
             <div>
               <label
                 htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Email
               </label>
@@ -149,7 +175,7 @@ else {
                 name="email"
                 id="email"
                 onChange={(e)=>{setEmailId(e.target.value)}}
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
+                className=" border border-gray-300  sm:text-sm rounded-lg  block w-full p-2.5 bg-gray-700  text-white focus:ring-violet-500 focus:border-violet-500"
                 placeholder="ex - meetoza@devconnect.com"
                 required
               />
@@ -158,7 +184,7 @@ else {
               <label
                 htmlFor="password"
                
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Password <span className=" text-gray-300 font-light">(Use uppercase, lowercase, symbols and numbers)</span>
               </label>
@@ -168,7 +194,7 @@ else {
                 onChange={(e)=>{setPassword(e.target.value)}}
                 id="password"
                 placeholder="A strong password contains more than 8 characters"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
+                className=" border border-gray-300  sm:text-sm rounded-lg  block w-full p-2.5 bg-gray-700  text-white focus:ring-violet-500 focus:border-violet-500"
                 required
               />
             </div>)}
@@ -177,7 +203,7 @@ else {
               <label
                 htmlFor="password"
                
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Password
               </label>
@@ -187,7 +213,7 @@ else {
                 onChange={(e)=>{setPassword(e.target.value)}}
                 id="password"
                 placeholder="********"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
+                className="  border border-gray-300  sm:text-sm rounded-lg  block w-full p-2.5 bg-gray-700  text-white focus:ring-violet-500 focus:border-violet-500"
                 required
               />
             </div>)}

@@ -15,8 +15,6 @@ const Profile = ()=>{
     
 
     useEffect(() => {
-        
-
         const fetchProfile = async () => {
             try {
                 const res = await axios.get(`${BASE_URL}/profile/user/${userId}`, { withCredentials: true });

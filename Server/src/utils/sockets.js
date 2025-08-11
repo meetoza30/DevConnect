@@ -1,54 +1,82 @@
-import Conversation from '../models/conversations.js'
-import Message from '../models/message.js'
+import { Server } from "socket.io";
+import Message from "../models/message.js";
+import Conversation from "../models/conversations.js";
 
-const activeUsers = new Map();
+const initializeSocket = (server) => {
+    const io = new Server(server, {
+        cors: {
+            origin: "http://localhost:5173",
+            methods: ["GET", "POST"]
+        },
+    });
 
-const handleMessage = async (conversationId, msgContent, sender)=>{
-    try {
-        const conversation = await Conversation.findById(conversationId)
-        if(!conversation) throw new Error("Conversation doesnt exist")
+    io.on("connection", async (socket) => {
+        console.log("User connected:", socket.id);
         
-        const message = await Message.create({
-            senderId : sender,
-            msgContent,
-            conversationId
-        })
-
-        await Conversation.updateOne({_id : conversationId}, {
-            lastMessageTimestamp : message.createdAt,
-            lastMessage : message._id
-        })
-
-        const populatedMsg = await message.populate('senderId', 'userName')
-        return {message : populatedMsg, conversation}
-    } catch (error) {
-        console.error(error.message)
-    }
-}
-
-const initiateSocket = (io)=>{
-    io.on('connection', (socket)=>{
-        socket.on('user_connected', (userId)=>{
-            activeUsers.set(userId, socket.id)
+        socket.on("joinChat", async ({userId, receiverId}) => {
+            console.log("Join chat:", userId, receiverId);
+            const room = [userId, receiverId].sort().join("_");
             
-        })
-
-        socket.on('send_message', async (conversationId, msgContent)=>{
-            try{const sender = socket.user._id;
-            const {conversation, message} = await handleMessage({
-                conversationId, msgContent, sender
-            })
-        conversation.members.forEach(memberId => {
-            if(memberId.toString() !== sender.toString()){
-                const receiverSocketId = activeUsers.get(memberId.toString());
-                if(receiverSocketId){
-                    io.to(receiverSocketId).emit('new_message', {message});
+            try{
+                let conversation = await Conversation.findOne({roomId : room});
+                if(!conversation) {
+                    conversation = new Conversation({
+                        roomId : room,
+                        members : [userId, receiverId]
+                    });
+                    await conversation.save();
                 }
+                
+                console.log("Joined room:", room);
+                socket.join(room);
+            }
+            catch(err){
+                console.log("Error joining chat:", err);
             }
         });
-    }catch(err){
-        socket.emit('error', {error : err.message})
-    }
-        })
-    })
-}
+        
+        socket.on("sendMessage", async (messageData) => {
+            try {
+                const {senderId, receiverId, message, senderName} = messageData;
+                const room = [senderId, receiverId].sort().join("_");
+                let conversation = await Conversation.findOne({roomId : room});
+
+                if(conversation){
+                    const newMessage = new Message({
+                        conversationId : conversation._id,
+                        senderId : senderId,
+                        text : message,
+                        timestamps : new Date() 
+                    });
+
+                    await newMessage.save();
+
+                    // Update conversation's last message
+                    conversation.lastMessage = {
+                        text : newMessage.text,
+                        timestamp : new Date(),
+                        senderId : senderId
+                    };
+                    await conversation.save();
+                    
+                    console.log("Message saved and sent to room:", room);
+                    io.to(room).emit("messageReceived", {
+                        messageData: {
+                            ...messageData,
+                            _id: newMessage._id,
+                            timestamps: newMessage.timestamps
+                        }
+                    });
+                }
+            } catch (err) {
+                console.log("Error sending message:", err);
+            }
+        });
+        
+        socket.on("disconnect", () => {
+            console.log("User disconnected:", socket.id);
+        });
+    });
+};
+
+export default initializeSocket;

@@ -1,22 +1,18 @@
 import mongoose, {Schema, Model} from "mongoose";
 
 const conversationSchema  = new Schema({
-    members : [
-        {
+    roomId : {type : String, required : true, unique : true},
+    members : [{
             type: mongoose.Schema.Types.ObjectId,
             ref : 'User'
-        }
-    ],
+        }],
     lastMessage : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'Message'
-    },
-    lastMessageTimestamp : {
-        type : Date,
-        default : Date.now
+        text: String,
+        senderId : mongoose.Schema.Types.ObjectId,
+        timestamp: { type: Date, default: Date.now }
     }
 }, {
-    timeseries : true
+   timestamps : true
 })
 
 const Conversation = mongoose.model('Conversation', conversationSchema);

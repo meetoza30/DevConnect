@@ -29,6 +29,7 @@
     "react-router-hash-link": "^2.4.3",
     "react-tinder-card": "^1.6.4",
     "react-toastify": "^11.0.3",
+    "socket.io-client": "^4.8.1",
     "tailwindcss": "^3.4.17",
     "validator": "^13.12.0"
   },

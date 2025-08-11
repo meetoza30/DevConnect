@@ -17,6 +17,7 @@ import ForgotPassword from './components/ForgotPassword.jsx';
 import ResetPassword from './components/ResetPassword.jsx';
 import { FilterSidebar } from './components/FilterSidebar.jsx';
 
+
 const router = createHashRouter([
   {
     path: '/',
@@ -41,6 +42,10 @@ const router = createHashRouter([
       {
         path : '/reqs/review',
         element : <Reqs />
+      },
+      {
+        path : '/convos/:receiverId',
+        element : <Convos />
       },
       {
         path : '/convos',
@@ -73,7 +78,7 @@ const router = createHashRouter([
       {
         path: '/profile/update/skills',
         element: <SkillsPage />
-      }
+      },
     ],
   },
   

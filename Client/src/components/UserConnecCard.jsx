@@ -40,6 +40,13 @@ const UserConnecCard = ({user}) => {
           >
             View Profile
           </Link>
+          <Link
+          to={`/convos/${user._id}`}
+            className="bg-purple-200 text-center text-black font-semibold hover:border-black hover:border-2 transition-all py-1 px-3 rounded-lg ml-20 sm:text-sm"
+            
+          >
+            Start Chat
+          </Link>
           </div>
         </div>
   );

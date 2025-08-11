@@ -15,15 +15,13 @@ profileRouter.patch('/profile/edit',userAuth, async (req, res)=>{
         if(req.body.skills?.length >15) throw new Error("You can add only 15 skills")
         else if(req.body.skills?.length < 3) throw new Error("You should add minimum 3 skills");
         
-        
         const user = req.user;
         console.log(req?.body?.gradYear)
         const updatedUser = await User.findByIdAndUpdate(user._id, req.body, {runValidators:true, new : true})
-      
         res.json(updatedUser);
     }
     catch(err){
-res.send("ERROR : " + err.message)
+        res.send("ERROR : " + err.message)
     }
 })
 
@@ -32,14 +30,14 @@ profileRouter.patch('/profile/upload', userAuth,upload.single('profilePic'), asy
 
         if(!req.file) throw new Error("Please upload a file")
             
-
             let user = req.user;
-            const updatesUser = await User.findByIdAndUpdate(user._id, {profileUrl : req.file.path})
+            await User.findByIdAndUpdate(user._id, {profileUrl : req.file.path})
             res.json({message : "Profile picture uploaded successfully", profileUrl : user.profileUrl})
     } catch (error) {
         res.status(400).json({error : error.message})
     }
 })
+
 profileRouter.get('/profile/view', userAuth, async (req, res)=>{
     // const {userId} = req.params;
     try{

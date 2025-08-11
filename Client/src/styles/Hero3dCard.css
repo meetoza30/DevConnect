@@ -1,0 +1,214 @@
+.three-d-container {
+  position: relative;
+  width: 420px;      /* << Increased width */
+  height: 480px;     /* << Increased height */
+  transition: 200ms;
+  max-width: 94vw;   /* Responsive on mobile */
+  max-height: 60vw;  /* Responsive */
+}
+.three-d-container:active {
+  width: 410px;
+  height: 470px;
+}
+
+#three-d-card {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 32px;
+  transition: 700ms;
+  background: linear-gradient(43deg, rgb(65, 88, 208) 0%, rgb(200, 80, 192) 46%, rgb(255, 204, 112) 100%);
+  overflow: hidden;
+}
+
+.three-d-image {
+  width: 370px;
+  height: 370px;
+  object-fit: contain;
+  margin-top: 62px;
+  border-radius: 18px;
+  /* box-shadow: 0 2px 24px 5px rgba(65,88,208,0.17); */
+  /* background: white; */
+}
+
+.three-d-subtitle {
+  transform: translateY(110px);
+  color: rgb(134, 110, 221);
+  text-align: center;
+  width: 100%;
+  font-size: 1.1rem;
+}
+
+.three-d-title {
+  opacity: 0;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+  transition-delay: 100ms;
+  position: absolute;
+  font-size: 2.3rem;
+  font-weight: bold;
+  color: white;
+  left: 0;
+  right: 0;
+  top: 51%;
+  text-align: center;
+  pointer-events: none;
+}
+
+.tracker:hover ~ #three-d-card .three-d-title {
+  opacity: 1;
+}
+
+.three-d-prompt {
+  bottom: 16px;
+  left: 16px;
+  z-index: 20;
+  font-size: 1.35rem;
+  font-weight: bold;
+  transition: 300ms ease-in-out;
+  position: absolute;
+  max-width: 220px;
+  color: rgb(255, 255, 255);
+}
+
+.tracker {
+  position: absolute;
+  z-index: 200;
+  width: 100%;
+  height: 100%;
+}
+
+.tracker:hover {
+  cursor: pointer;
+}
+
+.tracker:hover ~ #three-d-card .three-d-prompt {
+  opacity: 0;
+}
+.tracker:hover ~ #three-d-card {
+  transition: 300ms;
+  filter: brightness(1.1);
+}
+
+.three-d-container:hover #three-d-card::before {
+  transition: 200ms;
+  content: '';
+  opacity: 80%;
+}
+
+.canvas {
+  perspective: 1200px;
+  inset: 0;
+  z-index: 200;
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 0;
+}
+#three-d-card::before {
+  content: '';
+  background: linear-gradient(43deg, rgb(65, 88, 208) 0%, rgb(200, 80, 192) 46%, rgb(255, 204, 112) 100%);
+  filter: blur(2.2rem);
+  opacity: 30%;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+  transition: 200ms;
+}
+
+.tr-1 { grid-area: 1 / 1 / 2 / 2; }
+.tr-2 { grid-area: 1 / 2 / 2 / 3; }
+.tr-3 { grid-area: 1 / 3 / 2 / 4; }
+.tr-4 { grid-area: 1 / 4 / 2 / 5; }
+.tr-5 { grid-area: 1 / 5 / 2 / 6; }
+.tr-6 { grid-area: 2 / 1 / 3 / 2; }
+.tr-7 { grid-area: 2 / 2 / 3 / 3; }
+.tr-8 { grid-area: 2 / 3 / 3 / 4; }
+.tr-9 { grid-area: 2 / 4 / 3 / 5; }
+.tr-10 { grid-area: 2 / 5 / 3 / 6; }
+.tr-11 { grid-area: 3 / 1 / 4 / 2; }
+.tr-12 { grid-area: 3 / 2 / 4 / 3; }
+.tr-13 { grid-area: 3 / 3 / 4 / 4; }
+.tr-14 { grid-area: 3 / 4 / 4 / 5; }
+.tr-15 { grid-area: 3 / 5 / 4 / 6; }
+.tr-16 { grid-area: 4 / 1 / 5 / 2; }
+.tr-17 { grid-area: 4 / 2 / 5 / 3; }
+.tr-18 { grid-area: 4 / 3 / 5 / 4; }
+.tr-19 { grid-area: 4 / 4 / 5 / 5; }
+.tr-20 { grid-area: 4 / 5 / 5 / 6; }
+.tr-21 { grid-area: 5 / 1 / 6 / 2; }
+.tr-22 { grid-area: 5 / 2 / 6 / 3; }
+.tr-23 { grid-area: 5 / 3 / 6 / 4; }
+.tr-24 { grid-area: 5 / 4 / 6 / 5; }
+.tr-25 { grid-area: 5 / 5 / 6 / 6; }
+
+/* Rotations (as per Uiverse effect) */
+.tr-1:hover ~ #three-d-card {transform: rotateX(20deg) rotateY(-10deg);}
+.tr-2:hover ~ #three-d-card {transform: rotateX(20deg) rotateY(-5deg);}
+.tr-3:hover ~ #three-d-card {transform: rotateX(20deg) rotateY(0deg);}
+.tr-4:hover ~ #three-d-card {transform: rotateX(20deg) rotateY(5deg);}
+.tr-5:hover ~ #three-d-card {transform: rotateX(20deg) rotateY(10deg);}
+.tr-6:hover ~ #three-d-card {transform: rotateX(10deg) rotateY(-10deg);}
+.tr-7:hover ~ #three-d-card {transform: rotateX(10deg) rotateY(-5deg);}
+.tr-8:hover ~ #three-d-card {transform: rotateX(10deg) rotateY(0deg);}
+.tr-9:hover ~ #three-d-card {transform: rotateX(10deg) rotateY(5deg);}
+.tr-10:hover ~ #three-d-card {transform: rotateX(10deg) rotateY(10deg);}
+.tr-11:hover ~ #three-d-card {transform: rotateX(0deg) rotateY(-10deg);}
+.tr-12:hover ~ #three-d-card {transform: rotateX(0deg) rotateY(-5deg);}
+.tr-13:hover ~ #three-d-card {transform: rotateX(0deg) rotateY(0deg);}
+.tr-14:hover ~ #three-d-card {transform: rotateX(0deg) rotateY(5deg);}
+.tr-15:hover ~ #three-d-card {transform: rotateX(0deg) rotateY(10deg);}
+.tr-16:hover ~ #three-d-card {transform: rotateX(-10deg) rotateY(-10deg);}
+.tr-17:hover ~ #three-d-card {transform: rotateX(-10deg) rotateY(-5deg);}
+.tr-18:hover ~ #three-d-card {transform: rotateX(-10deg) rotateY(0deg);}
+.tr-19:hover ~ #three-d-card {transform: rotateX(-10deg) rotateY(5deg);}
+.tr-20:hover ~ #three-d-card {transform: rotateX(-10deg) rotateY(10deg);}
+.tr-21:hover ~ #three-d-card {transform: rotateX(-20deg) rotateY(-10deg);}
+.tr-22:hover ~ #three-d-card {transform: rotateX(-20deg) rotateY(-5deg);}
+.tr-23:hover ~ #three-d-card {transform: rotateX(-20deg) rotateY(0deg);}
+.tr-24:hover ~ #three-d-card {transform: rotateX(-20deg) rotateY(5deg);}
+.tr-25:hover ~ #three-d-card {transform: rotateX(-20deg) rotateY(10deg);}
+
+.noselect { user-select:none; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; }
+
+
+/* --- RESPONSIVE for HERO --- */
+@media (max-width: 900px) {
+  .three-d-container {
+    width: 82vw;
+    height: 56vw;
+    min-width: 240px;
+    min-height: 200px;
+  }
+  .three-d-image {
+    width: 32vw;
+    height: 32vw;
+    min-width: 120px;
+    min-height: 120px;
+    margin-top: 26px;
+  }
+  .three-d-title { font-size: 1.4rem; top: 53%; }
+  .three-d-prompt { font-size: 1rem; }
+}
+
+@media (max-width: 600px) {
+  .three-d-container {
+    width: 96vw;
+    height: 64vw;
+    min-width: 150px;
+    min-height: 120px;
+  }
+  .three-d-image {
+    width: 24vw;
+    height: 24vw;
+    min-width: 64px;
+    min-height: 64px;
+    margin-top: 14px;
+  }
+}

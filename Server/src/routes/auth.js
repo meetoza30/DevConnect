@@ -25,7 +25,7 @@ authRouter.post('/signup', async (req, res)=>{
             path: "/", // Important! Add path to ensure it's available throughout the site
             maxAge: 24 * 60 * 60 * 1000, // 1 Day
         });
-        res.json({user, message : "User saved successfully"})
+        res.json({user, message : "User saved successfully", token})
         
     }
     catch(err){
@@ -40,6 +40,8 @@ authRouter.post('/login', async (req,res)=>{
         const user = await User.findOne({emailId : req.body.emailId})
     if(!user) throw new Error("Invalid Credentials");
     const isPasswordValid = await bcrypt.compare(req.body.password, user?.password);
+    const newhashedPassword = await bcrypt.hash(req.body.password, 10);
+    console.log(req.body.password, newhashedPassword);
 
     if(!isPasswordValid) throw new Error("Invalid Credentials")
     else if(isPasswordValid){
@@ -51,7 +53,7 @@ authRouter.post('/login', async (req,res)=>{
             path: "/", 
             maxAge: 30*24 * 60 * 60 * 1000,
         });
-        res.send("Login Successfully!!")
+        res.json({message : "Login Successfully!!", token})
         }
     }
 catch(err){
@@ -98,7 +100,7 @@ authRouter.post('/google/login', async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({ user, message: "User logged in successfully", existing });
+    res.json({ user, message: "User logged in successfully", existing, token });
   } catch (err) {
     console.error(err);
     res.status(400).send(err.message);
