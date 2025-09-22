@@ -42,8 +42,8 @@ const Hero = () => {
       <section className="min-h-[70vh] bg-background dark:bg-background-dark transition-colors duration-300">
         <div className="container flex flex-col-reverse justify-center px-6 mx-auto sm:py-16 lg:py-24  lg:flex-row lg:justify-around lg:items-center">
           {/* Left: Headline & CTA */}
-          <div className="flex flex-1 flex-col mx-10 justify-center items-center lg:items-start rounded-sm max-w-xl space-y-8 text-center lg:text-left">
-            <h1 className="text-5xl   md:text-6xl font-extrabold leading-tight text-gray-700 dark:text-gray-300">
+          <div className="flex flex-1 flex-col mt-5 md:mt-0 mx-10 justify-center items-center lg:items-start rounded-sm max-w-xl space-y-8 text-center lg:text-left">
+            <h1 className="text-5xl md:text-6xl font-extrabold leading-tight text-gray-700 dark:text-gray-300">
               Connect. Collaborate.
               <br />
               <span className="bg-clip-text text-transparent leading-tight bg-gradient-to-r from-[rgb(65,88,208)] via-[rgb(200,80,192)] to-[rgb(255,204,112)] ">
@@ -69,7 +69,7 @@ const Hero = () => {
             )}
           </div>
           {/* Right: Illustration with a subtle circle gradient background */}
-          <div className="flex-1 flex justify-center items-center mb-9 lg:mb-0">
+          <div className="hidden lg:block  justify-center items-center">
             <ThreeDCard />
           </div>
         </div>
@@ -149,15 +149,15 @@ const Hero = () => {
       {/* About / Creator Section */}
       <section className="bg-background dark:bg-background-dark py-12 mt-4 transition-colors duration-300" id="dev">
         <div className="container px-6 mx-auto text-center">
-          <p className="text-3xl font-semibold text-main dark:text-white mb-2">
+          <p className="text-2xl md:text-3xl font-semibold text-main dark:text-white mb-2">
             Hi, I'm <span className="text-gray-700 dark:text-gray-300 underline decoration-primary-light">Meet Oza</span>, the creator of <span className="font-bold bg-clip-text text-transparent leading-tight  bg-gradient-to-r from-[rgb(65,88,208)] via-[rgb(200,80,192)] to-[rgb(255,204,112)] ">{DEVCONNECT}</span>!
           </p>
-          <p className="mt-4 text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-            As a passionate developer and hackathon enthusiast, I built this platform to help fellow developers collaborate, connect, and grow together.<br />
-            Whether you're looking for a team or honing your skills, <span className="bg-clip-text text-transparent leading-tight  bg-gradient-to-r from-[rgb(65,88,208)] via-[rgb(200,80,192)] to-[rgb(255,204,112)]  font-bold">DevConnect</span> is here for you.<br />
+          <p className="mt-4 text-lg md:text-2xl text-gray-700 dark:text-gray-300 max-w-5xl mx-auto">
+            As a passionate developer and hackathon enthusiast, I built this platform to help fellow developers collaborate, connect, and grow together.
+            Whether you're looking for a team or honing your skills, <span className="bg-clip-text text-transparent leading-tight  bg-gradient-to-r from-[rgb(65,88,208)] via-[rgb(200,80,192)] to-[rgb(255,204,112)]  font-bold">DevConnect</span> is here for you.<br /><br />
             Let's make this a thriving community for developers worldwide!
           </p>
-          <p className="mt-4 text-2xl  text-gray-700 dark:text-gray-300 font-medium">
+          <p className="mt-4 text-lg md:text-2xl  text-gray-700 dark:text-gray-300 font-medium">
             Got ideas or suggestions? I'd love to hear from you! Feel free to contribute to the project or reach out.
           </p>
           <div className="mt-6">

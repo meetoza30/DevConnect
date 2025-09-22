@@ -11,7 +11,7 @@ import  useAuth  from "../hooks/useAuth";
 const Layout = () => {
   const DEVCONNECT = "<DevConnect />"
   const { isLoggedIn } = useAuth();
-  console.log(isLoggedIn)
+  // console.log(isLoggedIn)
   
   
   const dispatch = useDispatch();
@@ -48,9 +48,16 @@ const Layout = () => {
               </svg>
             </label>
           </div>
-          <Link className="mx-2 flex-1 px-2 font-bold  min-w-0" to='/feed'>
+          {isLoggedIn ?  
+          ( <Link className=" md:mx-2 flex-1 font-bold min-w-0" to='/feed'>
+            <h1 className=" bg-clip-text text-transparent leading-tight  bg-gradient-to-r from-[rgb(65,88,208)] via-[rgb(200,80,192)] to-[rgb(255,204,112)] text-3xl">{DEVCONNECT}</h1>
+          </Link>) : (
+            <Link className=" md:mx-2 flex-1 font-bold min-w-0" to='/'>
             <h1 className=" bg-clip-text text-transparent leading-tight  bg-gradient-to-r from-[rgb(65,88,208)] via-[rgb(200,80,192)] to-[rgb(255,204,112)] text-3xl">{DEVCONNECT}</h1>
           </Link>
+          )
+          }
+         
           <div className="hidden flex-none lg:block">
             <ul className="menu menu-horizontal flex-nowrap">
               
@@ -129,26 +136,26 @@ const Layout = () => {
           </div>
         </div>
       </div>
-      <div className="drawer-side">
+      <div className="drawer-side z-50">
         <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
         <ul className="menu bg-base-200 min-h-full w-80 p-4 ">
           {/* Sidebar content here */}
-          {isLoggedIn && <li><Link to="/feed">
-              <div className="flex flex-grow justify-between items-center">
+          {isLoggedIn && <li><Link to="/feed" onClick={() => (document.getElementById('my-drawer-3').checked = false)}>
+              <div className=" flex flex-grow justify-between items-center">
                 <img src="https://img.icons8.com/?size=100&id=59766&format=png&color=7c3aed" className=" size-4"/>
                 <p className=" px-1">Explore</p>
               </div>
               </Link></li>}
 
-              {!isLoggedIn && <li><Link to='/signin'>
-              <div className="flex flex-grow justify-between items-center ">
+              {!isLoggedIn && <li><Link to='/signin' onClick={() => (document.getElementById('my-drawer-3').checked = false)}>
+              <div className=" flex flex-grow justify-between items-center ">
                 <img src="https://img.icons8.com/?size=100&id=a8WlVR9Y2GKa&format=png&color=7c3aed" className=" size-4"/>
                 <p className="text-black dark:text-white px-1">Sign In</p>
               </div>
               </Link></li>}
 
               {!isLoggedIn && <li>
-                <HashLink smooth to="/#features">
+                <HashLink smooth to="/#features" onClick={() => (document.getElementById('my-drawer-3').checked = false)}>
         <div className="flex flex-grow justify-between items-center">
           <img
             src="https://img.icons8.com/?size=100&id=37112&format=png&color=7c3aed"
@@ -160,7 +167,7 @@ const Layout = () => {
     </li>}
 
     {!isLoggedIn && <li>
-                <HashLink smooth to="/#dev">
+                <HashLink smooth to="/#dev" onClick={() => (document.getElementById('my-drawer-3').checked = false)}>
         <div className="flex flex-grow justify-between items-center">
           <img
             src="https://img.icons8.com/?size=100&id=77971&format=png&color=7c3aed"

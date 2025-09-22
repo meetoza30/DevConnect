@@ -4,39 +4,56 @@ import ChatWindow from './ChatWindow';
 import { useParams } from 'react-router-dom';
 
 const ConversationPage = () => {
-    const { receiverId } = useParams();
-    const [selectedConversation, setSelectedConversation] = useState(receiverId || null);
+  const { receiverId } = useParams();
+  const [selectedConversation, setSelectedConversation] = useState(receiverId || null);
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
 
-    return (
-        <div className="h-screen bg-gray-900 flex overflow-hidden">
-            {/* Left Sidebar - Conversations List */}
-            <div className="w-80 border-r border-gray-700 flex-shrink-0">
-                <ConvosList 
-                    selectedConversation={selectedConversation}
-                    onSelectConversation={setSelectedConversation}
-                />
+  // Handle screen resize
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return (
+    <div className="flex h-screen bg-gray-900">
+      {/* Mobile: Show either list or chat, Desktop: Show both */}
+      <div className={`${
+        isMobileView 
+          ? (selectedConversation ? 'hidden' : 'w-full') 
+          : 'w-1/3 border-r border-gray-700'
+      } bg-gray-900`}>
+        <ConvosList 
+          selectedConversation={selectedConversation} 
+          onSelectConversation={setSelectedConversation}
+          isMobile={isMobileView}
+        />
+      </div>
+
+      <div className={`${
+        isMobileView 
+          ? (selectedConversation ? 'w-full' : 'hidden') 
+          : 'flex-1'
+      } bg-gray-900`}>
+        {selectedConversation ? (
+          <ChatWindow 
+            receiverId={selectedConversation}
+            onBack={() => isMobileView && setSelectedConversation(null)}
+            isMobile={isMobileView}
+          />
+        ) : (
+          <div className="hidden md:flex items-center justify-center h-full text-gray-400">
+            <div className="text-center">
+              <h3 className="text-xl font-medium text-white">Send private messages to a friend</h3>
+              <p className="text-sm mt-2">Choose from your existing conversations or start a new one</p>
             </div>
-            
-            {/* Right Side - Chat Window */}
-            <div className="flex-1 flex flex-col">
-                {selectedConversation ? (
-                    <ChatWindow receiverId={selectedConversation} />
-                ) : (
-                    <div className="h-full flex items-center justify-center bg-gray-900">
-                        <div className="text-center text-gray-400">
-                            <div className="w-20 h-20 mx-auto mb-4 border-2 border-gray-600 rounded-full flex items-center justify-center">
-                                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                </svg>
-                            </div>
-                            <h3 className="text-xl font-light mb-2">Your Messages</h3>
-                            <p className="text-sm text-gray-500">Send private messages to a friend</p>
-                        </div>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default ConversationPage;

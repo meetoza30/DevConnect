@@ -42,7 +42,7 @@ if(res.data?.status){
       const res = await axios.post(BASE_URL+"/google/login",{_id: user.uid,
       fullName: user.displayName,
       emailId: user.email},{withCredentials:true});
-      console.log(res?.data?.user);
+      // console.log(res?.data?.user);
       dispath(addUser(res.data.user));
       localStorage.setItem('userData', JSON.stringify(res.data.user));
       localStorage.setItem('token', res.data.token);
@@ -68,7 +68,7 @@ if(res.data?.status){
             const res = await axios.post(BASE_URL+"/login",{emailId, password},{withCredentials:true})
             
             if(res.data.error === "Invalid Credentials") throw new Error("Invalid Credentials, please try again")
-            console.log(res.data.user);
+            // console.log(res.data.user);
             dispath(addUser(res.data.user));
             localStorage.setItem('userData', JSON.stringify(res.data.user));
             toast.success("Successfully logged in!");
@@ -107,7 +107,7 @@ else {
     window.dispatchEvent(new Event("storage"));
 
     // Update navbar immediately
-    refreshAuth();
+    // refreshAuth();
           return navigate('/profile/update/skills');
         } catch (error) {
           toast.error(error.message || "Signup failed. Please try again.");
@@ -120,8 +120,8 @@ else {
   };
 
   return (
-    <section className="flex flex-col items-center pt-6 my-20">
-      <div className="w-full bg-gray-800 rounded-lg border-purple-500 shadow border sm:max-w-md xl:p-0 ">
+    <section className="flex flex-col items-center my-20">
+      <div className=" bg-gray-800 rounded-lg border-purple-500 shadow border mx-5 md:mx-0 sm:max-w-md ">
         <div className="p-6 space-y-4 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight  md:text-2xl text-white">
             {isSignUp ? "Create an account" : "Sign in"}

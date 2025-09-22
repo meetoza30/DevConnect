@@ -16,8 +16,8 @@ export default function Feed() {
   const [showSwipeText, setShowSwipeText] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const user = useSelector((store) => store.user);
-  console.log("in feed..........");
-  console.log(user);
+  // console.log("in feed..........");
+  // console.log(user);
   
   
   // Filter state

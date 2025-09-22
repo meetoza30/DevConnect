@@ -11,9 +11,9 @@ const ResetPassword = ()=>{
     const {id, token} = useParams();
 
     const handleResetPassword = async ()=>{
-        console.log("in sendEmail")
+        // console.log("in sendEmail")
         const res = await axios.patch(BASE_URL + `/resetPassword/${token}/${id}`, {password}, {withCredentials:true});
-        console.log(res?.data?.message)
+        // console.log(res?.data?.message)
         if(res?.data?.message == "Failure") toast.error("An error occured :(");
 
         else toast.success("Password changed! Sign in with new password");

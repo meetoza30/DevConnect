@@ -10,7 +10,7 @@ const ForgotPassword = ()=>{
     const [emailId, setEmailId] = useState();
     const navigate = useNavigate();
     const sendEmail = async ()=>{
-        console.log("in sendEmail")
+        // console.log("in sendEmail")
         const result = await axios.post(BASE_URL + '/forgotPassword', {emailId}, {withCredentials:true});
 
         if(result?.data?.message == "User doesnt exist" || result?.data?.message == "Failure"){

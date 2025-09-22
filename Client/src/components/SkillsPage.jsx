@@ -67,9 +67,9 @@ const SkillsPage = () => {
     <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white p-8">
       <div className='mb-5 flex flex-col items-center'>
  <h1 className='text-3xl font-bold text-center mb-8'>Enter your graduation year:</h1>
-<div class="input-container">
+<div className="input-container">
   <input
-    class="input"
+    className="input"
     name="text"
     type="text"
     placeholder="Ex. 2027"

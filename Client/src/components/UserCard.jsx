@@ -13,7 +13,7 @@ const UserCard = ({ user, onSwipe }) => {
   const navigate = useNavigate()
   return (
     <TinderCard className="absolute w-[400px] h-[80vh] mb-1 cursor-pointer flex justify-center items-center group"
-  onSwipe={(dir) => onSwipe(dir)}
+  
 >
     <motion.div
       className="absolute w-[400px] h-[80vh] cursor-pointer flex justify-center items-center group"
@@ -27,7 +27,7 @@ const UserCard = ({ user, onSwipe }) => {
           onSwipe("interested", user._id);
           setX(200)
         } else if (info.offset.x < -100) {
-          onSwipe("ignored", user._id);
+          onSwipe("ignore", user._id);
           setX(-200)
         }
       }}
