@@ -11,14 +11,12 @@ const ShowConnections = () => {
   const getConnections = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/user/connections`, { withCredentials: true });
+      // console.log(res.data.connections);
       setConnections(res.data.connections);
     } catch (err) {
       console.error(err);
     }
   };
-
-
-
   useEffect(() => {
     getConnections();
   }, []);
@@ -26,7 +24,7 @@ const ShowConnections = () => {
 
   return (
     
-    <div className="flex flex-col items-center justify-center mx-5">
+    <div className="flex flex-col items-center justify-center mx-5 mb-5">
       <h1 className="text-3xl mt-10 mb-10 font-bold text-white ">Your Connections</h1>
 
       {/* Requests List */}

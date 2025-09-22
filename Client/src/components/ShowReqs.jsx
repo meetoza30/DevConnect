@@ -17,7 +17,6 @@ const Reqs = () => {
       console.error(err);
     }
   };
-
   
   const getSentReqs = async () => {
     try {
@@ -27,7 +26,6 @@ const Reqs = () => {
       console.error(err);
     }
   };
-
 
   
   const reviewReq = async (status, reqId) => {
@@ -47,7 +45,7 @@ const Reqs = () => {
 
   return (
     
-    <div className="flex flex-col items-center mx-5 ">
+    <div className="flex flex-col items-center mx-5 mt-5 mb-5 max-h-screen">
       <h1 className="text-3xl mt-10 mb-10 font-bold text-white ">Your Reqs</h1>
 
       {/* Toggle Switch */}
@@ -70,7 +68,7 @@ const Reqs = () => {
       </div>
 
       {/* Requests List */}
-      <div className="flex flex-col justify-center items-center mx-5 max-w-lg w-full">
+      <div className="lg:grid lg:grid-cols-2 lg:gap-6  sm:grid-cols-1 justify-center items-center">
         {showSent
           ?  (sentReqs.length > 0 ? sentReqs.map((req) => <UserReqCard showSent = {true} key={req._id} req={req} reviewReq={reviewReq}/>) : <div className="text-purple-500 text-2xl font-bold text-center md:w-26 items-center lg:w-66 mt-10">
           Nothing to show here. Toggle the button above to view the connection requests you’ve received.

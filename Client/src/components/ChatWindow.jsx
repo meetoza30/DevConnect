@@ -31,10 +31,12 @@ const ChatWindow = ({ receiverId, onBack, isMobile }) => {
             const res = await axios.get(BASE_URL + `/convos/${receiverId}`, {
                 withCredentials: true
             });
-            setMessages(res.data.messages.map(msg => ({
+            if(res.data.messages){
+               setMessages(res.data.messages.map(msg => ({
                 ...msg,
                 isSent: msg.senderId === userId
             })));
+            }
         } catch (err) {
             console.log(err);
         } finally {

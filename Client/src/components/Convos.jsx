@@ -5,10 +5,10 @@ import { useParams } from 'react-router-dom';
 
 const ConversationPage = () => {
   const { receiverId } = useParams();
+  console.log(receiverId)
   const [selectedConversation, setSelectedConversation] = useState(receiverId || null);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
 
-  // Handle screen resize
   React.useEffect(() => {
     const handleResize = () => {
       setIsMobileView(window.innerWidth < 768);

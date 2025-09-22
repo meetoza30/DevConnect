@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 
 const UserReqCard = ({ req, showSent, reviewReq, showConnec}) => {
   const user = showSent ? req.receiverId : req.senderId;
-  const { profileUrl, fullName, userName, bio, skills } = user;
+  // const { profileUrl, fullName, userName, bio, skills } = user;
 
   return (
     <div className="flex items-center justify-between bg-purple-700 text-white rounded-xl p-4 shadow-lg w-full mt-6 max-w-lg">
       {/* Profile Image */}
       <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-black">
-        {profileUrl ? (
-          <img src={profileUrl} alt="User" className="w-full h-full rounded-full object-cover" />
+        {user?.profileUrl ? (
+          <img src={user?.profileUrl} alt="User" className="w-full h-full rounded-full object-cover" />
         ) : (
           <span className="text-sm">User photo</span>
         )}
@@ -18,15 +18,15 @@ const UserReqCard = ({ req, showSent, reviewReq, showConnec}) => {
 
       {/* User Info */}
       <div className="flex flex-col flex-grow ml-4">
-        <Link to={`/profile/user/${user._id}`}>
-          <h3 className="text-lg font-semibold">{fullName}</h3>
-          <p className="text-sm text-gray-300">@{userName}</p>
+        <Link to={`/profile/user/${user?._id}`}>
+          <h3 className="text-lg font-semibold">{user?.fullName}</h3>
+          <p className="text-sm text-gray-300">@{user?.userName}</p>
         </Link>
         <p className="text-sm mt-1">
-  {bio && bio !== "Bio not available"
-    ? <span>{bio.slice(0,45)}...</span>
-    : skills?.length > 0
-    ? skills.slice(0, 3).join(", ") + (skills.length > 3 ? "..." : "")
+  {user?.bio && user?.bio !== "Bio not available"
+    ? <span>{user?.bio.slice(0,45)}...</span>
+    : user?.skills?.length > 0
+    ? user?.skills.slice(0, 3).join(", ") + (user?.skills.length > 3 ? "..." : "")
     : ""}
 </p>
 
@@ -38,7 +38,7 @@ const UserReqCard = ({ req, showSent, reviewReq, showConnec}) => {
           // Withdraw Button for Sent Requests
           <button
             className="bg-purple-200 text-black font-semibold hover:bg-purple-400 py-1 px-3 rounded-lg"
-            onClick={() => reviewReq("withdraw",req._id)}
+            onClick={() => reviewReq("withdraw",req?._id)}
           >
             Withdraw
           </button>
@@ -47,7 +47,7 @@ const UserReqCard = ({ req, showSent, reviewReq, showConnec}) => {
           <>
             <button
               className="bg-purple-500 hover:bg-purple-600 text-white py-1 px-3 rounded-lg"
-              onClick={() => reviewReq("accepted", req._id)}
+              onClick={() => reviewReq("accepted", req?._id)}
             >
               Accept
             </button>
