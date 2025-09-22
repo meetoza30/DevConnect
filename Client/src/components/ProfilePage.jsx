@@ -131,7 +131,7 @@ const profilesExist = useMemo(() => {
   const saveProfile = async()=>{
     try {
       
-      
+      console.log(tempProfile)
       await axios.patch(BASE_URL + "/profile/edit", tempProfile, {withCredentials : true})
       toast.success("Profile updated successfully")
       setIsEditMode(!isEditMode)
@@ -304,6 +304,8 @@ const profilesExist = useMemo(() => {
   };
   const logout = async ()=>{
       try{const res = await axios.post(BASE_URL + "/logout", {}, {withCredentials:true})
+      localStorage.removeItem('userData')
+      localStorage.removeItem('token')
       toast.success("User logged out successfully!")
       dispatch(removeUser());
       navigate('/')

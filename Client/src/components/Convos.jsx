@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 const ConversationPage = () => {
   const { receiverId } = useParams();
-  console.log(receiverId)
+  // console.log(receiverId)
   const [selectedConversation, setSelectedConversation] = useState(receiverId || null);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
 

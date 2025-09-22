@@ -62,7 +62,7 @@ catch(err){
 })
 
 authRouter.post('/google/login', async (req, res) => {
-  const { fullName, emailId, _id } = req.body;
+  const { fullName, emailId, _id, userName } = req.body;
   console.log(fullName, emailId)
 
   try {
@@ -74,7 +74,7 @@ authRouter.post('/google/login', async (req, res) => {
       user = new User({
         fullName,
         emailId,
-        userName: "", 
+        userName, 
         password: _id, 
         age: "",
         gradYear: "",

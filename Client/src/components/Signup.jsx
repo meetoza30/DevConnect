@@ -39,9 +39,26 @@ if(res.data?.status){
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      const res = await axios.post(BASE_URL+"/google/login",{_id: user.uid,
-      fullName: user.displayName,
-      emailId: user.email},{withCredentials:true});
+ const generateUsername = (displayName, email) => {
+            if (displayName) {
+                
+                return displayName.toLowerCase()
+                    .replace(/\s+/g, '') 
+                    .replace(/[^a-z0-9._]/g, '') 
+                    + Math.floor(Math.random() * 1000); 
+            }
+           
+            return email.split('@')[0].toLowerCase().replace(/[^a-z0-9._]/g, '') + Math.floor(Math.random() * 1000);
+        };
+        
+        const res = await axios.post(BASE_URL+"/google/login",{
+            _id: user.uid,
+            fullName: user.displayName,
+            emailId: user.email,
+            userName: generateUsername(user.displayName, user.email) // Add generated username
+        }, {withCredentials:true});
+
+
       // console.log(res?.data?.user);
       dispath(addUser(res.data.user));
       localStorage.setItem('userData', JSON.stringify(res.data.user));
@@ -52,9 +69,8 @@ if(res.data?.status){
     window.dispatchEvent(new Event("storage"));
 
     toast.success("Successfully logged in!");
-            return navigate('/feed')
-
-
+    if(res.data.existing) return navigate('/feed')
+    else return navigate('/profile/update/skills') 
       }
     catch(err){
       console.log(err);
