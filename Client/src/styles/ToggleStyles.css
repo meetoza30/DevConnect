@@ -1,84 +1,52 @@
-/* From Uiverse.io by JkHuger */ 
-.toggle-checkbox {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-.toggle-slot {
-  font-size: 10px;
+/* From Uiverse.io by gharsh11032000 */ 
+/* The switch - the box around the slider */
+.switch {
+  font-size: 17px;
   position: relative;
-  height: 2.5em;
-  width: 5em;
-  border: 0px solid transparent;
-  border-radius: 10em;
+  display: inline-block;
+  width: 3.0em;
+  height: 1.5em;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #d4acfb;
+  border-radius: 50px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1.0em;
+  width: 1.0em;
+  left: 0.3em;
+  bottom: 0.3em;
   background-color: white;
-  transition: background-color 250ms;
+  border-radius: 50px;
+  box-shadow: 0 0px 20px rgba(0,0,0,0.4);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.toggle-checkbox:checked ~ .toggle-slot {
-  background-color: #374151;
+.switch input:checked + .slider {
+  background: #b84fce;
 }
 
-.toggle-button {
-  transform: translate(0.3em, 0.25em);
-  position: absolute;
-  height: 2em;
-  width: 2em;
-  border-radius: 50%;
-  background-color: #ffeccf;
-  box-shadow: inset 0px 0px 0px 0.75em #ffbb52;
-  transition: background-color 250ms, border-color 250ms, transform 500ms cubic-bezier(.26,2,.46,.71);
+.switch input:focus + .slider {
+  box-shadow: 0 0 1px #b84fce;
 }
 
-.toggle-checkbox:checked ~ .toggle-slot .toggle-button {
-  background-color: #485367;
-  box-shadow: inset 0px 0px 0px 0.75em white;
-  transform: translate(3.65em, 0.25em);
+.switch input:checked + .slider:before {
+  transform: translateX(1.4em);
 }
-
-.sun-icon {
-  position: absolute;
-  height: 6em;
-  width: 6em;
-  color: #ffbb52;
-}
-
-.sun-icon-wrapper {
-  position: absolute;
-  height: 6em;
-  width: 6em;
-  opacity: 1;
-  transform: translate(2em, 2em) rotate(15deg);
-  transform-origin: 50% 50%;
-  transition: opacity 150ms, transform 500ms cubic-bezier(.26,2,.46,.71);
-}
-
-.toggle-checkbox:checked ~ .toggle-slot .sun-icon-wrapper {
-  opacity: 0;
-  transform: translate(3em, 2em) rotate(0deg);
-}
-
-.moon-icon {
-  position: absolute;
-  height: 6em;
-  width: 6em;
-  color: white;
-}
-
-.moon-icon-wrapper {
-  position: absolute;
-  height: 6em;
-  width: 6em;
-  opacity: 0;
-  transform: translate(11em, 2em) rotate(0deg);
-  transform-origin: 50% 50%;
-  transition: opacity 150ms, transform 500ms cubic-bezier(.26,2.5,.46,.71);
-}
-
-.toggle-checkbox:checked ~ .toggle-slot .moon-icon-wrapper {
-  opacity: 1;
-  transform: translate(2em, 2em) rotate(-15deg);
-}
+  

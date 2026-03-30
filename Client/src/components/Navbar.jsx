@@ -32,7 +32,7 @@ const Layout = () => {
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         {/* Navbar */}
-        <div className="navbar  dark:bg-background-dark w-full max-w-full border-b-2 border-black dark:border-gray-300 overflow-hidden">
+        <div className="navbar bg-white dark:bg-background-dark w-full max-w-full border-b-2 border-gray-200 dark:border-gray-300 shadow-sm overflow-hidden">
           <div className="flex-none lg:hidden">
             <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
               <svg
@@ -64,14 +64,14 @@ const Layout = () => {
               {isLoggedIn && <li><Link to="/feed">
               <div className="flex flex-grow justify-between items-center">
                 <img src="https://img.icons8.com/?size=100&id=59766&format=png&color=7c3aed" className=" size-4"/>
-                <p className=" px-1">Explore</p>
+                <p className="px-1 text-gray-700 dark:text-gray-300 font-medium">Explore</p>
               </div>
               </Link></li>}
 
               {!isLoggedIn && <li><Link to='/signin'>
               <div className="flex flex-grow justify-between items-center">
                 <img src="https://img.icons8.com/?size=100&id=a8WlVR9Y2GKa&format=png&color=7c3aed" className=" size-4"/>
-                <p className=" dark:text-gray-300 font-medium px-1">Sign In</p>
+                <p className="text-gray-700 dark:text-gray-300 font-medium px-1">Sign In</p>
               </div>
               </Link></li>}
 
@@ -82,7 +82,7 @@ const Layout = () => {
             src="https://img.icons8.com/?size=100&id=37112&format=png&color=7c3aed"
             className="size-4"
           />
-          <p className="px-1  dark:text-gray-300 font-medium">Why DevConnect?</p>
+          <p className="px-1 text-gray-700 dark:text-gray-300 font-medium">Why DevConnect?</p>
         </div>
       </HashLink>
     </li>}
@@ -94,7 +94,7 @@ const Layout = () => {
             src="https://img.icons8.com/?size=100&id=77971&format=png&color=7c3aed"
             className="size-4"
           />
-          <p className="px-1  dark:text-gray-300 font-medium">Developer's Message</p>
+          <p className="px-1 text-gray-700 dark:text-gray-300 font-medium">Developer's Message</p>
         </div>
       </HashLink>
     </li>}
@@ -102,14 +102,14 @@ const Layout = () => {
               {isLoggedIn && <li><Link to='/convos'>
               <div className="flex flex-grow justify-between items-center">
                 <img src="https://img.icons8.com/?size=100&id=tlOx8qQnfJdO&format=png&color=7c3aed" className=" size-4"/>
-                <p className=" px-1">Convos</p>
+                <p className="px-1 text-gray-700 dark:text-gray-300 font-medium">Convos</p>
               </div>
               </Link></li>}
 
               {isLoggedIn && <li><Link to="/reqs/review">
               <div className="flex flex-grow justify-between items-center">
                 <img src="https://img.icons8.com/?size=100&id=5MMxDaGdGsBe&format=png&color=7c3aed" className=" size-4"/>
-                <p className=" px-1">Reqs</p>
+                <p className="px-1 text-gray-700 dark:text-gray-300 font-medium">Reqs</p>
               </div>
               </Link></li>}
               {isLoggedIn && (
@@ -117,7 +117,7 @@ const Layout = () => {
           <Link to="/connections" onClick={() => (document.getElementById('my-drawer-3').checked = false)}>
             <div className="flex flex-grow justify-between items-center z-50">
               <img src="https://img.icons8.com/?size=100&id=92484&format=png&color=7c3aed" className="size-4" />
-              <p className="px-1">Connections</p>
+              <p className="px-1 text-gray-700 dark:text-gray-300 font-medium">Connections</p>
             </div>
           </Link>
         </li>
@@ -126,11 +126,15 @@ const Layout = () => {
               {isLoggedIn && <li><Link to="/profile">
               <div className="flex flex-grow justify-between items-center">
                 <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=7c3aed" className=" size-4"/>
-                <p className=" px-1">Profile</p>
+                <p className="px-1 text-gray-700 dark:text-gray-300 font-medium">Profile</p>
               </div>
               </Link></li>}
 
-                 {!isLoggedIn && <li><ThemeToggle /></li>}
+<li>
+    <div className="flex items-center justify-center hover:bg-transparent cursor-default px-2">
+      <ThemeToggle />
+    </div>
+  </li>
              
             </ul>
           </div>
@@ -138,7 +142,7 @@ const Layout = () => {
       </div>
       <div className="drawer-side z-50">
         <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
-        <ul className="menu bg-base-200 min-h-full w-80 p-4 ">
+        <ul className="menu bg-white dark:bg-gray-900 min-h-full w-80 p-4">
           {/* Sidebar content here */}
           {isLoggedIn && <li><Link to="/feed" onClick={() => (document.getElementById('my-drawer-3').checked = false)}>
               <div className=" flex flex-grow justify-between items-center">
@@ -221,7 +225,12 @@ const Layout = () => {
           </Link>
         </li>
       )}
-             
+<li>
+      <div className="flex items-center hover:bg-transparent cursor-default mt-2">
+        <ThemeToggle />
+      </div>
+    </li>
+         
         </ul>
       </div>
     </div>

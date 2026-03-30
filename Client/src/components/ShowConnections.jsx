@@ -25,7 +25,7 @@ const ShowConnections = () => {
   return (
     
     <div className="flex flex-col items-center justify-center mx-5 mb-5">
-      <h1 className="text-3xl mt-10 mb-10 font-bold text-white ">Your Connections</h1>
+      <h1 className="text-3xl mt-10 mb-10 font-bold text-gray-800 dark:text-white">Your Connections</h1>
 
       {/* Requests List */}
       <div className=" lg:grid lg:grid-cols-2 lg:gap-4  sm:grid-cols-1 justify-center items-center">
@@ -35,7 +35,7 @@ const ShowConnections = () => {
             
           </div>
         ))
-        : <div className="text-purple-500 text-2xl font-bold text-center md:w-26 items-center lg:w-66 mt-10">
+        : <div className="text-purple-600 dark:text-purple-400 text-xl md:text-2xl font-bold text-center col-span-full px-4 mt-10 max-w-2xl mx-auto">
         Nothing to show here. Explore & send reqs to other users.
       </div>
       

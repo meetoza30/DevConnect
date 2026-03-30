@@ -59,18 +59,20 @@ if(res.data?.status){
         }, {withCredentials:true});
 
 
-      // console.log(res?.data?.user);
       dispath(addUser(res.data.user));
       localStorage.setItem('userData', JSON.stringify(res.data.user));
       localStorage.setItem('token', res.data.token);
-      document.documentElement.classList.add("dark");
-    localStorage.setItem("theme", "dark");
-    localStorage.setItem("loggedIn", "true");
-    window.dispatchEvent(new Event("storage"));
+      // Only apply dark mode if no theme preference already saved
+      if (!localStorage.getItem('theme')) {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+      }
+      localStorage.setItem("loggedIn", "true");
+      window.dispatchEvent(new Event("storage"));
 
-    toast.success("Successfully logged in!");
-    if(res.data.existing) return navigate('/feed')
-    else return navigate('/profile/update/skills') 
+      toast.success("Successfully logged in!");
+      if(res.data.existing) return navigate('/feed')
+      else return navigate('/profile/update/skills') 
       }
     catch(err){
       console.log(err);
@@ -89,8 +91,11 @@ if(res.data?.status){
             localStorage.setItem('userData', JSON.stringify(res.data.user));
             toast.success("Successfully logged in!");
             localStorage.setItem('token', res.data.token);
-            document.documentElement.classList.add("dark");
-            localStorage.setItem("theme", "dark");
+            // Preserve user's theme preference
+            if (!localStorage.getItem('theme')) {
+              document.documentElement.classList.add("dark");
+              localStorage.setItem("theme", "dark");
+            }
 
             return navigate('/feed')
 
@@ -115,8 +120,11 @@ else {
           toast.success("Account created successfully!");
           
           localStorage.setItem( 'token',res.data.token);
-          document.documentElement.classList.add("dark");
-    localStorage.setItem("theme", "dark");
+          // Preserve user's theme preference
+          if (!localStorage.getItem('theme')) {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+          }
 
     // Store login flag and trigger storage event
     localStorage.setItem("loggedIn", "true");
@@ -136,10 +144,10 @@ else {
   };
 
   return (
-    <section className="flex flex-col items-center my-20">
-      <div className=" bg-gray-800 rounded-lg border-purple-500 shadow border mx-5 md:mx-0 sm:max-w-md ">
+    <section className="flex flex-col items-center my-20 bg-background dark:bg-background-dark min-h-[60vh] transition-colors duration-300">
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-purple-300 dark:border-purple-500 shadow-lg mx-5 md:mx-0 sm:max-w-md">
         <div className="p-6 space-y-4 sm:p-8">
-          <h1 className="text-xl font-bold leading-tight tracking-tight  md:text-2xl text-white">
+          <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-gray-900 dark:text-white">
             {isSignUp ? "Create an account" : "Sign in"}
           </h1>
           <form className="space-y-4" onSubmit={handleLogin}>
@@ -147,7 +155,7 @@ else {
               <div>
                 <label
                   htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-white"
+                  className="block mb-2 text-sm font-medium text-gray-700 dark:text-white"
                 >
                   Your full name
                 </label>
@@ -156,7 +164,7 @@ else {
                   name="name"
                   id="name"
                   onChange={(e)=>{setName(e.target.value)}}
-                  className="border border-gray-300  sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 bg-gray-700  dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500"
+                  className="border border-gray-300 dark:border-gray-600 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-400 focus:ring-violet-500 focus:border-violet-500"
                   placeholder="ex - Meet Oza"
                   required
                 />
@@ -165,7 +173,7 @@ else {
             {isSignUp && (<div>
               <label
                 htmlFor="username"
-                className="block mb-2 text-sm font-medium text-white"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-white"
               >
                 Username
               </label>
@@ -174,7 +182,7 @@ else {
                 name="username"
                 onChange={(e)=>{setUsername(e.target.value)}}
                 id="username"
-                className=" border border-gray-300  sm:text-sm rounded-lg  block w-full p-2.5 bg-gray-700  text-white focus:ring-violet-500 focus:border-violet-500"
+                className="border border-gray-300 dark:border-gray-600 sm:text-sm rounded-lg block w-full p-2.5 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-violet-500 focus:border-violet-500"
                 placeholder="ex - meetoza30"
                 required
               />
@@ -182,7 +190,7 @@ else {
             <div>
               <label
                 htmlFor="email"
-                className="block mb-2 text-sm font-medium text-white"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-white"
               >
                 Email
               </label>
@@ -191,7 +199,7 @@ else {
                 name="email"
                 id="email"
                 onChange={(e)=>{setEmailId(e.target.value)}}
-                className=" border border-gray-300  sm:text-sm rounded-lg  block w-full p-2.5 bg-gray-700  text-white focus:ring-violet-500 focus:border-violet-500"
+                className="border border-gray-300 dark:border-gray-600 sm:text-sm rounded-lg block w-full p-2.5 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-violet-500 focus:border-violet-500"
                 placeholder="ex - meetoza@devconnect.com"
                 required
               />
@@ -200,9 +208,9 @@ else {
               <label
                 htmlFor="password"
                
-                className="block mb-2 text-sm font-medium text-white"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-white"
               >
-                Password <span className=" text-gray-300 font-light">(Use uppercase, lowercase, symbols and numbers)</span>
+                Password <span className="text-gray-400 dark:text-gray-300 font-light">(Use uppercase, lowercase, symbols and numbers)</span>
               </label>
               <input
                 type="password"
@@ -210,7 +218,7 @@ else {
                 onChange={(e)=>{setPassword(e.target.value)}}
                 id="password"
                 placeholder="A strong password contains more than 8 characters"
-                className=" border border-gray-300  sm:text-sm rounded-lg  block w-full p-2.5 bg-gray-700  text-white focus:ring-violet-500 focus:border-violet-500"
+                className="border border-gray-300 dark:border-gray-600 sm:text-sm rounded-lg block w-full p-2.5 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-violet-500 focus:border-violet-500"
                 required
               />
             </div>)}
@@ -219,7 +227,7 @@ else {
               <label
                 htmlFor="password"
                
-                className="block mb-2 text-sm font-medium text-white"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-white"
               >
                 Password
               </label>
@@ -229,7 +237,7 @@ else {
                 onChange={(e)=>{setPassword(e.target.value)}}
                 id="password"
                 placeholder="********"
-                className="  border border-gray-300  sm:text-sm rounded-lg  block w-full p-2.5 bg-gray-700  text-white focus:ring-violet-500 focus:border-violet-500"
+                className="border border-gray-300 dark:border-gray-600 sm:text-sm rounded-lg block w-full p-2.5 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-violet-500 focus:border-violet-500"
                 required
               />
             </div>)}
@@ -248,7 +256,7 @@ else {
                 className="font-medium text-sm text-violet-600 underline dark:text-violet-500 cursor-pointer"
               >Forgot password?</Link>}
 
-            <p className=" mt-2 text-sm font-light text-gray-500 dark:text-gray-400">
+            <p className="mt-2 text-sm font-light text-gray-500 dark:text-gray-400">
               
               {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
               <span

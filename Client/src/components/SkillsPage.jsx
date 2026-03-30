@@ -64,9 +64,9 @@ const SkillsPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white p-8">
+    <div className="flex flex-col items-center min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-8 transition-colors duration-300">
       <div className='mb-5 flex flex-col items-center'>
- <h1 className='text-3xl font-bold text-center mb-8'>Enter your graduation year:</h1>
+ <h1 className='text-3xl font-bold text-center mb-8 text-gray-800 dark:text-white'>Enter your graduation year:</h1>
 <div className="input-container">
   <input
     className="input"
@@ -79,7 +79,7 @@ const SkillsPage = () => {
       </div>
      
 
-      <h1 className="text-3xl font-bold text-center mb-8">
+      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-white">
         Let people know about your skills
       </h1>
       {Object.entries(skillsData).map(([category, items]) => (
@@ -93,7 +93,7 @@ const SkillsPage = () => {
       ))}
       <div className="flex justify-between mt-6 w-full lg:w-2/3 mx-auto">
         <button
-          className="bg-gray-600 hover:bg-gray-500 text-white py-2 px-6 rounded-lg"
+          className="bg-gray-400 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-500 text-white py-2 px-6 rounded-lg"
         >
           Skip
         </button>
@@ -110,8 +110,8 @@ const SkillsPage = () => {
 
 const CheckBoxGroup = ({ category, items, selected, handleCheckBox }) => {
   return (
-    <div className="bg-purple-700 rounded-xl p-6 mb-6 w-full lg:w-2/3 mx-auto">
-      <h2 className="text-xl font-bold mb-4 text-center">{category}</h2>
+    <div className="bg-purple-600 dark:bg-purple-700 rounded-xl p-6 mb-6 w-full lg:w-2/3 mx-auto shadow-md">
+      <h2 className="text-xl font-bold mb-4 text-center text-white">{category}</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {items.map((item, index) => (
           <div key={index} className="customCheckBoxHolder">
@@ -126,7 +126,7 @@ const CheckBoxGroup = ({ category, items, selected, handleCheckBox }) => {
               htmlFor={`${category}-${index}`}
               className="customCheckBoxWrapper cursor-pointer"
             >
-              <div className="customCheckBox bg-purple-500 rounded-lg py-2 px-4 text-center">
+              <div className="customCheckBox bg-purple-400 dark:bg-purple-500 rounded-lg py-2 px-4 text-center">
                 <div className="inner text-white">{item}</div>
               </div>
             </label>

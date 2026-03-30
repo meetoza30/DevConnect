@@ -54,26 +54,26 @@ export const FilterSidebar = ({
       {/* Overlay */}
       <div className="fixed inset-0 overflow-scroll bg-black bg-opacity-50 z-50" onClick={onClose}>
         <div 
-          className="fixed overflow-scroll inset-x-4 top-20 md:inset-x-auto md:left-4 md:top-4 md:w-80 bg-gray-900 rounded-lg border border-gray-700 max-h-[calc(100vh-6rem)] md:max-h-[calc(100vh-2rem)] "
+          className="fixed overflow-scroll inset-x-4 top-20 md:inset-x-auto md:left-4 md:top-4 md:w-80 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 max-h-[calc(100vh-6rem)] md:max-h-[calc(100vh-2rem)]"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="p-6 overflow-y-auto max-h-full">
             <div className="space-y-6">
               {/* Header */}
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                   <Filter size={20} />
                   Filters
                 </h2>
                 <div className="flex gap-2">
                   <button 
-                    className="px-3 py-1 text-sm text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                    className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                     onClick={onClearFilters}
                   >
                     Clear All
                   </button>
                   <button 
-                    className="p-1 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                    className="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                     onClick={onClose}
                   >
                     <X size={20} />
@@ -82,9 +82,9 @@ export const FilterSidebar = ({
               </div>
 
               {/* Skills Filter */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg">
-                <div className="p-4 border-b border-gray-700">
-                  <h3 className="text-sm font-medium text-white">Skills</h3>
+              <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">Skills</h3>
                 </div>
                 <div className="p-4 max-h-48 overflow-y-auto">
                   <div className="grid grid-cols-2 gap-2">
@@ -95,9 +95,9 @@ export const FilterSidebar = ({
                           id={`skill-${skill}`}
                           checked={filters.skills.includes(skill)}
                           onChange={(e) => handleSkillChange(skill, e.target.checked)}
-                          className="w-4 h-4 text-purple-600 bg-gray-700 border-gray-600 rounded focus:ring-purple-500 focus:ring-2"
+                          className="w-4 h-4 text-purple-600 bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-purple-500 focus:ring-2"
                         />
-                        <label htmlFor={`skill-${skill}`} className="text-sm text-gray-300 cursor-pointer">
+                        <label htmlFor={`skill-${skill}`} className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
                           {skill}
                         </label>
                       </div>
@@ -107,9 +107,9 @@ export const FilterSidebar = ({
               </div>
 
               {/* Experience Filter */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg">
-                <div className="p-4 border-b border-gray-700">
-                  <h3 className="text-sm font-medium text-white">Hackathon Experience</h3>
+              <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">Hackathon Experience</h3>
                 </div>
                 <div className="p-4">
                   {experienceOptions.map((option) => (
@@ -121,9 +121,9 @@ export const FilterSidebar = ({
                         value={option.value}
                         checked={filters.hackathons === option.value}
                         onChange={(e) => onFiltersChange({ ...filters, hackathons: e.target.value })}
-                        className="w-4 h-4 text-purple-600 bg-gray-700 border-gray-600 focus:ring-purple-500 focus:ring-2"
+                        className="w-4 h-4 text-purple-600 bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-purple-500 focus:ring-2"
                       />
-                      <label htmlFor={`exp-${option.value}`} className="text-sm text-gray-300 cursor-pointer">
+                      <label htmlFor={`exp-${option.value}`} className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
                         {option.label}
                       </label>
                     </div>
@@ -132,9 +132,9 @@ export const FilterSidebar = ({
               </div>
 
               {/* Graduation Year Filter */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg">
-                <div className="p-4 border-b border-gray-700">
-                  <h3 className="text-sm font-medium text-white">Graduation Year</h3>
+              <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">Graduation Year</h3>
                 </div>
                 <div className="p-4 max-h-40 overflow-y-auto">
                   <div className="grid grid-cols-3 gap-2">
@@ -145,9 +145,9 @@ export const FilterSidebar = ({
                           id={`year-${year}`}
                           checked={filters.graduationYears.includes(year)}
                           onChange={(e) => handleGraduationYearChange(year, e.target.checked)}
-                          className="w-4 h-4 text-purple-600 bg-gray-700 border-gray-600 rounded focus:ring-purple-500 focus:ring-2"
+                          className="w-4 h-4 text-purple-600 bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-purple-500 focus:ring-2"
                         />
-                        <label htmlFor={`year-${year}`} className="text-sm text-gray-300 cursor-pointer">
+                        <label htmlFor={`year-${year}`} className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
                           {year}
                         </label>
                       </div>

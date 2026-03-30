@@ -7,7 +7,7 @@ const UserConnecCard = ({user}) => {
   // const { profileUrl, fullName, userName, bio, skills } = user;
 
   return (
-    <div className="flex items-center justify-between bg-purple-700 w-full text-white rounded-xl p-4 shadow-lg  mt-6">
+    <div className="flex items-center justify-between bg-purple-600 dark:bg-purple-700 w-full text-white rounded-xl p-4 shadow-lg  mt-6">
           {/* Profile Image */}
           <div className="lg:w-16 lg:h-16 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center text-black">
             {user?.profileUrl ? (

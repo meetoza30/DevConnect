@@ -6,7 +6,7 @@ const UserReqCard = ({ req, showSent, reviewReq, showConnec}) => {
   // const { profileUrl, fullName, userName, bio, skills } = user;
 
   return (
-    <div className="flex items-center justify-between bg-purple-700 text-white rounded-xl p-4 shadow-lg w-full mt-6 max-w-lg">
+    <div className="flex items-center justify-between bg-purple-600 dark:bg-purple-700 text-white rounded-xl p-4 shadow-lg w-full mt-6 max-w-lg">
       {/* Profile Image */}
       <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-black">
         {user?.profileUrl ? (

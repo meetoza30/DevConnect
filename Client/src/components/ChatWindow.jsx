@@ -122,22 +122,22 @@ const ChatWindow = ({ receiverId, onBack, isMobile }) => {
 
     if (loading) {
         return (
-            <div className="h-full flex items-center justify-center bg-gray-900">
-                <div className="text-gray-400">Loading chat...</div>
+            <div className="h-full flex items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+                <div className="text-gray-500 dark:text-gray-400">Loading chat...</div>
             </div>
         );
     }
 
     return (
-         <div className="h-full flex flex-col bg-gray-900">
+         <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       {/* Chat Header */}
-      <div className="px-4 py-3 border-b border-gray-700 bg-gray-900 sticky top-0 z-10">
+      <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky top-0 z-10">
         <div className="flex items-center space-x-3">
           {/* Back button for mobile */}
           {isMobile && (
             <button
               onClick={onBack}
-              className="p-2 -ml-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+              className="p-2 -ml-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -159,7 +159,7 @@ const ChatWindow = ({ receiverId, onBack, isMobile }) => {
           
           <div className="flex-1 min-w-0">
             <Link to={`/profile/user/${receiverId}`} className="hover:underline">
-              <h2 className="text-lg font-semibold text-white truncate">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
                 {receiverInfo?.fullName || 'Loading...'}
               </h2>
             </Link>
@@ -168,7 +168,7 @@ const ChatWindow = ({ receiverId, onBack, isMobile }) => {
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-gray-900">
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-gray-50 dark:bg-gray-900">
         {messages.map((msg, index) => (
           <div
             key={index}
@@ -177,11 +177,11 @@ const ChatWindow = ({ receiverId, onBack, isMobile }) => {
             <div className={`max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl px-4 py-2 rounded-2xl ${
               msg.isSent
                 ? 'bg-blue-600 text-white rounded-br-sm'
-                : 'bg-gray-700 text-gray-100 rounded-bl-sm'
+                : 'bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-bl-sm shadow-sm border border-gray-100 dark:border-transparent'
             }`}>
               <p className="text-sm break-words">{msg.text || msg.message}</p>
               <p className={`text-xs mt-1 ${
-                msg.isSent ? 'text-blue-200' : 'text-gray-400'
+                msg.isSent ? 'text-blue-200' : 'text-gray-400 dark:text-gray-400'
               }`}>
                 {formatMessageTime(msg.timestamp || msg.timestamps)}
               </p>
@@ -192,7 +192,7 @@ const ChatWindow = ({ receiverId, onBack, isMobile }) => {
       </div>
 
       {/* Message Input */}
-      <div className="px-4 py-3 border-t border-gray-700 bg-gray-900">
+      <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         <div className="flex items-end space-x-3">
           <div className="flex-1">
             <textarea
@@ -201,7 +201,7 @@ const ChatWindow = ({ receiverId, onBack, isMobile }) => {
               onKeyPress={handleKeyPress}
               placeholder="Type a message..."
               rows={1}
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none text-sm max-h-32"
+              className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none text-sm max-h-32"
               style={{
                 minHeight: '40px',
                 height: 'auto',
@@ -211,7 +211,7 @@ const ChatWindow = ({ receiverId, onBack, isMobile }) => {
           <button
             onClick={sendMessage}
             disabled={!message.trim()}
-            className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+            className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors flex-shrink-0"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
