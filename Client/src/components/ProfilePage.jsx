@@ -352,9 +352,9 @@ const profilesExist = useMemo(() => {
 
   return (
     
-    <div className="min-h-screen bg-gray-900 text-gray-100 p-6 flex flex-col md:flex-row gap-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 flex flex-col md:flex-row gap-6 transition-colors duration-300">
       {/* Profile Section (Left Sidebar) & SKills & Profiles - Unchanged */}
-      <div className="w-full md:w-1/3  rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-500">
+      <div className="w-full md:w-1/3 rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-300 dark:border-purple-500 bg-white dark:bg-gray-800">
         <div className="flex flex-col items-center">
           <div className="relative group flex flex-col justify-center items-center">
             <img 
@@ -380,45 +380,45 @@ const profilesExist = useMemo(() => {
           
           {!isEditMode ? (
             <>
-              <h2 className="text-2xl font-bold mt-4 text-purple-300">{tempProfile?.fullName}</h2>
-              <p className="text-center mt-2 text-purple-300 font-semibold border px-2 rounded-md border-purple-700">🎓 - {tempProfile?.gradYear}</p>
+              <h2 className="text-2xl font-bold mt-4 text-purple-700 dark:text-purple-300">{tempProfile?.fullName}</h2>
+              <p className="text-center mt-2 text-purple-600 dark:text-purple-300 font-semibold border px-2 rounded-md border-purple-400 dark:border-purple-700">🎓 - {tempProfile?.gradYear}</p>
               {
                 tempProfile?.userName.length > 0 && <p className="text-purple-500">@{tempProfile?.userName}</p>
               }
-              <p className="text-center mt-2 text-gray-300">{tempProfile?.bio}</p>
+              <p className="text-center mt-2 text-gray-600 dark:text-gray-300">{tempProfile?.bio}</p>
               
             </>
           ) : (
             <div className="w-full mt-4 space-y-3">
-              <h2 className="text-2xl font-bold mt-4 text-purple-300">{tempProfile?.fullName}</h2>
+              <h2 className="text-2xl font-bold mt-4 text-purple-700 dark:text-purple-300">{tempProfile?.fullName}</h2>
               <input 
                 type="text" 
                 value={tempProfile?.userName}
                 onChange={(e) => handleProfileUpdate("userName", e.target.value)}
                 placeholder="Username"
-                className="w-full p-2 border rounded bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
+                className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-800 border-purple-300 dark:border-purple-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-600"
               />
               <textarea 
                 value={tempProfile?.bio}
                 onChange={(e) => handleProfileUpdate("bio", e.target.value)}
                 placeholder="Bio"
-                className="w-full p-2 border rounded h-24 bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
+                className="w-full p-2 border rounded h-24 bg-gray-50 dark:bg-gray-800 border-purple-300 dark:border-purple-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-600"
               />
               <input 
                 type="text" 
                 value={tempProfile?.gradYear}
                 onChange={(e) => handleProfileUpdate("gradYear", e.target.value)}
                 placeholder="Enter your graduation year"
-                className="w-full p-2 border rounded bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
+                className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-800 border-purple-300 dark:border-purple-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-600"
               />
             </div>
           )}
           
         </div>
         {/* Coding & Social Profiles */}
-       <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500 z-0">
-          {profilesExist && <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding & Social Profiles</h3>}
-          {!profilesExist && <h3 className="text-xl font-semibold mb-4 text-purple-300">You haven't added any profiles yet</h3>}
+       <div className="rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-300 dark:border-purple-500 z-0">
+          {profilesExist && <h3 className="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-300">Coding & Social Profiles</h3>}
+          {!profilesExist && <h3 className="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-300">You haven't added any profiles yet</h3>}
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isEditMode ? 'opacity-100' : 'opacity-90'}`}>
             {Object.entries(tempProfile?.socialIds).map(([platform]) => (
               <div key={platform} className="flex items-center space-x-2">
@@ -428,14 +428,14 @@ const profilesExist = useMemo(() => {
                     value={tempProfile?.socialIds[platform]}
                     onChange={(e) => handleSocialProfileUpdate(platform, e.target.value)}
                     placeholder={`${platform} Profile`}
-                    className="w-full p-2 border rounded bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
+                    className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-800 border-purple-300 dark:border-purple-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-600"
                   />
                 ) : tempProfile.socialIds[platform] && (
                   <a 
                     href={tempProfile.socialIds[platform].startsWith("http") ? tempProfile.socialIds[platform] : `https://${tempProfile.socialIds[platform]}`}
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="flex items-center p-1 underline hover:text-purple-400 transition-colors text-purple-200"
+                    className="flex items-center p-1 underline hover:text-purple-500 transition-colors text-purple-600 dark:text-purple-300"
                   >
                     <span className="text-sm">{platform}</span>
                   </a>
@@ -446,8 +446,8 @@ const profilesExist = useMemo(() => {
         </div>
         {/* ... (existing Skills Showcase section) */}
 
-        <div className="rounded-lg shadow-2xl p-6 border border-purple-500">
-  <h3 className="text-xl font-semibold mb-4 text-purple-300">Skills</h3>
+        <div className="rounded-lg shadow-2xl p-6 border border-purple-300 dark:border-purple-500">
+  <h3 className="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-300">Skills</h3>
   
   <div className="flex flex-wrap gap-2 overflow-auto max-h-40">
     {!isEditMode ? (
@@ -455,7 +455,7 @@ const profilesExist = useMemo(() => {
       tempProfile?.skills?.map(skill => (
         <span 
           key={skill} 
-          className="bg-purple-700/30 text-purple-200 px-3 py-1 rounded-full text-sm min-w-[80px] text-center"
+          className="bg-purple-100 dark:bg-purple-700/30 text-purple-700 dark:text-purple-200 px-3 py-1 rounded-full text-sm min-w-[80px] text-center"
         >
           {skill}
         </span>
@@ -468,8 +468,8 @@ const profilesExist = useMemo(() => {
           className={`
             px-3 py-1 rounded-full text-sm transition-colors min-w-[80px] text-center
             ${tempProfile?.skills.includes(skill) 
-              ? 'bg-purple-700 text-white' 
-              : 'bg-gray-800 text-purple-400 hover:bg-purple-900'}
+              ? 'bg-purple-600 dark:bg-purple-700 text-white' 
+              : 'bg-gray-100 dark:bg-gray-800 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900'}
           `}
         >
           {skill}
@@ -521,9 +521,9 @@ const profilesExist = useMemo(() => {
       <div className="w-full md:w-2/3 space-y-6">
        
         {/* Projects Section */}
-        <div className="rounded-lg border border-purple-500 shadow-2xl p-6">
+        <div className="rounded-lg border border-purple-300 dark:border-purple-500 shadow-2xl p-6 bg-white dark:bg-gray-800">
   <div className="flex justify-between items-center mb-4">
-    <h3 className="text-xl font-bold text-purple-300">Project Journey</h3>
+    <h3 className="text-xl font-bold text-purple-700 dark:text-purple-300">Project Journey</h3>
     
     <button 
       onClick={addProject} 
@@ -534,26 +534,26 @@ const profilesExist = useMemo(() => {
   </div>
 
   {(tempProjects?.length === 0) ? (
-    <div className="flex flex-col items-center justify-center py-10 bg-purple-900/30 rounded">
-      <p className="text-gray-400 mb-4">No projects added yet</p>
+    <div className="flex flex-col items-center justify-center py-10 bg-purple-50 dark:bg-purple-900/30 rounded">
+      <p className="text-gray-500 dark:text-gray-400 mb-4">No projects added yet</p>
       
     </div>
   ) : (
     tempProjects.map((project) => (
-      <div key={project._id} className="mb-4 bg-purple-900/30 mt-10 p-4 rounded relative">
+      <div key={project._id} className="mb-4 bg-purple-50 dark:bg-purple-900/30 mt-10 p-4 rounded relative">
         {!editingProjects.has(project._id) ? (
           <>
             <div className='flex flex-row justify-between items-center'>
               <div className='flex flex-col'>
-                <h4 className="font-bold text-purple-300">{project.title}</h4>
-                <p className="text-gray-400">{project.description}</p>
-                <a href={project?.url?.startsWith("http") ? project.url : `https://${project.url}`} target='_blank' className="text-purple-300 cursor-pointer hover:underline">
+                <h4 className="font-bold text-purple-700 dark:text-purple-300">{project.title}</h4>
+                <p className="text-gray-600 dark:text-gray-400">{project.description}</p>
+                <a href={project?.url?.startsWith("http") ? project.url : `https://${project.url}`} target='_blank' className="text-purple-600 dark:text-purple-300 cursor-pointer hover:underline">
                   View
                 </a>
               </div>
               <button 
                 onClick={() => setEditingProjects(prevSet => new Set(prevSet).add(project._id))} 
-                className="ml-3 border border-purple-500 bg-gray-800 text-white px-2 py-1 rounded hover:bg-purple-500 hover:transition-all hover:duration-200"
+                className="ml-3 border border-purple-400 dark:border-purple-500 bg-white dark:bg-gray-800 text-purple-700 dark:text-white px-2 py-1 rounded hover:bg-purple-500 hover:text-white hover:transition-all hover:duration-200"
               >
                 Edit
               </button>
@@ -566,7 +566,7 @@ const profilesExist = useMemo(() => {
               placeholder='Project title'
               value={project.title} 
               onChange={(e) => handleProjectUpdate(project._id, { title: e.target.value })} 
-              className="w-full p-2 border rounded bg-gray-800 text-gray-100"
+              className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
               disabled={!editingProjects.has(project._id)}
             />
             
@@ -574,7 +574,7 @@ const profilesExist = useMemo(() => {
               value={project.description} 
               placeholder='Description'
               onChange={(e) => handleProjectUpdate(project._id, { description: e.target.value })} 
-              className="w-full p-2 border rounded h-24 bg-gray-800 text-gray-100 mt-2"
+              className="w-full p-2 border rounded h-24 bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 mt-2"
               disabled={!editingProjects.has(project._id)}
             ></textarea>
             
@@ -583,7 +583,7 @@ const profilesExist = useMemo(() => {
               value={project.url} 
               placeholder='Put the link where project is hosted or Github repo'
               onChange={(e) => handleProjectUpdate(project._id, { url: e.target.value })} 
-              className="w-full p-2 border rounded bg-gray-800 text-gray-100 mt-2"
+              className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 mt-2"
               disabled={!editingProjects.has(project._id)}
             />
             <button 
@@ -606,29 +606,29 @@ const profilesExist = useMemo(() => {
 </div>
 
         {/* Hackathon Journey */}
-        <div className="border border-purple-500 rounded-lg shadow-2xl p-6"> 
+        <div className="border border-purple-300 dark:border-purple-500 rounded-lg shadow-2xl p-6 bg-white dark:bg-gray-800"> 
   <div className="flex justify-between items-center mb-4">
-    <h3 className="text-xl font-semibold text-purple-300">Hackathon Journey</h3>
+    <h3 className="text-xl font-semibold text-purple-700 dark:text-purple-300">Hackathon Journey</h3>
     <button onClick={addHackathon} className="bg-purple-700 text-white px-3 py-1 rounded hover:shadow-md hover:shadow-purple-400 hover:transition-all hover:duration-300">Add Hackathon</button>
   </div>
 
   {(tempHackathons?.length === 0) &&  (
-    <div className="flex flex-col items-center justify-center py-10 bg-purple-900/30 rounded">
-      <p className="text-gray-400 mb-4">No hackathons added yet</p>
+    <div className="flex flex-col items-center justify-center py-10 bg-purple-50 dark:bg-purple-900/30 rounded">
+      <p className="text-gray-500 dark:text-gray-400 mb-4">No hackathons added yet</p>
       
     </div>
   )}
   {tempHackathons.length > 0 && tempHackathons.map((hackathon) => (
-    <div key={hackathon._id} className="mb-4 mt-10 bg-purple-900/30  p-4 rounded-lg relative">
+    <div key={hackathon._id} className="mb-4 mt-10 bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg relative">
       {!editingHackathons.has(hackathon._id) ? (
         <>
         <div className='flex flex-row justify-between items-center'>
         <div className='flex flex-col'>
-          <h4 className="font-bold text-purple-300">{hackathon.name}</h4>
-          <p className="text-gray-400 mt-1">{hackathon.description}</p>
-          <small className="text-purple-300 mt-3">Outcome - {hackathon.outcome}</small>
+          <h4 className="font-bold text-purple-700 dark:text-purple-300">{hackathon.name}</h4>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">{hackathon.description}</p>
+          <small className="text-purple-600 dark:text-purple-300 mt-3">Outcome - {hackathon.outcome}</small>
         </div>
-        <button onClick={() => setEditingHackathons(prevSet => new Set(prevSet).add(hackathon._id))} className="ml-3 border border-purple-500 text-white px-2 py-1 rounded hover:bg-purple-500  hover:transition-all hover:duration-200">Edit</button>
+        <button onClick={() => setEditingHackathons(prevSet => new Set(prevSet).add(hackathon._id))} className="ml-3 border border-purple-400 dark:border-purple-500 text-purple-700 dark:text-white px-2 py-1 rounded hover:bg-purple-500 hover:text-white hover:transition-all hover:duration-200">Edit</button>
         </div>
         </>
       ) : (
@@ -638,7 +638,7 @@ const profilesExist = useMemo(() => {
   value={hackathon.name} 
   placeholder='Title'
   onChange={(e) => handleHackathonUpdate(hackathon._id, { name: e.target.value })} 
-  className="w-full p-2 border border-purple-200 rounded bg-gray-800 text-gray-300"
+  className="w-full p-2 border border-purple-300 dark:border-purple-200 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-300"
   disabled={!editingHackathons.has(hackathon._id)}
 />
 
@@ -646,7 +646,7 @@ const profilesExist = useMemo(() => {
   value={hackathon.description} 
   placeholder='Description'
   onChange={(e) => handleHackathonUpdate(hackathon._id, { description: e.target.value })} 
-  className="w-full p-2 border rounded h-24 bg-gray-800 text-gray-100"
+  className="w-full p-2 border rounded h-24 bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100"
   disabled={!editingHackathons.has(hackathon._id)}
 ></textarea>
 
@@ -655,7 +655,7 @@ const profilesExist = useMemo(() => {
   value={hackathon.outcome} 
   placeholder='Outcome (Win/Loss, prize, or participation details)'
   onChange={(e) => handleHackathonUpdate(hackathon._id, { outcome: e.target.value })} 
-  className="w-full p-2 border rounded bg-gray-800 text-gray-100"
+  className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100"
   disabled={!editingHackathons.has(hackathon._id)}
 />
           <button onClick={() => saveHackathon(hackathon._id)} className="mt-2 bg-green-600 text-white px-2 py-1 rounded">Save</button>

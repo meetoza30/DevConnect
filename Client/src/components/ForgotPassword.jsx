@@ -23,8 +23,8 @@ const ForgotPassword = ()=>{
 
     }
     return(
-        <section className="flex flex-col items-center pt-6 my-20">
-        <div className="w-full bg-white rounded-lg border-purple-500 shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 ">
+        <section className="flex flex-col items-center pt-6 my-20 bg-background dark:bg-background-dark min-h-[60vh] transition-colors duration-300">
+        <div className="w-full bg-white dark:bg-gray-800 rounded-lg border border-purple-300 dark:border-purple-500 shadow-lg sm:max-w-md xl:p-0">
             <div className="p-6 space-y-4 sm:p-8">
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
             Forgot password:

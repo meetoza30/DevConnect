@@ -115,7 +115,7 @@ export default function Feed() {
   const hasActiveFilters = filters.skills.length > 0 || filters.hackathons || filters.graduationYears.length > 0;
 
   return (
-    <div className="relative max-h-screen h-[80vh]">
+    <div className="relative min-h-screen bg-background dark:bg-background-dark transition-colors duration-300">
       {/* Filter Button - Left side on desktop, top on mobile */}
       <div className="fixed  left-4 z-40 md:top-20 md:left-4">
         <button
@@ -123,7 +123,7 @@ export default function Feed() {
           className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors shadow-lg ${
             hasActiveFilters 
               ? 'bg-purple-600 border-purple-600 text-white' 
-              : 'bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700'
+              : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
           }`}
         >
           <Filter size={18} />

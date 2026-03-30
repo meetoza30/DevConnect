@@ -38,9 +38,9 @@ const profilesExist = useMemo(() => {
     
     return(
         
-        <div className="min-h-screen bg-gray-900 text-gray-100 p-6 flex flex-col md:flex-row gap-6">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 flex flex-col md:flex-row gap-6 transition-colors duration-300">
       {/* Profile Section (Left Sidebar) & Skills & Profiles - Unchanged */}
-      <div className="w-full z-0 md:w-1/3  rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-500">
+      <div className="w-full z-0 md:w-1/3 rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-300 dark:border-purple-500 bg-white dark:bg-gray-800">
         <div className="flex flex-col items-center">
           <div className="relative group flex flex-col justify-center items-center">
             <img 
@@ -59,13 +59,13 @@ const profilesExist = useMemo(() => {
           
           {!isEditMode ? (
             <>
-              <h2 className="text-2xl font-bold mt-4 text-purple-300">{othersProfile?.fullName}</h2>
+              <h2 className="text-2xl font-bold mt-4 text-purple-700 dark:text-purple-300">{othersProfile?.fullName}</h2>
               {
                 othersProfile?.userName.length > 0 && <p className="text-purple-500">@{othersProfile?.userName}</p>
               }
-              <p className="text-center mt-2 text-purple-300 font-semibold border px-2 mb-2 rounded-md border-purple-700">🎓 - {othersProfile?.gradYear}</p>
+              <p className="text-center mt-2 text-purple-600 dark:text-purple-300 font-semibold border px-2 mb-2 rounded-md border-purple-400 dark:border-purple-700">🎓 - {othersProfile?.gradYear}</p>
               
-              <p className="text-center mt-2 text-gray-300">{othersProfile?.bio}</p>
+              <p className="text-center mt-2 text-gray-600 dark:text-gray-300">{othersProfile?.bio}</p>
             </>
           ) : (
             <div className="w-full mt-4 space-y-3">
@@ -89,8 +89,8 @@ const profilesExist = useMemo(() => {
         </div>
         {/* Coding & Social Profiles */}
 
-       {profilesExist && <div className=" rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-500 z-0">
-          <h3 className="text-xl font-semibold mb-4 text-purple-300">Coding & Social Profiles</h3>
+       {profilesExist && <div className="rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-300 dark:border-purple-500 z-0">
+          <h3 className="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-300">Coding & Social Profiles</h3>
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isEditMode ? 'opacity-100' : 'opacity-90'}`}>
             {othersProfile?.socialIds && Object.entries(othersProfile?.socialIds).map(([platform]) => (
               <div key={platform} className="flex items-center space-x-2">
@@ -100,14 +100,14 @@ const profilesExist = useMemo(() => {
                     value={othersProfile?.socialIds[platform]}
                     onChange={(e) => handleSocialProfileUpdate(platform, e.target.value)}
                     placeholder={`${platform} Profile`}
-                    className="w-full p-2 border rounded bg-gray-800 border-purple-700 text-gray-100 focus:ring-2 focus:ring-purple-600"
+                    className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-800 border-purple-300 dark:border-purple-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-600"
                   />
                 ) : othersProfile.socialIds[platform] && (
                   <a 
                     href={othersProfile.socialIds[platform].startsWith("http") ? othersProfile.socialIds[platform] : `https://${othersProfile.socialIds[platform]}`}
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="flex items-center p-1 underline hover:text-purple-400 transition-colors text-purple-200"
+                    className="flex items-center p-1 underline hover:text-purple-500 transition-colors text-purple-600 dark:text-purple-300"
                   >
                     <span className="text-sm">{platform}</span>
                   </a>
@@ -118,9 +118,9 @@ const profilesExist = useMemo(() => {
         </div>}
         {/* ... (existing Skills Showcase section) */}
 
-        <div className=" rounded-lg shadow-2xl p-6 border border-purple-500">
+        <div className="rounded-lg shadow-2xl p-6 border border-purple-300 dark:border-purple-500">
           
-          <h3 className="text-xl font-semibold mb-4 text-purple-300">Skills</h3>
+          <h3 className="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-300">Skills</h3>
           
           <div className="flex flex-wrap gap-2">
             {!isEditMode ? (
@@ -128,7 +128,7 @@ const profilesExist = useMemo(() => {
               othersProfile?.skills?.map(skill => (
                 <span 
                   key={skill} 
-                  className="bg-purple-700/30 text-purple-200 px-3 py-1 rounded-full text-sm"
+                  className="bg-purple-100 dark:bg-purple-700/30 text-purple-700 dark:text-purple-200 px-3 py-1 rounded-full text-sm"
                 >
                   {skill}
                 </span>
@@ -158,26 +158,26 @@ const profilesExist = useMemo(() => {
       <div className="w-full md:w-2/3 space-y-6">
        
         {/* Projects Section */}
-        <div className="rounded-lg border border-purple-500 shadow-2xl p-6">
+        <div className="rounded-lg border border-purple-300 dark:border-purple-500 shadow-2xl p-6 bg-white dark:bg-gray-800">
   <div className="flex justify-between items-center mb-4">
-    <h3 className="text-xl font-bold text-purple-300">Project Journey</h3>
+    <h3 className="text-xl font-bold text-purple-700 dark:text-purple-300">Project Journey</h3>
   </div>
 
   {(tempProjects?.length === 0) ? (
-    <div className="flex flex-col items-center justify-center py-10 bg-purple-900/30 rounded">
-      <p className="text-gray-400 mb-4">No projects added yet</p>
+    <div className="flex flex-col items-center justify-center py-10 bg-purple-50 dark:bg-purple-900/30 rounded">
+      <p className="text-gray-500 dark:text-gray-400 mb-4">No projects added yet</p>
       
     </div>
   ) : (
     tempProjects.map((project) => (
-      <div key={project._id} className="mb-4 bg-purple-900/30 mt-10 p-4 rounded relative">
+      <div key={project._id} className="mb-4 bg-purple-50 dark:bg-purple-900/30 mt-10 p-4 rounded relative">
         
           <>
             <div className='flex flex-row justify-between items-center'>
               <div className='flex flex-col'>
-                <h4 className="font-bold text-purple-300">{project.title}</h4>
-                <p className="text-gray-400">{project.description}</p>
-                <a href={project.url} className="text-purple-300 cursor-pointer hover:underline">
+                <h4 className="font-bold text-purple-700 dark:text-purple-300">{project.title}</h4>
+                <p className="text-gray-600 dark:text-gray-400">{project.description}</p>
+                <a href={project.url} className="text-purple-600 dark:text-purple-300 cursor-pointer hover:underline">
                   View
                 </a>
               </div>
@@ -189,27 +189,27 @@ const profilesExist = useMemo(() => {
 </div>
 
         {/* Hackathon Journey */}
-        <div className="border border-purple-500 rounded-lg shadow-2xl p-6"> 
+        <div className="border border-purple-300 dark:border-purple-500 rounded-lg shadow-2xl p-6 bg-white dark:bg-gray-800"> 
   <div className="flex justify-between items-center mb-4">
-    <h3 className="text-xl font-semibold text-purple-300">Hackathon Journey</h3>
+    <h3 className="text-xl font-semibold text-purple-700 dark:text-purple-300">Hackathon Journey</h3>
     
   </div>
 
   {(tempHackathons?.length === 0) &&  (
-    <div className="flex flex-col items-center justify-center py-10 bg-purple-900/30 rounded">
-      <p className="text-gray-400 mb-4">No hackathons added yet</p>
+    <div className="flex flex-col items-center justify-center py-10 bg-purple-50 dark:bg-purple-900/30 rounded">
+      <p className="text-gray-500 dark:text-gray-400 mb-4">No hackathons added yet</p>
       
     </div>
   )}
   {tempHackathons.length > 0 && tempHackathons.map((hackathon) => (
-    <div key={hackathon._id} className="mb-4 mt-10 bg-purple-900/30  p-4 rounded-lg relative">
+    <div key={hackathon._id} className="mb-4 mt-10 bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg relative">
       
         
         <div className='flex flex-row justify-between items-center'>
         <div className='flex flex-col'>
-          <h4 className="font-bold text-purple-300">{hackathon.name}</h4>
-          <p className="text-gray-400">{hackathon.description}</p>
-          <small className="text-purple-300">{hackathon.date}</small>
+          <h4 className="font-bold text-purple-700 dark:text-purple-300">{hackathon.name}</h4>
+          <p className="text-gray-600 dark:text-gray-400">{hackathon.description}</p>
+          <small className="text-purple-600 dark:text-purple-300">{hackathon.date}</small>
         </div>
         </div>
     </div>
