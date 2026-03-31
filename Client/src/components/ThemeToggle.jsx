@@ -43,7 +43,7 @@ const ThemeToggle = () => {
     //   </div>
     // </label>
     // <!-- From Uiverse.io by gharsh11032000 --> 
-<label class="switch">
+<label className="switch">
   <input type="checkbox" 
   checked={isDark}
         onChange={() => setIsDark(prev => !prev)}
