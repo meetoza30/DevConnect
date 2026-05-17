@@ -72,6 +72,11 @@ app.use('/', connectionRouter)
 app.use('/', userRouter)
 app.use('/', messageRouter)
 
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'success', message: 'Server is up and running' });
+})
+
+
 
 
 
