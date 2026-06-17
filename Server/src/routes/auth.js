@@ -6,6 +6,9 @@ import {userAuth} from '../middlewares/auth.js';
 import nodemailer from 'nodemailer';
 import { resetPasswordAuth } from '../middlewares/auth.js';
 import 'dotenv/config'
+import app from '../config/firebaseAdmin.js';
+import { getAuth } from 'firebase-admin/auth';
+import generateUsername from '../utils/utility.js';
 
 const authRouter = express.Router()
 
@@ -62,20 +65,32 @@ catch(err){
 })
 
 authRouter.post('/google/login', async (req, res) => {
-  const { fullName, emailId, _id, userName } = req.body;
-  console.log(fullName, emailId)
+  const { gtoken } = req.body;
+//   console.log(gtoken)
 
   try {
+    const payload = await getAuth(app).verifyIdToken(gtoken);
+    const emailId = payload?.email;
+    const fullName = payload?.name;
+    const profilePicUrl = payload?.picture;
+    const _id = payload.uid;
+    const userName = generateUsername(fullName, emailId);
+
     let existing = false;
     let user = await User.findOne({ emailId });
-    if(user) existing = true;
+    if (user) existing = true;
+
     if (!user) {
+      // Generate a strong random password for Google users
+      const randomPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-10);
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
       user = new User({
         fullName,
         emailId,
         userName, 
-        password: _id, 
+        password: hashedPassword, 
+        profileUrl: profilePicUrl,
         age: "",
         gradYear: "",
         projects: [],
@@ -84,13 +99,12 @@ authRouter.post('/google/login', async (req, res) => {
         gender: "",
         bio: "",
         socials: {},
-        isGoogleUser:true
+        isGoogleUser: true
       });
 
       await user.save();
     }
 
-   
     const token = await user.getJWToken();
     res.cookie("token", token, {
       httpOnly: true,

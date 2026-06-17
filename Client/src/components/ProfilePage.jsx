@@ -354,7 +354,7 @@ const profilesExist = useMemo(() => {
     
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 flex flex-col md:flex-row gap-6 transition-colors duration-300">
       {/* Profile Section (Left Sidebar) & SKills & Profiles - Unchanged */}
-      <div className="w-full md:w-1/3 rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-300 dark:border-purple-500 bg-white dark:bg-gray-800">
+      <div className="w-full md:w-1/3 rounded-lg  p-6 transition-all duration-300 border border-purple-300 dark:border-purple-500 bg-white dark:bg-gray-800">
         <div className="flex flex-col items-center">
           <div className="relative group flex flex-col justify-center items-center">
             <img 
@@ -416,7 +416,7 @@ const profilesExist = useMemo(() => {
           
         </div>
         {/* Coding & Social Profiles */}
-       <div className="rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-300 dark:border-purple-500 z-0">
+       <div className="rounded-lg   p-6 border mt-10 mb-5 border-purple-300 dark:border-purple-500 z-0">
           {profilesExist && <h3 className="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-300">Coding & Social Profiles</h3>}
           {!profilesExist && <h3 className="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-300">You haven't added any profiles yet</h3>}
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isEditMode ? 'opacity-100' : 'opacity-90'}`}>
@@ -446,7 +446,7 @@ const profilesExist = useMemo(() => {
         </div>
         {/* ... (existing Skills Showcase section) */}
 
-        <div className="rounded-lg shadow-2xl p-6 border border-purple-300 dark:border-purple-500">
+        <div className="rounded-lg   p-6 border border-purple-300 dark:border-purple-500">
   <h3 className="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-300">Skills</h3>
   
   <div className="flex flex-wrap gap-2 overflow-auto max-h-40">
@@ -485,13 +485,13 @@ const profilesExist = useMemo(() => {
           <div className="flex flex-col justify-center">
           <button
             onClick={() => setIsEditMode(true)}
-            className="  px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700"
+            className="  px-4 py-2 bg-purple-600 text-white rounded-lg    hover:bg-purple-700"
           >
             Edit Profile
           </button>
           <button
             onClick={() => logout()}
-            className="  px-4 py-2 bg-purple-600 mt-3 text-white rounded-lg shadow-md hover:bg-purple-700"
+            className="  px-4 py-2 bg-purple-600 mt-3 text-white rounded-lg    hover:bg-purple-700"
           >
            Log Out
           </button>
@@ -502,13 +502,13 @@ const profilesExist = useMemo(() => {
           <>
             <button
               onClick={() => setIsEditMode(false)}
-              className="px-4 py-2 mt-3 bg-gray-600 text-white rounded-lg shadow-md hover:bg-gray-700"
+              className="px-4 py-2 mt-3 bg-gray-600 text-white rounded-lg    hover:bg-gray-700"
             >
               Cancel
             </button>
             <button
               onClick={saveProfile}
-              className="px-4 py-2 mt-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700"
+              className="px-4 py-2 mt-3 bg-green-600 text-white rounded-lg    hover:bg-green-700"
             >
               Save
             </button>
@@ -521,13 +521,13 @@ const profilesExist = useMemo(() => {
       <div className="w-full md:w-2/3 space-y-6">
        
         {/* Projects Section */}
-        <div className="rounded-lg border border-purple-300 dark:border-purple-500 shadow-2xl p-6 bg-white dark:bg-gray-800">
+        <div className="rounded-lg border border-purple-300 dark:border-purple-500   p-6 bg-white dark:bg-gray-800">
   <div className="flex justify-between items-center mb-4">
     <h3 className="text-xl font-bold text-purple-700 dark:text-purple-300">Project Journey</h3>
     
     <button 
       onClick={addProject} 
-      className="bg-purple-700 font-semibold text-white px-3 py-1 rounded hover:shadow-md hover:shadow-purple-400 hover:transition-all hover:duration-300"
+      className="bg-purple-700 font-semibold text-white px-3 py-1 rounded hover:   hover:shadow-purple-400 hover:transition-all hover:duration-300"
     >
       Add Project
     </button>
@@ -606,10 +606,10 @@ const profilesExist = useMemo(() => {
 </div>
 
         {/* Hackathon Journey */}
-        <div className="border border-purple-300 dark:border-purple-500 rounded-lg shadow-2xl p-6 bg-white dark:bg-gray-800"> 
+        <div className="border border-purple-300 dark:border-purple-500 rounded-lg   p-6 bg-white dark:bg-gray-800"> 
   <div className="flex justify-between items-center mb-4">
     <h3 className="text-xl font-semibold text-purple-700 dark:text-purple-300">Hackathon Journey</h3>
-    <button onClick={addHackathon} className="bg-purple-700 text-white px-3 py-1 rounded hover:shadow-md hover:shadow-purple-400 hover:transition-all hover:duration-300">Add Hackathon</button>
+    <button onClick={addHackathon} className="bg-purple-700 text-white px-3 py-1 rounded hover:   hover:shadow-purple-400 hover:transition-all hover:duration-300">Add Hackathon</button>
   </div>
 
   {(tempHackathons?.length === 0) &&  (

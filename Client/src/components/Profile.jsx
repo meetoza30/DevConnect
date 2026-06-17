@@ -40,7 +40,7 @@ const profilesExist = useMemo(() => {
         
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 flex flex-col md:flex-row gap-6 transition-colors duration-300">
       {/* Profile Section (Left Sidebar) & Skills & Profiles - Unchanged */}
-      <div className="w-full z-0 md:w-1/3 rounded-lg shadow-2xl p-6 transition-all duration-300 border border-purple-300 dark:border-purple-500 bg-white dark:bg-gray-800">
+      <div className="w-full z-0 md:w-1/3 rounded-lg  p-6 transition-all duration-300 border border-purple-300 dark:border-purple-500 bg-white dark:bg-gray-800">
         <div className="flex flex-col items-center">
           <div className="relative group flex flex-col justify-center items-center">
             <img 
@@ -89,7 +89,7 @@ const profilesExist = useMemo(() => {
         </div>
         {/* Coding & Social Profiles */}
 
-       {profilesExist && <div className="rounded-lg shadow-2xl p-6 border mt-10 mb-5 border-purple-300 dark:border-purple-500 z-0">
+       {profilesExist && <div className="rounded-lg  p-6 border mt-10 mb-5 border-purple-300 dark:border-purple-500 z-0">
           <h3 className="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-300">Coding & Social Profiles</h3>
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isEditMode ? 'opacity-100' : 'opacity-90'}`}>
             {othersProfile?.socialIds && Object.entries(othersProfile?.socialIds).map(([platform]) => (
@@ -118,7 +118,7 @@ const profilesExist = useMemo(() => {
         </div>}
         {/* ... (existing Skills Showcase section) */}
 
-        <div className="rounded-lg shadow-2xl p-6 border border-purple-300 dark:border-purple-500">
+        <div className="rounded-lg  p-6 border border-purple-300 dark:border-purple-500">
           
           <h3 className="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-300">Skills</h3>
           
@@ -158,7 +158,7 @@ const profilesExist = useMemo(() => {
       <div className="w-full md:w-2/3 space-y-6">
        
         {/* Projects Section */}
-        <div className="rounded-lg border border-purple-300 dark:border-purple-500 shadow-2xl p-6 bg-white dark:bg-gray-800">
+        <div className="rounded-lg border border-purple-300 dark:border-purple-500  p-6 bg-white dark:bg-gray-800">
   <div className="flex justify-between items-center mb-4">
     <h3 className="text-xl font-bold text-purple-700 dark:text-purple-300">Project Journey</h3>
   </div>
@@ -189,7 +189,7 @@ const profilesExist = useMemo(() => {
 </div>
 
         {/* Hackathon Journey */}
-        <div className="border border-purple-300 dark:border-purple-500 rounded-lg shadow-2xl p-6 bg-white dark:bg-gray-800"> 
+        <div className="border border-purple-300 dark:border-purple-500 rounded-lg  p-6 bg-white dark:bg-gray-800"> 
   <div className="flex justify-between items-center mb-4">
     <h3 className="text-xl font-semibold text-purple-700 dark:text-purple-300">Hackathon Journey</h3>
     

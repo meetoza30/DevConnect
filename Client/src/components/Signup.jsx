@@ -38,24 +38,12 @@ if(res.data?.status){
     try{
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+      const gtoken = await user.getIdToken();
 
- const generateUsername = (displayName, email) => {
-            if (displayName) {
-                
-                return displayName.toLowerCase()
-                    .replace(/\s+/g, '') 
-                    .replace(/[^a-z0-9._]/g, '') 
-                    + Math.floor(Math.random() * 1000); 
-            }
-           
-            return email.split('@')[0].toLowerCase().replace(/[^a-z0-9._]/g, '') + Math.floor(Math.random() * 1000);
-        };
+ 
         
         const res = await axios.post(BASE_URL+"/google/login",{
-            _id: user.uid,
-            fullName: user.displayName,
-            emailId: user.email,
-            userName: generateUsername(user.displayName, user.email) // Add generated username
+          gtoken
         }, {withCredentials:true});
 
 
