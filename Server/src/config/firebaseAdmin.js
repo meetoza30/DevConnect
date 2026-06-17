@@ -1,8 +1,9 @@
+import { readFileSync } from 'fs';
 import { initializeApp, cert } from 'firebase-admin/app';
-import serviceAccount from './serviceAccountKey.json' assert { type: 'json' };
 
-const app = initializeApp({
-  credential: cert(serviceAccount),
-});
+const serviceAccount = JSON.parse(
+  readFileSync('/etc/secrets/serviceAccountKey.json', 'utf8')
+);
 
+const app = initializeApp({ credential: cert(serviceAccount) }); 
 export default app;
